@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/backgroundColor"
+    tools:context=".ui.fragment.setting.ActivateFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/backgroundLight"
+        android:orientation="horizontal"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:weightSum="3">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2.3"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="4dp"
+                android:src="@drawable/led" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginRight="16dp"
+                android:gravity="left|center"
+                android:text="@string/kich_hoat_LED"
+
+                android:textColor="?attr/Text_head"
+                android:textSize="16dp" />
+        </LinearLayout>
+
+        <Switch
+            android:id="@+id/btSwitchLED"
+            android:layout_width="0dp"
+            android:layout_height="15dp"
+            android:layout_gravity="center"
+            android:layout_marginRight="16dp"
+            android:layout_weight="0.7"
+            android:gravity="end"
+            tools:ignore="UseSwitchCompatOrMaterialXml" />
+    </LinearLayout>
+
+    <TextView
+        style="@style/line"
+        android:background="@color/grayline"
+        android:backgroundTint="@color/grayline" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/backgroundLight"
+        android:orientation="horizontal"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:weightSum="3">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2.3"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="4dp"
+                android:src="@drawable/scale" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginRight="16dp"
+                android:gravity="left|center"
+                android:text="@string/kich_hoat_can"
+                android:textColor="?attr/Text_head"
+                android:textSize="16dp" />
+        </LinearLayout>
+
+        <Switch
+            android:id="@+id/btSwitchScale"
+            android:layout_width="0dp"
+            android:layout_height="15dp"
+            android:layout_gravity="center"
+            android:layout_marginRight="16dp"
+            android:layout_weight="0.7"
+            android:gravity="end"
+            tools:ignore="UseSwitchCompatOrMaterialXml" />
+    </LinearLayout>
+
+    <TextView
+        style="@style/line"
+        android:background="@color/grayline"
+        android:backgroundTint="@color/grayline" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/backgroundLight"
+        android:orientation="horizontal"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:weightSum="3">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2.3"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="4dp"
+                android:src="@drawable/notification" />
+
+            <TextView
+                android:id="@+id/tvBuzzer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginRight="16dp"
+                android:gravity="left|center"
+                android:text="@string/kich_hoat_chuong"
+                android:textColor="?attr/Text_head"
+                android:textSize="16dp" />
+        </LinearLayout>
+
+        <Switch
+            android:id="@+id/btSwitchBuzzer"
+            android:layout_width="0dp"
+            android:layout_height="15dp"
+            android:layout_gravity="center"
+            android:layout_marginRight="16dp"
+            android:layout_weight="0.7"
+            android:gravity="end"
+            tools:ignore="UseSwitchCompatOrMaterialXml" />
+    </LinearLayout>
+
+    <TextView
+        style="@style/line"
+        android:background="@color/grayline"
+        android:backgroundTint="@color/grayline" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/backgroundLight"
+        android:orientation="horizontal"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:weightSum="3">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2.3"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="4dp"
+                android:src="@drawable/fan" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginRight="16dp"
+                android:gravity="left|center"
+                android:text="@string/kich_hoat_quat_tan_nhiet"
+                android:textColor="?attr/Text_head"
+                android:textSize="16dp" />
+        </LinearLayout>
+
+        <Switch
+            android:id="@+id/btSwitchFan"
+            android:layout_width="0dp"
+            android:layout_height="15dp"
+            android:layout_gravity="center"
+            android:layout_marginRight="16dp"
+            android:layout_weight="0.7"
+            android:gravity="end"
+            tools:ignore="UseSwitchCompatOrMaterialXml" />
+    </LinearLayout>
+
+
+</LinearLayout>
+</layout>

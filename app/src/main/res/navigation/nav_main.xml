@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_main"
+    app:startDestination="@id/mainFragment">
+
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="com.example.uimkk.ui.fragment.MainFragment"
+        android:label="AFALSOL"
+        tools:layout="@layout/main_fragment">
+        <action
+            android:id="@+id/action_mainFragment_to_historyFragment"
+            app:destination="@id/historyFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_programFragment"
+            app:destination="@id/programFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_settingFragment"
+            app:destination="@id/settingFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_testFragment"
+            app:destination="@id/testFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_programRetailFragment"
+            app:destination="@id/programRetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/historyFragment"
+        android:name="com.example.uimkk.ui.fragment.history.HistoryFragment"
+        android:label="Lịch sử"
+        tools:layout="@layout/history_fragment" >
+        <action
+            android:id="@+id/action_historyFragment_to_historyRetailFragment"
+            app:destination="@id/historyRetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/programFragment"
+        android:name="com.example.uimkk.ui.fragment.program.ProgramFragment"
+        android:label="Chương trình"
+        tools:layout="@layout/program_fragment" >
+        <action
+            android:id="@+id/action_programFragment_to_programDependFragment"
+            app:destination="@id/programDependFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/settingFragment"
+        android:name="com.example.uimkk.ui.fragment.setting.SettingFragment"
+        android:label="Cài đặt"
+        tools:layout="@layout/setting_fragment">
+        <argument
+            android:name="ipaddress"
+            app:argType="string" />
+        <argument
+            android:name="port"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_settingFragment_to_editProfileFragment"
+            app:destination="@id/editProfileFragment" />
+        <action
+            android:id="@+id/action_settingFragment_to_activateFragment"
+            app:destination="@id/activateFragment" />
+        <action
+            android:id="@+id/action_settingFragment_to_speedFragment"
+            app:destination="@id/speedFragment" />
+        <action
+            android:id="@+id/action_settingFragment_to_scaleFragment"
+            app:destination="@id/scaleFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/testFragment"
+        android:name="com.example.uimkk.ui.fragment.test.TestFragment"
+        android:label="Kiểm tra"
+        tools:layout="@layout/test_fragment">
+        <argument
+            android:name="ipaddress"
+            app:argType="string" />
+        <argument
+            android:name="port"
+            app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/programDependFragment"
+        android:name="com.example.uimkk.ui.fragment.program.ProgramDependFragment"
+        android:label="Vận hành"
+        tools:layout="@layout/program_depend_fragment">
+        <action
+            android:id="@+id/action_programDependFragment_to_programRetailFragment"
+            app:destination="@id/programRetailFragment" />
+        <argument
+            android:name="program"
+            app:argType="com.example.uimkk.model.Program" />
+        <argument
+            android:name="username"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/programRetailFragment"
+        android:name="com.example.uimkk.ui.fragment.program.ProgramRetailFragment"
+        android:label="Vận hành"
+        tools:layout="@layout/program_retail_fragment" >
+        <argument
+            android:name="program"
+            app:argType="com.example.uimkk.model.Program" />
+        <argument
+            android:name="numberOfRun"
+            app:argType="integer" />
+        <argument
+            android:name="timeSpeed"
+            app:argType="string" />
+        <argument
+            android:name="theTich"
+            app:argType="string" />
+        <argument
+            android:name="nongdo"
+            app:argType="string" />
+        <argument
+            android:name="timeSum"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_programRetailFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+        <argument
+            android:name="username"
+            app:argType="string" />
+        <argument
+            android:name="timecreate"
+            app:argType="string" />
+        <argument
+            android:name="hourStart"
+            app:argType="string" />
+        <argument
+            android:name="ipAddress"
+            app:argType="string" />
+        <argument
+            android:name="port"
+            app:argType="integer" />
+        <argument
+            android:name="speedSpray"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/historyRetailFragment"
+        android:name="com.example.uimkk.ui.fragment.history.HistoryRetailFragment"
+        android:label="Lịch sử"
+        tools:layout="@layout/history_retail_fragment">
+        <argument
+            android:name="history"
+            app:argType="com.example.uimkk.model.History" />
+    </fragment>
+    <fragment
+        android:id="@+id/editProfileFragment"
+        android:name="com.example.uimkk.ui.fragment.login.EditProfileFragment"
+        android:label="Cập nhật tài khoản" >
+        <argument
+            android:name="user"
+            app:argType="com.example.uimkk.model.UserClass" />
+    </fragment>
+    <fragment
+        android:id="@+id/activateFragment"
+        android:name="com.example.uimkk.ui.fragment.setting.ActivateFragment"
+        android:label="Kích hoạt" >
+        <argument
+            android:name="ipAddress"
+            app:argType="string" />
+        <argument
+            android:name="port"
+            app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/speedFragment"
+        android:name="com.example.uimkk.ui.fragment.setting.SpeedFragment"
+        android:label="Tốc độ" >
+        <argument
+            android:name="ipAddress"
+            app:argType="string" />
+        <argument
+            android:name="port"
+            app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/scaleFragment"
+        android:name="com.example.uimkk.ui.fragment.setting.ScaleFragment"
+        android:label="Căn chỉnh cân hóa chất"
+        tools:layout="@layout/scale_fragment" >
+        <argument
+            android:name="ipAddress"
+            app:argType="string" />
+        <argument
+            android:name="port"
+            app:argType="integer" />
+    </fragment>
+
+</navigation>

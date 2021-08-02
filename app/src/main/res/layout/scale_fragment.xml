@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/backgroundColor"
+    tools:context=".ui.fragment.setting.ScaleFragment">
+
+    <LinearLayout
+        android:background="?attr/backgroundLight"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <CheckedTextView
+            android:id="@+id/btZero"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:text="Căn chỉnh Zero"
+            android:checked="false"
+            android:textAllCaps="false"
+            android:textColor="?attr/Text_head"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginLeft="16dp"
+            android:background="@color/grayline"/>
+        <CheckedTextView
+            android:id="@+id/btMax"
+            android:layout_marginLeft="16dp"
+            android:checked="false"
+            android:layout_marginRight="16dp"
+            android:textColor="?attr/Text_head"
+            android:text="Căn chỉnh Max"
+            android:textAllCaps="false"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_weight="0.95"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+</LinearLayout>
+</layout>

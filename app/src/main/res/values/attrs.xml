@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="a1">
+        <attr name="backgroundColor" format="color"/>
+        <attr name="Text" format="color"/>
+        <attr name="Text_head" format="color"/>
+        <attr name="backgroundColor1" format="color"/>
+        <attr name="backgroundLight" format="color"/>
+    </declare-styleable>
+</resources>

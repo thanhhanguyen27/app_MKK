@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+<LinearLayout
+    android:id="@+id/lnMain"
+    android:background="@color/backgroundColor"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.fragment.setting.SpeedFragment">
+
+    <LinearLayout
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/backgroundColor"
+        android:orientation="horizontal"
+        android:paddingTop="8dp"
+        android:paddingBottom="4dp">
+
+
+
+            <TextView
+                android:layout_marginLeft="16sp"
+                android:id="@+id/tvSpeedDomes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="2"
+                android:gravity="left|center"
+                android:text="Tốc độ phun hóa chất:"
+                android:textColor="@color/text_gray"
+                android:textSize="14dp" />
+
+    </LinearLayout>
+    <LinearLayout
+        android:paddingBottom="10sp"
+        android:paddingTop="10sp"
+        android:background="?attr/backgroundLight"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="2">
+        <TextView
+            android:id="@+id/tvSpeedSpray"
+            android:layout_marginLeft="16sp"
+            android:layout_width="0dp"
+            android:gravity="end"
+            android:text="0"
+            android:textSize="16sp"
+            android:layout_weight="0.65"
+            android:textColor="?attr/Text_head"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:layout_width="0dp"
+            android:gravity="start"
+            android:text="ml/phút"
+            android:layout_marginLeft="2dp"
+            android:textSize="16sp"
+            android:layout_weight="0.65"
+            android:textColor="?attr/Text_head"
+            android:layout_height="wrap_content"/>
+
+        <Button
+            android:id="@+id/btEditSpeedSpray"
+            style="?attr/buttonBarButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25sp"
+            android:layout_marginRight="16sp"
+            android:layout_weight="0.7"
+            android:text="Thiết lập"
+            android:textAllCaps="false"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+    <LinearLayout
+        android:visibility="gone"
+        android:paddingBottom="10sp"
+        android:background="?attr/backgroundLight"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    <TextView
+        android:id="@+id/tvWarningEdit"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:textColor="@color/ora"
+        android:text="Chỉnh sửa tốc độ phun từ 30-37 ml/phút"/>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_marginTop="5sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/backgroundColor"
+        android:orientation="horizontal"
+        android:paddingTop="8dp"
+        android:paddingBottom="4dp">
+
+
+            <TextView
+                android:layout_marginLeft="16sp"
+                android:layout_weight="2"
+                android:id="@+id/tvSpeed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="left|center"
+                android:text="Tốc độ quay:"
+                android:textColor="@color/text_gray"
+                android:textSize="14dp" />
+
+        </LinearLayout>
+
+    <LinearLayout
+        android:paddingBottom="10sp"
+        android:paddingTop="10sp"
+        android:background="?attr/backgroundLight"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="2"
+        android:orientation="horizontal">
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tocdoquay"
+            android:layout_marginLeft="16dp"
+            android:layout_width="0dp"
+            android:layout_gravity="center"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_weight="1.3"
+            android:layout_height="58dp">
+            <AutoCompleteTextView
+                android:id="@+id/textSpeed"
+                android:textSize="16dp"
+                android:inputType="none"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </com.google.android.material.textfield.TextInputLayout>
+        <Button
+            android:id="@+id/btSet"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:text="Thiết lập"
+            android:layout_marginRight="16dp"
+            android:layout_marginLeft="25dp"
+            android:gravity="center"
+            style="?attr/buttonBarButtonStyle"
+            android:layout_weight="0.7"
+            android:layout_gravity="end"
+            android:textSize="14sp"
+            android:textAllCaps="false"/>
+
+    </LinearLayout>
+
+
+
+
+</LinearLayout>
+</layout>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">UI MKK</string>
+
+    <string name="dark">Dark Mode</string>
+
+
+    <string name="dong_co_AC">Động cơ quay</string>
+    <string name="dong_co_DC">Động cơ thổi</string>
+    <string name="quat">Quạt tản nhiệt</string>
+    <string name="bomnhudong">Bơm hóa chất</string>
+    <string name="caidatnhiet">Cài đặt mức nhiệt</string>
+    <string name="chuong">Chuông</string>
+    <string name="chuongtrinh">Chương trình</string>
+    <string name="lich_su">Lịch sử</string>
+    <string name="kiem_tra">Kiểm tra</string>
+    <string name="cai_dat">Cài đặt</string>
+    <string name="nguoi_van_hanh">Người vận hành</string>
+    <string name="dia_diem">Phòng</string>
+    <string name="so_lan_chay">Số lần chạy</string>
+    <string name="thoi_gian_phun">Thời gian phun</string>
+    <string name="loi">Lỗi</string>
+    <string name="nong_do">Nồng độ(ml/m3)</string>
+    <string name="the_tich">Thể tích(m3)</string>
+    <string name="toc_do_phun">Tốc độ phun</string>
+    <string name="bat_dau">Bắt đầu</string>
+    <string name="ket_thuc">Kết thúc</string>
+    <string name="thoi_gian_phun_01_00_00">Thời gian phun: 01:00:00</string>
+    <string name="ngon_ngu">Ngôn ngữ</string>
+    <string name="can_hoa_chat">Cân hóa chất</string>
+    <string name="muc_hoa_chat">Mức hóa chất</string>
+    <string name="phong">Phòng</string>
+    <string name="th_i_gian_phun_c_t_nh_10_20">Thời gian phun ước tính: _ </string>
+    <string name="chuan_bi_phun_sau">Chuẩn bị phun sau</string>
+    <string name="thoi_gian">Thời gian</string>
+    <string name="dung_phun">Dừng phun</string>
+    <string name="che_do_toi">Chế độ tối</string>
+    <string name="kich_hoat_LED">Kích hoạt LED</string>
+    <string name="kich_hoat_can">Kích hoạt cân hóa chất</string>
+    <string name="kich_hoat_chuong">Kích hoạt chuông</string>
+    <string name="kich_hoat_quat_tan_nhiet">Kích hoạt quạt tản nhiệt</string>
+    <string name="can_chinh_can_zero">Căn chỉnh cân hóa chất</string>
+    <string name="can_chinh_can_max">Căn chỉnh Max cân hóa chất</string>
+    <string name="toc_do_phun_bom">Tốc độ phun bơm nhu động</string>
+    <string name="Toc_do_quay">Tốc độ quay</string>
+    <string name="dang_xuat">Đăng xuất</string>
+</resources>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#6200EE</color>
+    <color name="colorPrimaryDark">#3700B3</color>
+    <color name="colorAccent">#64b5f6</color>
+    <color name="colorText">#5C5B5B</color>
+    <color name="yellowlight">#ffff74</color>
+    <color name="yellow">#ffd740</color>
+    <color name="yellowdark">#c8a600</color>
+    <color name="orange">#f4511e</color>
+    <color name="backgroundColor">#F8F8FB</color>
+    <color name="subtitleTextColor">#9e9e9e</color>
+    <color name="grayline">#66cfcfcf</color>
+    <color name="text_gray">#616161</color>
+    <color name="graydark">#424242</color>
+    <color name="or">#0277bd</color>
+    <color name="ora">#b71c1c</color>
+    <color name="run">#087f23</color>
+    <color name="ordark">#004c8c</color>
+    <color name="orlight">#ffff6b</color>
+    <color name="blue">#1a237e</color>
+    <color name="titleTextColor">#212121</color>
+    <color name="blacklittle">#1b1b1b</color>
+    <color name="buttoncolor">#07ddf9</color>
+    <color name="bluelight">#c3fdff</color>
+    <color name="bluee">#64b5f6</color>
+    <color name="lightblue">#e3f2fd</color>
+    <color name="bluedark">#5d99c6</color>
+    <color name="navbottom">#ffca28</color>
+    <color name="bgBottomNavigation">#fe485a</color>
+    <color name="colorSurface">#fff</color>
+    <color name="white">#ffffff</color>
+    <color name="load">#00c853</color>
+    <color name="light">#F8F8FB</color>
+    <color name="red">#d50000</color>
+</resources>

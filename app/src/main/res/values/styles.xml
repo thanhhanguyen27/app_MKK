@@ -1,0 +1,198 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
+        <item name="colorPrimary">#0277bd</item>
+        <item name="colorPrimaryDark">#004c8c</item>
+        <item name="colorAccent">#64b5f6</item>
+        <item name="android:actionMenuTextColor">#fff</item>
+        <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
+        <item name="backgroundColor">#F3F3F3</item>
+        <item name="backgroundColor1">#fff</item>
+        <item name="Text">#9e9e9e</item>
+        <item name="Text_head">#212121</item>
+        <item name="backgroundLight">#fff</item>
+        <item name="android:windowEnterAnimation">@style/WindowAnimationTransition</item>
+
+    </style>
+    <style name="AlertDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorAccent">@color/blue</item>
+        <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
+        <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
+        <item name="buttonBarNeutralButtonStyle">@style/NeutralButtonStyle</item>
+        <item name="textAllCaps">false</item>
+        <item name="android:layout_marginLeft">2dp</item>
+
+    </style>
+
+
+    <style name="NegativeButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/red</item>
+    </style>
+
+    <style name="PositiveButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/or</item>
+    </style>
+
+    <style name="NeutralButtonStyle"
+        parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">#00f</item>
+    </style>
+    <style name="WindowAnimationTransition">
+        <item name="android:windowEnterAnimation">@android:anim/fade_in</item>
+        <item name="android:windowExitAnimation">@android:anim/fade_out</item>
+    </style>
+
+
+    <style name="DarkTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
+        <item name="colorPrimary">@color/or</item>
+        <item name="colorPrimaryDark">@color/ordark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:actionMenuTextColor">@android:color/white</item>
+        <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
+        <item name="backgroundColor">#212121</item>
+        <item name="backgroundColor1">#212121</item>
+        <item name="Text">#9e9e9e</item>
+        <item name="Text_head">#cfcfcf</item>
+        <item name="backgroundLight">#5C5B5B</item>
+        <item name="android:windowEnterAnimation">@style/WindowAnimationTransition</item>
+    </style>
+<!--    <style name="AppTheme.NoActionBar">-->
+<!--        <item name="windowActionBar">false</item>-->
+<!--        <item name="windowNoTitle">true</item>-->
+<!--        <item name="android:actionMenuTextColor">@android:color/white</item>-->
+<!--        <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>-->
+<!--    </style>-->
+
+    <style name="DrawerArrowStyle"
+        parent="@style/Widget.AppCompat.DrawerArrowToggle">
+        <item name="spinBars">true</item>
+    </style>
+    <style name="textview_user_info">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">14dp</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:gravity">end</item>
+        <item name="android:layout_marginEnd">16dp</item>
+        <item name="android:layout_marginRight">16dp</item>
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingBottom">8dp</item>
+    </style>
+
+    <style name="input_info_layout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">44dp</item>
+        <item name="android:orientation">horizontal</item>
+    </style>
+
+        <style name="input_info_edit_text">
+            <item name="android:layout_marginRight">16dp</item>
+            <item name="android:layout_width">match_parent</item>
+            <item name="android:layout_height">wrap_content</item>
+            <item name="android:gravity">end</item>
+            <item name="android:layout_gravity">center_vertical</item>
+            <item name="android:singleLine">true</item>
+            <item name="android:background">@null</item>
+            <item name="android:textSize">16dp</item>
+            <item name="android:importantForAutofill" tools:ignore="NewApi">no</item>
+        </style>
+
+
+        <style name="textview_device_info">
+            <item name="android:layout_width">match_parent</item>
+            <item name="android:layout_height">wrap_content</item>
+            <item name="android:textSize">16dp</item>
+            <item name="android:layout_gravity">center_vertical</item>
+            <item name="android:gravity">start</item>
+            <item name="android:layout_marginEnd">5dp</item>
+            <item name="android:layout_marginRight">5dp</item>
+            <item name="android:paddingTop">5dp</item>
+            <item name="android:textColor">?attr/Text_head</item>
+            <item name="android:paddingBottom">5dp</item>
+        </style>
+
+    <style name="textview_device_info_short">
+        <item name="android:layout_width">70dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">16dp</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:gravity">start</item>
+        <item name="android:layout_marginEnd">16dp</item>
+        <item name="android:layout_marginRight">16dp</item>
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:textColor">?attr/Text_head</item>
+        <item name="android:paddingBottom">8dp</item>
+    </style>
+    <style name="textview_device_title">
+    <item name="android:layout_width">120dp</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:textSize">16dp</item>
+    <item name="android:textColor">?attr/Text_head</item>
+    <item name="android:layout_gravity">center_vertical</item>
+</style>
+
+    <style name="textview_device_title_short">
+        <item name="android:layout_width">100dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">16dp</item>
+        <item name="android:textColor">?attr/Text_head</item>
+        <item name="android:layout_gravity">center_vertical</item>
+    </style>
+
+    <style name="title_recyclerview_item">
+        <item name="android:maxLines">2</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">?attr/Text_head</item>
+        <item name="android:textSize">16dp</item>
+    </style>
+    <style name="content_text_recycler_item">
+        <item name="android:maxLines">3</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">12dp</item>
+        <item name="android:textColor">?attr/Text</item>
+    </style>
+    <style name="info_more_lines_layout">
+        <item name="android:background">?attr/backgroundLight</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:minHeight">35dp</item>
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingBottom">8dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">horizontal</item>
+    </style>
+    <style name="input_info_title">
+        <item name="android:textColor">?attr/Text</item>
+        <item name="android:layout_width">100dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">16dp</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:layout_gravity">center_vertical</item>
+    </style>
+    <style name="info_more_lines_text">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:minHeight">28dp</item>
+        <item name="android:textColor">?attr/Text_head</item>
+        <item name="android:textSize">16dp</item>
+        <item name="android:layout_marginRight">16dp</item>
+        <item name="android:gravity">center_vertical|right</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">horizontal</item>
+    </style>
+    <style name="line">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:layout_marginLeft">16dp</item>
+        <item name="android:layout_marginRight">16dp</item>
+    </style>
+    <style name="line_program">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">0.1dp</item>
+        <item name="android:layout_marginLeft">16dp</item>
+        <item name="android:layout_marginRight">16dp</item>
+    </style>
+
+
+
+
+</resources>

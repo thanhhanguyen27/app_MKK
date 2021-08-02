@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+    <RelativeLayout
+        android:background="@color/ora"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerInParent="true"
+            android:background="@drawable/ic_baseline_warning_24"/>
+    </RelativeLayout>
+    <LinearLayout
+        android:layout_marginTop="18dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="16dp"
+            android:textColor="?attr/Text"
+            android:text="   Chuẩn bị phun khử khuẩn. \nĐề nghị ra khỏi phòng!"/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Ok"
+            android:textSize="16dp"
+            android:background="@drawable/coner_ok"
+            android:backgroundTint="?attr/backgroundLight"
+            android:textAllCaps="false"
+            android:layout_marginTop="25dp"/>
+    </LinearLayout>
+
+
+</LinearLayout>

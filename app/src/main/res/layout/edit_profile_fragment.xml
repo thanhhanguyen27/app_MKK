@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+<!--            <TextView-->
+<!--                android:layout_marginTop="10dp"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="Ảnh đại diện"-->
+<!--                android:textSize="16dp"-->
+<!--                android:layout_marginLeft="16dp"-->
+<!--                android:textColor="?attr/Text_head"/>-->
+
+<!--            <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_marginTop="20dp"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:layout_marginBottom="15dp"-->
+<!--                android:layout_weight="1"-->
+<!--                android:layout_height="wrap_content">-->
+<!--                <androidx.cardview.widget.CardView-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:layout_width="110dp"-->
+<!--                    android:layout_height="130dp"-->
+<!--                    android:minHeight="32dp"-->
+<!--                    app:cardCornerRadius="5dp"-->
+<!--                    app:cardElevation="0dp"-->
+<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                    app:layout_constraintEnd_toEndOf="parent"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintTop_toTopOf="parent">-->
+
+<!--                    <ImageView-->
+<!--                        android:id="@+id/buttonViewImage"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="match_parent"-->
+<!--                        android:adjustViewBounds="true"-->
+<!--                        android:background="?attr/backgroundColor" />-->
+<!--                </androidx.cardview.widget.CardView>-->
+<!--                <ImageButton-->
+<!--                    android:id="@+id/buttonAddImage"-->
+<!--                    android:layout_width="24dp"-->
+<!--                    android:layout_height="24dp"-->
+<!--                    android:layout_marginTop="53dp"-->
+<!--                    android:layout_marginLeft="43dp"-->
+<!--                    android:gravity="center"-->
+<!--                    android:padding="0dp"-->
+<!--                    android:src="@drawable/ic_baseline_camera_alt_24"-->
+<!--                    android:textSize="16sp"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintTop_toTopOf="parent" />-->
+<!--            </androidx.constraintlayout.widget.ConstraintLayout>-->
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textFieldRoom"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="15dp"
+                android:hint="Họ và tên"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/edtName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textFieldId"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="12dp"
+                android:hint="Email"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/edtMail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textFie"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="12dp"
+                android:hint="Giới tính"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/edtSex"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textFieldTime"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="12dp"
+                android:hint="Số điện thoại"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/edtPhone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="12dp"
+                android:hint="Phòng ban"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/edtRoom"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="26dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginBottom="30dp"
+                android:weightSum="2">
+
+                <Button
+                    android:id="@+id/btCancel1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="30dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="#7e57c2"
+                    android:text="Hủy"
+                    android:textAllCaps="false" />
+
+                <Button
+                    android:id="@+id/btSave"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Lưu"
+                    android:textAllCaps="false" />
+            </LinearLayout>
+
+        </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+</layout>

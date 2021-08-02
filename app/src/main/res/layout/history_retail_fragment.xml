@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="history"
+            type="com.example.uimkk.model.History" />
+    </data>
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/backgroundColor"
+    tools:context=".ui.fragment.history.HistoryRetailFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/ln1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="?attr/backgroundLight"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                style="@style/info_more_lines_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/input_info_title"
+                    android:text="@string/dia_diem" />
+
+                <TextView
+                    style="@style/info_more_lines_text"
+                    android:text='@{String.format("%s",history.room)}' />
+
+            </LinearLayout>
+
+            <TextView
+                style="@style/line"
+                android:background="@color/grayline"
+                android:backgroundTint="@color/grayline" />
+
+
+
+            <LinearLayout
+                style="@style/info_more_lines_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/input_info_title"
+                    android:text="@string/nguoi_van_hanh" />
+
+                <TextView
+                    android:id="@+id/tvCreater"
+                    style="@style/info_more_lines_text"
+                    android:text='@{String.format("%s",history.creater)}' />
+
+            </LinearLayout>
+
+            <TextView
+                style="@style/line"
+                android:background="@color/grayline"
+                android:backgroundTint="@color/grayline" />
+
+
+            <LinearLayout
+                style="@style/info_more_lines_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/input_info_title"
+                    android:text="@string/thoi_gian_phun" />
+
+                <TextView
+                    style="@style/info_more_lines_text"
+                    android:text='@{String.format("%s", history.timeRun)}' />
+
+            </LinearLayout>
+
+            <TextView
+                style="@style/line"
+                android:background="@color/grayline"
+                android:backgroundTint="@color/grayline" />
+
+            <LinearLayout
+                style="@style/info_more_lines_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/input_info_title"
+                    android:text="@string/loi" />
+
+                <TextView
+                    style="@style/info_more_lines_text"
+                    android:text='@{String.format("%s", history.error)}' />
+
+            </LinearLayout>
+
+
+
+<!--            <LinearLayout-->
+<!--                style="@style/info_more_lines_layout"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:orientation="horizontal">-->
+
+<!--                <TextView-->
+<!--                    style="@style/input_info_title"-->
+<!--                    android:text="Địa điểm" />-->
+
+<!--                <TextView-->
+<!--                    style="@style/info_more_lines_text"-->
+<!--                    android:text='@{String.format("%s", history.location)}' />-->
+
+<!--            </LinearLayout>-->
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="?attr/backgroundLight"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ln1">
+
+            <LinearLayout
+                style="@style/info_more_lines_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/input_info_title"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="@string/nong_do" />
+
+                <TextView
+                    style="@style/info_more_lines_text"
+                    android:text='@{String.format("%s", history.nongdo)}' />
+
+            </LinearLayout>
+
+            <TextView
+                style="@style/line"
+                android:background="@color/grayline"
+                android:backgroundTint="@color/grayline" />
+
+            <LinearLayout
+                style="@style/info_more_lines_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/input_info_title"
+                    android:text="@string/the_tich" />
+
+                <TextView
+                    style="@style/info_more_lines_text"
+                    android:text='@{String.format("%s", history.thetich)}' />
+
+            </LinearLayout>
+
+            <TextView
+                style="@style/line"
+                android:background="@color/grayline"
+                android:backgroundTint="@color/grayline" />
+
+            <LinearLayout
+                style="@style/info_more_lines_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/input_info_title"
+                    android:text="@string/toc_do_phun" />
+
+                <TextView
+                    style="@style/info_more_lines_text"
+                    android:text='@{String.format("%s", history.speedSpray)}' />
+
+            </LinearLayout>
+
+            <TextView
+                style="@style/line"
+                android:background="@color/grayline"
+                android:backgroundTint="@color/grayline" />
+
+            <LinearLayout
+                style="@style/info_more_lines_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/input_info_title"
+                    android:text="@string/bat_dau" />
+
+                <TextView
+                    style="@style/info_more_lines_text"
+                  android:id="@+id/tvTimeCreate"/>
+
+            </LinearLayout>
+
+            <TextView
+                style="@style/line"
+                android:background="@color/grayline"
+                android:backgroundTint="@color/grayline" />
+
+            <LinearLayout
+                style="@style/info_more_lines_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/input_info_title"
+                    android:text="@string/ket_thuc" />
+
+                <TextView
+                    android:id="@+id/tvTimeEnd"
+                    style="@style/info_more_lines_text"
+                  />
+            </LinearLayout>
+
+        </LinearLayout>
+        </LinearLayout>
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

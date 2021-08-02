@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">UI MKK</string>
+    <string name="dark">Dark Mode</string>
+
+
+    <string name="dong_co_AC">AC Motor</string>
+    <string name="dong_co_DC">DC Motor</string>
+    <string name="quat">Radiator fan</string>
+    <string name="bomnhudong">Pump</string>
+    <string name="caidatnhiet">Set the heat level</string>
+    <string name="chuong">Buzzer</string>
+    <string name="chuongtrinh">Program</string>
+    <string name="lich_su">History</string>
+    <string name="kiem_tra">Check</string>
+    <string name="cai_dat">Setting</string>
+    <string name="nguoi_van_hanh">Operator</string>
+    <string name="dia_diem">Place</string>
+    <string name="so_lan_chay">Number of runs</string>
+    <string name="thoi_gian_phun">Spray time</string>
+    <string name="loi">Error</string>
+    <string name="nong_do">Concentration(ml/m3)</string>
+    <string name="the_tich">Volume(m3)</string>
+    <string name="toc_do_phun">Spray speed</string>
+    <string name="bat_dau">Start</string>
+    <string name="ket_thuc">End</string>
+    <string name="thoi_gian_phun_01_00_00">Spray time: 01:00:00</string>
+    <string name="ngon_ngu">Language</string>
+    <string name="can_hoa_chat">Chemical balance</string>
+    <string name="muc_hoa_chat">Chemical level</string>
+    <string name="phong">Room</string>
+    <string name="th_i_gian_phun_c_t_nh_10_20">Estimated spraying time: _</string>
+    <string name="chuan_bi_phun_sau">Prepare to spray later</string>
+    <string name="thoi_gian">Time</string>
+    <string name="dung_phun">Stop spraying</string>
+    <string name="che_do_toi">Dark mode</string>
+    <string name="kich_hoat_LED">Activate LED</string>
+    <string name="kich_hoat_can">Active chemical balance</string>
+    <string name="kich_hoat_chuong">Active buzzer</string>
+    <string name="kich_hoat_quat_tan_nhiet">Active radiator fan</string>
+    <string name="can_chinh_can_zero">balance chemical</string>
+    <string name="can_chinh_can_max">Max balance chemical</string>
+    <string name="toc_do_phun_bom">Pump injection speed</string>
+    <string name="Toc_do_quay">Spin speed</string>
+    <string name="dang_xuat">Log out</string>
+</resources>
