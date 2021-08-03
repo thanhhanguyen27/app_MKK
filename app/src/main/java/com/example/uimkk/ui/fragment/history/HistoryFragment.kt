@@ -50,7 +50,6 @@ class  HistoryFragment : Fragment(), IconHistoryAdapter.OnItemButtonClick {
     ): View? {
         setHasOptionsMenu(true)
         (activity as AppCompatActivity).supportActionBar?.show()
-        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding= DataBindingUtil.inflate(inflater, R.layout.history_fragment, container, false)
         viewModel = ViewModelProviders.of(this).get(HistoryViewModel::class.java)
         viewModel.getAllHistory()

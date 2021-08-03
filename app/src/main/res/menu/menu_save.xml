@@ -2,12 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item android:title="Lưu"
-       app:showAsAction="never"
+       app:showAsAction="always"
         android:contentDescription="Lưu"
         android:id="@+id/Save"/>
-    <item android:title="Xóa chương trình"
-        app:showAsAction="never"
-        android:contentDescription="Xóa chương trình"
-        android:id="@+id/Delete"/>
+<!--    <item android:title="Xóa chương trình"-->
+<!--        app:showAsAction="never"-->
+<!--        android:contentDescription="Xóa chương trình"-->
+<!--        android:id="@+id/Delete"/>-->
 
 </menu>

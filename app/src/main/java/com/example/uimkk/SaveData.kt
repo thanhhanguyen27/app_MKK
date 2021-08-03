@@ -5,7 +5,6 @@ import android.content.SharedPreferences
 import android.content.res.Resources
 import android.content.res.loader.ResourcesProvider
 import androidx.core.content.ContentProviderCompat.requireContext
-import dagger.lint.R
 import java.util.*
 
 class SaveData(context:Context) {

@@ -20,6 +20,12 @@ class IconProgramAdapter( var programs: ArrayList<Program>, private val onItemBu
             binding.root.setOnClickListener{
                 onItemButtonClick.onItemClick(program)
             }
+            binding.btDelete.setOnClickListener {
+                onItemButtonClick.delete(program)
+            }
+            binding.btSee.setOnClickListener {
+                onItemButtonClick.seeMore(program)
+            }
         }
 
     }
@@ -39,13 +45,14 @@ class IconProgramAdapter( var programs: ArrayList<Program>, private val onItemBu
         return programs.size
     }
 
-    fun remove(index: Int) {
-        programs.removeAt(index)
-        notifyItemRemoved(index)
+    fun remove(program:Program) {
+        programs.remove(program)
     }
 
     interface OnItemButtonClick{
         fun onItemClick(program:Program)
+        fun delete(program: Program)
+        fun seeMore(program: Program)
     }
 
 

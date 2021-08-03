@@ -68,7 +68,6 @@ class SettingFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         (activity as AppCompatActivity).supportActionBar?.show()
-        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding = DataBindingUtil.inflate(inflater, R.layout.setting_fragment, container, false)
 
         //loadLanguageState()
@@ -82,8 +81,8 @@ class SettingFragment : Fragment() {
         if (saveData.loadTempSetting().isNotEmpty()){
             binding.tvTemp.setText("${saveData.loadTempSetting()}")
         }
-        ipAddress = SettingFragmentArgs.fromBundle(requireArguments()).ipaddress
-        port = SettingFragmentArgs.fromBundle(requireArguments()).port
+        ipAddress = "192.168.4.1"
+        port = 8080
         radioGroup = binding.radioGroup
 
 
@@ -136,9 +135,9 @@ class SettingFragment : Fragment() {
         ReceiveData1(port)
 
         binding.apply {
-            lnActive.setOnClickListener { findNavController().navigate(SettingFragmentDirections.actionSettingFragmentToActivateFragment(ipAddress, port)) }
-            lnScale.setOnClickListener { findNavController().navigate(SettingFragmentDirections.actionSettingFragmentToScaleFragment(ipAddress, port)) }
-            lnSpeed.setOnClickListener { findNavController().navigate(SettingFragmentDirections.actionSettingFragmentToSpeedFragment(ipAddress, port)) }
+            lnActive.setOnClickListener { findNavController().navigate(SettingFragmentDirections.actionSettingFragmentToActivateFragment()) }
+            lnScale.setOnClickListener { findNavController().navigate(SettingFragmentDirections.actionSettingFragmentToScaleFragment()) }
+            lnSpeed.setOnClickListener { findNavController().navigate(SettingFragmentDirections.actionSettingFragmentToSpeedFragment()) }
 
             binding.lnEdit.setOnClickListener {
                 findNavController().navigate(

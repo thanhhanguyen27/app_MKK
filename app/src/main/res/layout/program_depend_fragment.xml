@@ -22,7 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="10dp"
             android:text="Phòng 1"
             android:textColor="?attr/Text_head"
             android:textSize="18dp"
@@ -31,10 +31,12 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
         <TextView
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="10dp"
             android:layout_width="match_parent"
-            android:layout_height="8dp"
-            android:background="?attr/backgroundColor"/>
+            android:layout_height="1dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:background="@color/grayline"/>
 
 <LinearLayout
     android:layout_marginTop="25dp"

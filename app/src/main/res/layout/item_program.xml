@@ -8,7 +8,7 @@
             type="com.example.uimkk.model.Program" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_marginTop="6dp"
+        android:layout_marginTop="2dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -16,6 +16,14 @@
             android:id="@+id/cardView1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:cardElevation="3dp"
+            android:elevation="3dp"
+            app:cardCornerRadius="8dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="4dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginLeft="8dp"
+            android:background="?attr/backgroundColor1"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -23,14 +31,20 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:weightSum="2">
                 <ImageView
+                    android:layout_marginTop="8dp"
                     android:layout_width="30dp"
-                    android:layout_height="40dp"
+                    android:layout_height="34dp"
                     android:layout_weight="0.2"
-                    android:layout_gravity="center"
-                    android:src="@drawable/coding"
+                    android:layout_gravity="top"
+                    android:src="@drawable/set_programpng"
                     />
 
             <LinearLayout
@@ -44,43 +58,98 @@
                     style="@style/title_recyclerview_item"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
                     android:layout_marginTop="4dp"
                     android:text='@{String.format("%s", program.name)}'
-                    android:textStyle="bold" />
+                    />
                 <TextView
-                    android:layout_marginLeft="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/timeCreatee"
                     style="@style/content_text_recycler_item"/>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:weightSum="2">
+
                 <TextView
-                    android:layout_marginLeft="10dp"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     style="@style/content_text_recycler_item"
                     android:text='@{String.format("Thể tích: %s m3", program.thetich)}'
+                    />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/content_text_recycler_item"
+                    android:text='@{String.format("Nồng độ: %s ml/m3", program.nongdo)}'
                     android:layout_marginBottom="4dp"
                     />
-                    <TextView
-                        android:layout_marginLeft="10dp"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        style="@style/content_text_recycler_item"
-                        android:text='@{String.format("Nồng độ: %s ml/m3", program.nongdo)}'
-                        android:layout_marginBottom="4dp"
-                        />
-                </LinearLayout>
 
             </LinearLayout>
             </LinearLayout>
+                <TextView
+                    android:layout_marginTop="4dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:background="@color/grayline"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:weightSum="2"
+                    android:orientation="horizontal">
+                    <LinearLayout
+                        android:id="@+id/btDelete"
+                        android:layout_gravity="center"
+                        android:layout_width="0dp"
+                        android:gravity="center"
+                        style="?attr/buttonBarButtonStyle"
+                        android:layout_weight="1"
+                        android:layout_height="40dp"
+                        android:orientation="horizontal">
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/trash"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Xóa chương trình"
+                            android:layout_marginLeft="3dp"
+                            android:textSize="14dp"
+                            android:textColor="@color/delete_or"/>
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/btSee"
+                        android:layout_gravity="center"
+                        android:layout_width="0dp"
+                        android:gravity="center"
+                        style="?attr/buttonBarButtonStyle"
+                        android:layout_weight="1"
+                        android:layout_height="40dp"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="21dp"
+                            android:layout_height="21dp"
+                            android:src="@drawable/information" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Xem chi tiết"
+                            android:layout_marginLeft="4dp"
+                            android:textSize="14dp"
+                            android:textColor="#0277bd"/>
+
+
+                    </LinearLayout>
+
+
+
+
+                </LinearLayout>
+            </LinearLayout>
+
         </androidx.cardview.widget.CardView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

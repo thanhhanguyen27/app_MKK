@@ -5,10 +5,8 @@
 <LinearLayout
     android:id="@+id/lnMain"
     android:layout_width="match_parent"
-    android:background="?attr/backgroundColor"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:weightSum="2"
     tools:context=".ui.fragment.history.HistoryFragment">
     <LinearLayout
         android:layout_width="match_parent"
@@ -17,7 +15,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="6dp"
         android:layout_gravity="center"
         android:gravity="center"
         android:weightSum="2"
@@ -27,17 +25,31 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:layout_width="0dp"
+            android:orientation="horizontal"
             android:layout_height="wrap_content"
             android:layout_weight="1">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:text="Từ"
+                android:layout_marginRight="3dp"
+                android:textColor="?attr/Text_head"
+                android:textSize="16dp"
+                android:textStyle="bold" />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="16dp"
-            android:padding="5dp"
-            android:background="@drawable/boder_stroke_load"
+            android:textStyle="bold"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
             android:textColor="?attr/Text_head"
             android:id="@+id/tvDateStart"/>
         </LinearLayout>
+
         <ImageView
             android:layout_width="20dp"
             android:layout_height="20dp"
@@ -47,15 +59,27 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:layout_width="0dp"
+            android:orientation="horizontal"
             android:layout_height="wrap_content"
             android:layout_weight="1">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Đến"
+                android:paddingTop="5dp"
+                android:layout_marginRight="3dp"
+                android:paddingBottom="5dp"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                android:textColor="?attr/Text_head"/>
         <TextView
             android:textColor="?attr/Text_head"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="16dp"
-            android:padding="5dp"
-            android:background="@drawable/boder_stroke_load"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:textStyle="bold"
             android:id="@+id/tvDateEnd"/>
         </LinearLayout>
 
@@ -81,8 +105,7 @@
         android:layout_width="match_parent"
         tools:listitem="@layout/item_history"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginTop="3dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"

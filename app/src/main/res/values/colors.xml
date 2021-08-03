@@ -33,4 +33,5 @@
     <color name="load">#00c853</color>
     <color name="light">#F8F8FB</color>
     <color name="red">#d50000</color>
+    <color name="delete_or">#ff7043</color>
 </resources>

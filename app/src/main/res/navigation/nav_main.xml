@@ -3,31 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_main"
-    app:startDestination="@id/mainFragment">
+    app:startDestination="@id/nav_home">
 
     <fragment
-        android:id="@+id/mainFragment"
-        android:name="com.example.uimkk.ui.fragment.MainFragment"
-        android:label="AFALSOL"
-        tools:layout="@layout/main_fragment">
-        <action
-            android:id="@+id/action_mainFragment_to_historyFragment"
-            app:destination="@id/historyFragment" />
-        <action
-            android:id="@+id/action_mainFragment_to_programFragment"
-            app:destination="@id/programFragment" />
-        <action
-            android:id="@+id/action_mainFragment_to_settingFragment"
-            app:destination="@id/settingFragment" />
-        <action
-            android:id="@+id/action_mainFragment_to_testFragment"
-            app:destination="@id/testFragment" />
-        <action
-            android:id="@+id/action_mainFragment_to_programRetailFragment"
-            app:destination="@id/programRetailFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/historyFragment"
+        android:id="@+id/nav_history"
         android:name="com.example.uimkk.ui.fragment.history.HistoryFragment"
         android:label="Lịch sử"
         tools:layout="@layout/history_fragment" >
@@ -36,25 +15,22 @@
             app:destination="@id/historyRetailFragment" />
     </fragment>
     <fragment
-        android:id="@+id/programFragment"
+        android:id="@+id/nav_home"
         android:name="com.example.uimkk.ui.fragment.program.ProgramFragment"
         android:label="Chương trình"
         tools:layout="@layout/program_fragment" >
         <action
             android:id="@+id/action_programFragment_to_programDependFragment"
             app:destination="@id/programDependFragment" />
+        <action
+            android:id="@+id/action_nav_home_to_editProfileFragment2"
+            app:destination="@id/editProfileFragment" />
     </fragment>
     <fragment
-        android:id="@+id/settingFragment"
+        android:id="@+id/nav_setting"
         android:name="com.example.uimkk.ui.fragment.setting.SettingFragment"
         android:label="Cài đặt"
         tools:layout="@layout/setting_fragment">
-        <argument
-            android:name="ipaddress"
-            app:argType="string" />
-        <argument
-            android:name="port"
-            app:argType="integer" />
         <action
             android:id="@+id/action_settingFragment_to_editProfileFragment"
             app:destination="@id/editProfileFragment" />
@@ -69,17 +45,10 @@
             app:destination="@id/scaleFragment" />
     </fragment>
     <fragment
-        android:id="@+id/testFragment"
+        android:id="@+id/nav_test"
         android:name="com.example.uimkk.ui.fragment.test.TestFragment"
         android:label="Kiểm tra"
-        tools:layout="@layout/test_fragment">
-        <argument
-            android:name="ipaddress"
-            app:argType="string" />
-        <argument
-            android:name="port"
-            app:argType="integer" />
-    </fragment>
+        tools:layout="@layout/test_fragment"/>
     <fragment
         android:id="@+id/programDependFragment"
         android:name="com.example.uimkk.ui.fragment.program.ProgramDependFragment"
@@ -118,9 +87,6 @@
         <argument
             android:name="timeSum"
             app:argType="integer" />
-        <action
-            android:id="@+id/action_programRetailFragment_to_mainFragment"
-            app:destination="@id/mainFragment" />
         <argument
             android:name="username"
             app:argType="string" />
@@ -130,12 +96,6 @@
         <argument
             android:name="hourStart"
             app:argType="string" />
-        <argument
-            android:name="ipAddress"
-            app:argType="string" />
-        <argument
-            android:name="port"
-            app:argType="integer" />
         <argument
             android:name="speedSpray"
             app:argType="string" />
@@ -160,36 +120,15 @@
     <fragment
         android:id="@+id/activateFragment"
         android:name="com.example.uimkk.ui.fragment.setting.ActivateFragment"
-        android:label="Kích hoạt" >
-        <argument
-            android:name="ipAddress"
-            app:argType="string" />
-        <argument
-            android:name="port"
-            app:argType="integer" />
-    </fragment>
+        android:label="Kích hoạt" />
     <fragment
         android:id="@+id/speedFragment"
         android:name="com.example.uimkk.ui.fragment.setting.SpeedFragment"
-        android:label="Tốc độ" >
-        <argument
-            android:name="ipAddress"
-            app:argType="string" />
-        <argument
-            android:name="port"
-            app:argType="integer" />
-    </fragment>
+        android:label="Tốc độ" />
     <fragment
         android:id="@+id/scaleFragment"
         android:name="com.example.uimkk.ui.fragment.setting.ScaleFragment"
         android:label="Căn chỉnh cân hóa chất"
-        tools:layout="@layout/scale_fragment" >
-        <argument
-            android:name="ipAddress"
-            app:argType="string" />
-        <argument
-            android:name="port"
-            app:argType="integer" />
-    </fragment>
+        tools:layout="@layout/scale_fragment" />
 
 </navigation>

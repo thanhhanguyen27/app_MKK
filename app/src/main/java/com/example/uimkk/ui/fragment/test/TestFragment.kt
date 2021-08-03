@@ -17,9 +17,6 @@ import com.example.uimkk.SaveData
 import com.example.uimkk.databinding.TestFragmentBinding
 import com.example.uimkk.ui.viewmodel.TestViewModel
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.analytics.ktx.analytics
-import com.google.firebase.ktx.Firebase
-import kotlinx.android.synthetic.main.test_fragment.*
 import java.io.IOException
 import java.net.DatagramPacket
 import java.net.DatagramSocket
@@ -56,11 +53,9 @@ class TestFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         (activity as AppCompatActivity).supportActionBar?.show()
-        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding= DataBindingUtil.inflate(inflater, R.layout.test_fragment, container, false)
-        ipAddress= TestFragmentArgs.fromBundle(requireArguments()).ipaddress
-        port=TestFragmentArgs.fromBundle(requireArguments()).port
-        Log.d("_UDP", port.toString())
+        ipAddress= "192.168.4.1"
+        port= 8080
         //connect
         checkOn(0x01, 0x0B, 0x00, 0x00, 0x00, 0x01)
         if ((ipAddress.isNotEmpty()) && (port != 0) ){

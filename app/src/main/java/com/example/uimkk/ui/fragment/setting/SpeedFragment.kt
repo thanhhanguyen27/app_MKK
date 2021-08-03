@@ -21,7 +21,6 @@ import androidx.navigation.fragment.findNavController
 import com.example.uimkk.R
 import com.example.uimkk.SaveData
 import com.example.uimkk.databinding.SpeedFragmentBinding
-import com.example.uimkk.ui.fragment.MainFragmentDirections
 import com.example.uimkk.ui.viewmodel.setting.SpeedViewModel
 import java.io.IOException
 import java.net.DatagramPacket
@@ -57,8 +56,8 @@ class SpeedFragment : Fragment() {
         (activity as AppCompatActivity).supportActionBar?.show()
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding= DataBindingUtil.inflate(inflater,R.layout.speed_fragment, container, false)
-        ipAddress=SpeedFragmentArgs.fromBundle(requireArguments()).ipAddress
-        port=SpeedFragmentArgs.fromBundle(requireArguments()).port
+        ipAddress="192.168.4.1"
+        port=8080
         saveData= SaveData(requireContext())
         if (saveData.loadSpray().isNotEmpty()){
             binding.tvSpeedSpray.text= saveData.loadSpray()

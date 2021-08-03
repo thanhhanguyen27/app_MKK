@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/nav_home"
+        android:icon="@drawable/homee"
+        android:title="Chương trình"
+        app:showAsAction="ifRoom"
+        android:contentDescription="Chương trình"
+        />
+    <item
+        android:id="@+id/nav_test"
+        android:icon="@drawable/testt"
+        android:title="Kiểm tra"
+        android:contentDescription="Kiểm tra"
+        app:showAsAction="ifRoom"
+        />
+    <item
+        android:id="@+id/nav_history"
+        android:icon="@drawable/historyyyy"
+        android:title="Lịch sử"
+        android:contentDescription="Lịch sử"
+        app:showAsAction="ifRoom"
+        />
+    <item
+        android:id="@+id/nav_setting"
+        android:icon="@drawable/settingss"
+        android:title="Cài đặt"
+        android:contentDescription="Cài đặt"
+        app:showAsAction="ifRoom"
+        />
+
+</menu>

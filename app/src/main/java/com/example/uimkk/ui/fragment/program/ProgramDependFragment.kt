@@ -80,8 +80,8 @@ class ProgramDependFragment : Fragment() {
         program = ProgramDependFragmentArgs.fromBundle(requireArguments()).program
         username = ProgramDependFragmentArgs.fromBundle(requireArguments()).username
         val pref = requireContext().getSharedPreferences(SHARE_NAME, Context.MODE_PRIVATE)
-        ipAddress = pref.getString(IPADDRESS, "")!!
-        port = pref.getInt(PORT, 0)
+        ipAddress = "192.168.4.1"
+        port = 8080
         savedata = SaveData(requireContext())
         savedata.setRoom(program.name)
         scaleActive = savedata.loadActiveScale()
@@ -341,8 +341,6 @@ class ProgramDependFragment : Fragment() {
         requireView().findNavController().navigate(
             ProgramDependFragmentDirections.actionProgramDependFragmentToProgramRetailFragment(
                 program = program,
-                ipAddress = ipAddress,
-                port = port,
                 timecreate = timeCreate,
                 timeSpeed = time1,
                 hourStart = hourStart,
@@ -460,10 +458,10 @@ class ProgramDependFragment : Fragment() {
                 showDialogSave()
                 true
             }
-            R.id.Delete ->{
-                deleteProgram(program)
-                true
-            }
+//            R.id.Delete ->{
+//                deleteProgram(program)
+//                true
+//            }
             else -> {
                 super.onOptionsItemSelected(item)
             }

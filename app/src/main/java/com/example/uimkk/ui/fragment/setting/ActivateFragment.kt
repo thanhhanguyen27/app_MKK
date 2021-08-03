@@ -47,8 +47,8 @@ class ActivateFragment : Fragment() {
         (activity as AppCompatActivity).supportActionBar?.show()
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding= DataBindingUtil.inflate(inflater, R.layout.activate_fragment, container, false)
-        ipAddress= ActivateFragmentArgs.fromBundle(requireArguments()).ipAddress
-        port=ActivateFragmentArgs.fromBundle(requireArguments()).port
+        ipAddress= "192.168.4.1"
+        port=8080
         saveData= SaveData(requireContext())
         //get data
         checkOn(0x02, 0x09, B3, B4, B5, 0x01)

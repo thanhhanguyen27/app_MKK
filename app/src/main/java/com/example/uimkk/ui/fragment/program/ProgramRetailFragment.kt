@@ -80,8 +80,8 @@ class ProgramRetailFragment: Fragment(){
             false
         )
         viewModel = ViewModelProviders.of(this).get(ProgramRetailViewModel::class.java)
-        port= ProgramRetailFragmentArgs.fromBundle(requireArguments()).port
-        ipAddress=ProgramRetailFragmentArgs.fromBundle(requireArguments()).ipAddress
+        port=8080
+        ipAddress="192.168.4.1"
         timeCreate= ProgramRetailFragmentArgs.fromBundle(requireArguments()).timecreate
         program= ProgramRetailFragmentArgs.fromBundle(requireArguments()).program
         timeRun= ProgramRetailFragmentArgs.fromBundle(requireArguments()).timeSpeed
