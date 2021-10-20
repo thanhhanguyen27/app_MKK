@@ -5,8 +5,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/backgroundColor"
-    tools:context=".ui.fragment.test.TestFragment">
+    android:background="?attr/backgroundColor1">
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -22,7 +21,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="15dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -30,12 +29,14 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="24dp"
-                android:layout_marginRight="24dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="16dp"
                 android:layout_marginBottom="8dp"
                 android:background="?attr/backgroundLight"
                 app:cardCornerRadius="6dp"
                 app:cardElevation="4dp"
+                android:elevation="4dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -47,7 +48,6 @@
                     android:orientation="vertical">
 
                     <LinearLayout
-                        android:layout_marginTop="5dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:weightSum="2"
@@ -199,487 +199,670 @@
 
             </androidx.cardview.widget.CardView>
 
+
+        </LinearLayout>
+
+        <LinearLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2">
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="8dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
+                app:cardCornerRadius="6dp"
+                app:cardElevation="4dp"
+                android:elevation="3dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+                <LinearLayout
+                    android:id="@+id/lnNotification"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvNotification"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:gravity="start"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/chuong"
+                android:textColor="?attr/Text_head"
+                android:textSize="16dp" />
+                <LinearLayout
+                    android:weightSum="2"
+                    android:layout_marginBottom="8dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <ImageView
+                        android:src="@drawable/notification"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="1"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="10dp" />
+                    <androidx.appcompat.widget.SwitchCompat
+                        android:id="@+id/btNotifyOnOff"
+                        android:layout_weight="1"
+                        android:button="@drawable/change_color"
+                        android:layout_marginRight="8dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        />
+                </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+
+            <!--        <androidx.cardview.widget.CardView-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_weight="1"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="8dp"-->
+<!--            android:layout_marginLeft="24dp"-->
+<!--            android:layout_marginRight="12dp"-->
+<!--            android:layout_marginBottom="8dp"-->
+<!--            android:background="?attr/backgroundLight"-->
+<!--            app:cardCornerRadius="6dp"-->
+<!--            app:cardElevation="4dp"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent">-->
+
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="160dp"-->
+<!--                android:background="?attr/backgroundLight"-->
+<!--                android:orientation="vertical">-->
+
+<!--                <ImageView-->
+<!--                    android:id="@+id/icon"-->
+<!--                    android:src="@drawable/motorac"-->
+<!--                    android:layout_width="60dp"-->
+<!--                    android:layout_height="60dp"-->
+<!--                    android:layout_gravity="center"-->
+<!--                    android:layout_marginTop="10dp"-->
+<!--                    android:layout_marginBottom="10dp" />-->
+
+<!--                <TextView-->
+<!--                    android:id="@+id/textView"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:gravity="center"-->
+<!--                    android:text="@string/dong_co_AC"-->
+<!--                    android:textColor="?attr/Text_head"-->
+<!--                    android:textSize="16dp" />-->
+<!--                <LinearLayout-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:weightSum="2"-->
+<!--                    android:orientation="horizontal">-->
+<!--                    <Button-->
+<!--                        android:id="@+id/btNguoc"-->
+<!--                        android:layout_width="0dp"-->
+<!--                        android:layout_weight="1"-->
+<!--                        android:textSize="13sp"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        style="?attr/buttonBarButtonStyle"-->
+<!--                        android:text="Quay\nngược"-->
+<!--                        android:textAllCaps="false"/>-->
+<!--                    <TextView-->
+<!--                        android:layout_width="1dp"-->
+<!--                        android:layout_gravity="center"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:background="@color/grayline"/>-->
+<!--                    <Button-->
+<!--                        android:id="@+id/btXuoi"-->
+<!--                        android:layout_width="0dp"-->
+<!--                        android:layout_weight="1"-->
+<!--                        android:textSize="13sp"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        style="?attr/buttonBarButtonStyle"-->
+<!--                        android:text="Quay\nxuôi"-->
+<!--                        android:textAllCaps="false"/>-->
+<!--                </LinearLayout>-->
+<!--            </LinearLayout>-->
+<!--        </androidx.cardview.widget.CardView>-->
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="16dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
+                android:background="?attr/backgroundLight"
+                app:cardCornerRadius="6dp"
+                app:cardElevation="4dp"
+                android:elevation="3dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:id="@+id/lnThoi"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvThoi"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:gravity="start"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:text="@string/dong_co_DC"
+                    android:textColor="?attr/text_change"
+                    android:textSize="16dp" />
+                <LinearLayout
+                    android:weightSum="2"
+                    android:layout_marginBottom="8dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <ImageView
+                        android:src="@drawable/motor"
+                        android:layout_width="30dp"
+                        android:layout_weight="1"
+                        android:layout_height="30dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_gravity="center" />
+
+                    <androidx.appcompat.widget.SwitchCompat
+                        android:id="@+id/btMotorBlow"
+                        android:layout_width="wrap_content"
+                        android:button="@drawable/change_color"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginRight="8dp"
+                        android:layout_weight="1"
+                        android:gravity="center" />
+                </LinearLayout>
+
+
+        </LinearLayout>
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
+
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <androidx.cardview.widget.CardView
+
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginBottom="8dp"
+                android:background="?attr/backgroundLight"
+                app:cardCornerRadius="6dp"
+                app:cardElevation="4dp"
+                android:elevation="3dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <LinearLayout
+                    android:id="@+id/lnFan"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvFan"
+                        android:text="@string/quat"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:textColor="?attr/text_change"
+                        android:textSize="16dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginBottom="15dp"/>
+                    <LinearLayout
+                        android:layout_marginBottom="8dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+
+                        <ImageView
+                            android:src="@drawable/fan"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_weight="1"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginBottom="5dp" />
+
+                        <androidx.appcompat.widget.SwitchCompat
+                            android:id="@+id/btFanOnOff"
+                            android:layout_width="wrap_content"
+                            android:button="@drawable/change_color"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginRight="8dp"
+                            android:layout_weight="1"
+                            android:gravity="center" />
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="16dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
+                android:background="?attr/backgroundLight"
+                app:cardCornerRadius="6dp"
+                app:cardElevation="4dp"
+                android:elevation="3dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <LinearLayout
+                    android:id="@+id/lnPump"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvPump"
+                        android:text="@string/bomnhudong"
+                        android:layout_width="match_parent"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:layout_marginBottom="15dp"
+                        android:textColor="?attr/text_change"
+                        android:textSize="16dp" />
+                    <LinearLayout
+                        android:layout_marginBottom="8dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:weightSum="2"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:src="@drawable/chemistry"
+                            android:layout_width="30dp"
+                            android:layout_weight="1"
+                            android:layout_height="30dp"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginBottom="5dp" />
+                        <androidx.appcompat.widget.SwitchCompat
+                            android:id="@+id/btPump"
+                            android:layout_weight="1"
+
+                            android:layout_marginRight="8dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:layout_gravity="center"
+                            />
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
+
+<!--        <LinearLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:orientation="horizontal"-->
+<!--            android:weightSum="2">-->
+
 <!--            <androidx.cardview.widget.CardView-->
+
 <!--                android:layout_width="0dp"-->
 <!--                android:layout_weight="1"-->
 <!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginRight="24dp"-->
-<!--                android:layout_marginLeft="12dp"-->
-<!--                android:layout_marginBottom="8dp"-->
 <!--                android:layout_marginTop="8dp"-->
+<!--                android:layout_marginLeft="16dp"-->
+<!--                android:layout_marginRight="8dp"-->
+<!--                android:layout_marginBottom="8dp"-->
 <!--                android:background="?attr/backgroundLight"-->
 <!--                app:cardCornerRadius="6dp"-->
 <!--                app:cardElevation="4dp"-->
+<!--                android:elevation="3dp"-->
 <!--                app:layout_constraintBottom_toBottomOf="parent"-->
 <!--                app:layout_constraintEnd_toEndOf="parent"-->
 <!--                app:layout_constraintStart_toStartOf="parent"-->
 <!--                app:layout_constraintTop_toTopOf="parent">-->
 
 <!--                <LinearLayout-->
+<!--                    android:id="@+id/lnLedRed"-->
 <!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="160dp"-->
-<!--                    android:background="?attr/backgroundLight"-->
+<!--                    android:layout_height="wrap_content"-->
 <!--                    android:orientation="vertical">-->
 
-<!--                    <ImageView-->
-<!--                        android:src="@drawable/notification"-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="60dp"-->
-<!--                        android:layout_gravity="center"-->
-<!--                        android:layout_marginTop="10dp"-->
-<!--                        android:layout_marginBottom="10dp" />-->
-
 <!--                    <TextView-->
-<!--                        android:text="@string/chuong"-->
+<!--                        android:text="Led đỏ"-->
 <!--                        android:layout_width="match_parent"-->
 <!--                        android:layout_height="wrap_content"-->
-<!--                        android:gravity="center"-->
-<!--                        android:layout_marginBottom="5dp"-->
-<!--                        android:textColor="?attr/Text_head"-->
-<!--                        android:textSize="16dp" />-->
-<!--                    <androidx.appcompat.widget.SwitchCompat-->
-<!--                        android:id="@+id/btNotifyOnOff"-->
-<!--                        android:layout_width="wrap_content"-->
+<!--                        android:gravity="start"-->
+<!--                        android:textColor="?attr/text_change"-->
+<!--                        android:textSize="16dp"-->
+<!--                        android:layout_marginLeft="16dp"-->
+<!--                        android:layout_marginTop="16dp"-->
+<!--                        android:layout_marginBottom="15dp"/>-->
+<!--                    <LinearLayout-->
+<!--                        android:layout_marginBottom="8dp"-->
+<!--                        android:layout_width="match_parent"-->
 <!--                        android:layout_height="wrap_content"-->
-<!--                        android:gravity="center"-->
-<!--                        android:layout_gravity="center"-->
-<!--                        />-->
+<!--                        android:orientation="horizontal"-->
+<!--                        android:weightSum="2">-->
 
+<!--                        <ImageView-->
+<!--                            android:src="@drawable/ledred"-->
+<!--                            android:layout_width="30dp"-->
+<!--                            android:layout_height="35dp"-->
+<!--                            android:layout_weight="1"-->
+<!--                            android:layout_gravity="center"-->
+<!--                            android:layout_marginTop="5dp"-->
+<!--                            android:layout_marginBottom="5dp" />-->
 
+<!--                        <androidx.appcompat.widget.SwitchCompat-->
+<!--                            android:id="@+id/btLedRed"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:button="@drawable/change_color"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_gravity="center"-->
+<!--                            android:layout_marginRight="8dp"-->
+<!--                            android:layout_weight="1"-->
+<!--                            android:gravity="center" />-->
+<!--                    </LinearLayout>-->
 <!--                </LinearLayout>-->
-
 <!--            </androidx.cardview.widget.CardView>-->
 
-        </LinearLayout>
+<!--            <androidx.cardview.widget.CardView-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_weight="1"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginRight="16dp"-->
+<!--                android:layout_marginLeft="8dp"-->
+<!--                android:layout_marginBottom="8dp"-->
+<!--                android:layout_marginTop="8dp"-->
+<!--                android:background="?attr/backgroundLight"-->
+<!--                app:cardCornerRadius="6dp"-->
+<!--                app:cardElevation="4dp"-->
+<!--                android:elevation="3dp"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toTopOf="parent">-->
+
+<!--                <LinearLayout-->
+<!--                    android:id="@+id/lnLedGreen"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:orientation="vertical">-->
+
+<!--                    <TextView-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_marginLeft="16dp"-->
+<!--                        android:layout_marginTop="16dp"-->
+<!--                        android:layout_marginBottom="15dp"-->
+<!--                        android:gravity="start"-->
+<!--                        android:text="Led xanh lá"-->
+<!--                        android:textColor="?attr/text_change"-->
+<!--                        android:textSize="16dp" />-->
+
+<!--                    <LinearLayout-->
+<!--                        android:layout_marginBottom="8dp"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:weightSum="2"-->
+<!--                        android:orientation="horizontal">-->
+
+<!--                        <ImageView-->
+<!--                            android:src="@drawable/ledgreen"-->
+<!--                            android:layout_width="30dp"-->
+<!--                            android:layout_weight="1"-->
+<!--                            android:layout_height="35dp"-->
+<!--                            android:layout_gravity="center"-->
+<!--                            android:layout_marginTop="5dp"-->
+<!--                            android:layout_marginBottom="5dp" />-->
+<!--                        <androidx.appcompat.widget.SwitchCompat-->
+<!--                            android:id="@+id/btLedGreen"-->
+<!--                            android:layout_weight="1"-->
+
+<!--                            android:layout_marginRight="8dp"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:gravity="center"-->
+<!--                            android:layout_gravity="center"-->
+<!--                            />-->
+<!--                    </LinearLayout>-->
+<!--                </LinearLayout>-->
+<!--            </androidx.cardview.widget.CardView>-->
+<!--        </LinearLayout>-->
 
         <LinearLayout
-
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
             android:orientation="horizontal"
-            android:weightSum="2">
-
-        <androidx.cardview.widget.CardView
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginLeft="24dp"
-            android:layout_marginRight="12dp"
-            android:layout_marginBottom="8dp"
-            android:background="?attr/backgroundLight"
-            app:cardCornerRadius="6dp"
-            app:cardElevation="4dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="160dp"
-                android:background="?attr/backgroundLight"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:id="@+id/icon"
-                    android:src="@drawable/motorac"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp" />
-
-                <TextView
-                    android:id="@+id/textView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="@string/dong_co_AC"
-                    android:textColor="?attr/Text_head"
-                    android:textSize="16dp" />
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:weightSum="2"
-                    android:orientation="horizontal">
-                    <Button
-                        android:id="@+id/btNguoc"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:textSize="13sp"
-                        android:layout_height="wrap_content"
-                        style="?attr/buttonBarButtonStyle"
-                        android:text="Quay\nngược"
-                        android:textAllCaps="false"/>
-                    <TextView
-                        android:layout_width="1dp"
-                        android:layout_gravity="center"
-                        android:layout_height="wrap_content"
-                        android:background="@color/grayline"/>
-                    <Button
-                        android:id="@+id/btXuoi"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:textSize="13sp"
-                        android:layout_height="wrap_content"
-                        style="?attr/buttonBarButtonStyle"
-                        android:text="Quay\nxuôi"
-                        android:textAllCaps="false"/>
-                </LinearLayout>
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="24dp"
-                android:layout_marginLeft="12dp"
-                android:layout_marginBottom="8dp"
-                android:layout_marginTop="8dp"
-                android:background="?attr/backgroundLight"
-                app:cardCornerRadius="6dp"
-                app:cardElevation="4dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="160dp"
-                android:background="?attr/backgroundLight"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:src="@drawable/motor"
-                    android:layout_width="match_parent"
-                    android:layout_height="60dp"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp" />
-
-                <TextView
-                    android:text="@string/dong_co_DC"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:layout_marginBottom="5dp"
-                    android:textColor="?attr/Text_head"
-                    android:textSize="16dp" />
-
-                <androidx.appcompat.widget.SwitchCompat
-                    android:id="@+id/btMotorBlow"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:layout_gravity="center"
-                    />
-
-        </LinearLayout>
-            </androidx.cardview.widget.CardView>
-        </LinearLayout>
-
-
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="2">
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginLeft="24dp"
-                android:layout_marginRight="12dp"
-                android:layout_marginBottom="8dp"
-                android:background="?attr/backgroundLight"
-                app:cardCornerRadius="6dp"
-                app:cardElevation="4dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="160dp"
-                    android:background="?attr/backgroundLight"
-                    android:orientation="vertical">
-
-                    <ImageView
-                        android:src="@drawable/fan"
-                        android:layout_width="match_parent"
-                        android:layout_height="60dp"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp" />
-
-                    <TextView
-                        android:text="@string/quat"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:textColor="?attr/Text_head"
-                        android:textSize="16dp"
-                        android:layout_marginBottom="5dp"/>
-
-                    <androidx.appcompat.widget.SwitchCompat
-                        android:id="@+id/btFanOnOff"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:layout_gravity="center"
-                        />
-
-
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="24dp"
-                android:layout_marginLeft="12dp"
-                android:layout_marginBottom="8dp"
-                android:layout_marginTop="8dp"
-                android:background="?attr/backgroundLight"
-                app:cardCornerRadius="6dp"
-                app:cardElevation="4dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="160dp"
-                    android:background="?attr/backgroundLight"
-                    android:orientation="vertical">
-
-                    <ImageView
-                        android:src="@drawable/motor"
-                        android:layout_width="match_parent"
-                        android:layout_height="60dp"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp" />
-
-                    <TextView
-                        android:text="@string/bomnhudong"
-                        android:layout_width="match_parent"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginRight="20dp"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:layout_marginBottom="5dp"
-                        android:textColor="?attr/Text_head"
-                        android:textSize="16dp" />
-
-                    <androidx.appcompat.widget.SwitchCompat
-                        android:id="@+id/btPump"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:layout_gravity="center"
-                        />
-
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:weightSum="2"
-            android:layout_marginBottom="10dp"
-            android:orientation="horizontal">
-
-        <androidx.cardview.widget.CardView
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginLeft="24dp"
-            android:layout_marginRight="12dp"
             android:layout_marginBottom="20dp"
-            android:background="?attr/backgroundLight"
-            app:cardCornerRadius="6dp"
-            app:cardElevation="4dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:weightSum="2">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="160dp"
-                android:orientation="vertical">
+<!--            <androidx.cardview.widget.CardView-->
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="3">
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_weight="1"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="8dp"-->
+<!--                android:layout_marginLeft="16dp"-->
+<!--                android:layout_marginRight="8dp"-->
+<!--                android:layout_marginBottom="8dp"-->
+<!--                android:background="?attr/backgroundLight"-->
+<!--                app:cardCornerRadius="6dp"-->
+<!--                app:cardElevation="4dp"-->
+<!--                android:elevation="3dp"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toTopOf="parent">-->
 
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="4dp"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+<!--                <LinearLayout-->
+<!--                    android:id="@+id/lnLedBlue"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:orientation="vertical">-->
 
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="60dp"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="5dp"
-                        android:src="@drawable/ledred" />
+<!--                    <TextView-->
+<!--                        android:text="Led xanh dương"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:gravity="start"-->
+<!--                        android:textColor="?attr/text_change"-->
+<!--                        android:textSize="16dp"-->
+<!--                        android:layout_marginLeft="16dp"-->
+<!--                        android:layout_marginTop="16dp"-->
+<!--                        android:layout_marginBottom="15dp"/>-->
+<!--                    <LinearLayout-->
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="Red" />
+<!--                        android:layout_marginBottom="8dp"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:orientation="horizontal"-->
+<!--                        android:weightSum="2">-->
 
+<!--                        <ImageView-->
+<!--                            android:src="@drawable/ledblue"-->
+<!--                            android:layout_width="30dp"-->
+<!--                            android:layout_height="35dp"-->
+<!--                            android:layout_weight="1"-->
+<!--                            android:layout_gravity="center"-->
+<!--                            android:layout_marginTop="5dp"-->
+<!--                            android:layout_marginBottom="5dp" />-->
 
-                    <androidx.appcompat.widget.SwitchCompat
-                        android:id="@+id/btLedRedOnOff"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:gravity="center" />
+<!--                        <androidx.appcompat.widget.SwitchCompat-->
+<!--                            android:id="@+id/btLedBlue"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_gravity="center"-->
+<!--                            android:layout_marginRight="8dp"-->
+<!--                            android:layout_weight="1"-->
+<!--                            android:button="@drawable/change_color"-->
+<!--                            android:gravity="center" />-->
+<!--                    </LinearLayout>-->
+<!--                </LinearLayout>-->
+<!--            </androidx.cardview.widget.CardView>-->
 
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="60dp"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="5dp"
-                        android:src="@drawable/ledgreen" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="Green" />
-
-                    <androidx.appcompat.widget.SwitchCompat
-                        android:id="@+id/btLedGreenOnOff"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:gravity="center" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="60dp"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="5dp"
-                        android:src="@drawable/ledblue" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="Blue" />
-
-
-                    <androidx.appcompat.widget.SwitchCompat
-                        android:id="@+id/btLedBlueOnOff"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:gravity="center" />
-
-                </LinearLayout>
-            </LinearLayout>
-                <TextView
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="LED"
-                    android:textSize="16dp"
-                    android:textColor="?attr/Text_head"/>
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
             <androidx.cardview.widget.CardView
                 android:layout_width="0dp"
+                android:layout_gravity="center"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="24dp"
-                android:layout_marginLeft="12dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginLeft="8dp"
                 android:layout_marginBottom="8dp"
                 android:layout_marginTop="8dp"
                 android:background="?attr/backgroundLight"
                 app:cardCornerRadius="6dp"
                 app:cardElevation="4dp"
+                android:elevation="3dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <LinearLayout
+                    android:id="@+id/lnMotorAC"
                     android:layout_width="match_parent"
-                    android:layout_height="160dp"
-                    android:background="?attr/backgroundLight"
+                    android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <ImageView
-                        android:src="@drawable/notification"
-                        android:layout_width="match_parent"
-                        android:layout_height="60dp"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp" />
-
                     <TextView
-                        android:text="@string/chuong"
+                        android:text="Động cơ quay"
+                        android:layout_width="match_parent"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:layout_marginBottom="10dp"
+                        android:textColor="?attr/text_change"
+                        android:textSize="16dp" />
+                    <androidx.appcompat.widget.LinearLayoutCompat
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:layout_marginBottom="5dp"
-                        android:textColor="?attr/Text_head"
-                        android:textSize="16dp" />
-                    <androidx.appcompat.widget.SwitchCompat
-                        android:id="@+id/btNotifyOnOff"
+                        android:layout_gravity="center">
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_marginBottom="8dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:layout_gravity="center"
-                        />
+                        android:weightSum="2"
+                        android:orientation="horizontal">
 
+                        <LinearLayout
+                            android:id="@+id/quaynguoc"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:background="?android:attr/selectableItemBackground"
+                            android:foreground="?android:attr/selectableItemBackground"
+                            android:gravity="start"
+                            android:orientation="vertical"
+                            app:layout_constraintEnd_toStartOf="@+id/quayxuoi"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            tools:layout_editor_absoluteX="32dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="4dp"
+                                android:layout_marginRight="4dp"
+                                android:layout_marginBottom="5dp"
+                                android:gravity="center"
+                                android:text="ngược"
+                                android:textColor="?attr/Text_head"
+                                android:textSize="12sp" />
+
+                            <ImageView
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:layout_marginLeft="4dp"
+                                android:layout_marginRight="4dp"
+                                android:src="@drawable/back_time" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/quayxuoi"
+                            android:background="?android:attr/selectableItemBackground"
+                            android:foreground="?android:attr/selectableItemBackground"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/quaynguoc"
+                            android:layout_width="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="end"
+                            android:layout_marginLeft="24dp"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="xuôi  "
+                                android:layout_marginRight="4dp"
+                                android:layout_marginLeft="4dp"
+                                android:layout_marginBottom="5dp"
+                                android:textSize="12sp"
+                                android:textColor="?attr/Text_head"/>
+                            <ImageView
+                                android:layout_marginRight="4dp"
+                                android:layout_marginLeft="4dp"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:src="@drawable/clockwise"/>
+                        </LinearLayout>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                    </androidx.appcompat.widget.LinearLayoutCompat>
                 </LinearLayout>
-
             </androidx.cardview.widget.CardView>
-
-
-
         </LinearLayout>
-
 
     </LinearLayout>
     </ScrollView>

@@ -10,9 +10,29 @@
         <item name="backgroundColor1">#fff</item>
         <item name="Text">#9e9e9e</item>
         <item name="Text_head">#212121</item>
-        <item name="backgroundLight">#fff</item>
+        <item name="text_change">#212121</item>
+        <item name="light_linear">#bbdefb</item>
+        <item name="backgroundWhite">#ffffff</item>
+        <item name="backgroundLight">@color/white</item>
+        <item name="text_change_on">#f8f8fb</item>
         <item name="android:windowEnterAnimation">@style/WindowAnimationTransition</item>
 
+    </style>
+
+    <style name="Change_theme" parent="Theme.MaterialComponents.Light.DarkActionBar">
+        <item name="colorPrimary">#0277bd</item>
+        <item name="colorPrimaryDark">#004c8c</item>
+        <item name="colorAccent">#64b5f6</item>
+        <item name="android:actionMenuTextColor">#fff</item>
+        <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
+        <item name="backgroundColor">#F3F3F3</item>
+        <item name="backgroundColor1">#fff</item>
+        <item name="Text">#9e9e9e</item>
+        <item name="Text_head">#fafafa</item>
+        <item name="light_linear">#42a5f5</item>
+        <item name="android:windowEnterAnimation">@style/WindowAnimationTransition</item>
+        <item name="backgroundWhite">#90caf9</item>
+        <item name="text_change">#f8f8fb</item>
     </style>
 
     <style name="AppTheme.ActionBar" parent="Widget.AppCompat.Light.ActionBar">
@@ -138,7 +158,7 @@
         <item name="android:paddingBottom">8dp</item>
     </style>
     <style name="textview_device_title">
-    <item name="android:layout_width">120dp</item>
+    <item name="android:layout_width">110dp</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:textSize">16dp</item>
     <item name="android:textColor">?attr/Text_head</item>

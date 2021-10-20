@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/backgroundColor"
-    tools:context=".ui.fragment.setting.ScaleFragment">
+    android:background="@color/backgroundColor">
 
     <LinearLayout
         android:background="?attr/backgroundLight"
@@ -13,6 +12,8 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
         <CheckedTextView
+            android:background="?android:attr/selectableItemBackground"
+            android:foreground="?android:attr/selectableItemBackground"
             android:id="@+id/btZero"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
@@ -30,6 +31,8 @@
             android:layout_marginLeft="16dp"
             android:background="@color/grayline"/>
         <CheckedTextView
+            android:background="?android:attr/selectableItemBackground"
+            android:foreground="?android:attr/selectableItemBackground"
             android:id="@+id/btMax"
             android:layout_marginLeft="16dp"
             android:checked="false"

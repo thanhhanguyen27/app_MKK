@@ -5,7 +5,7 @@
     <data>
         <variable
             name="history"
-            type="com.example.uimkk.model.History" />
+            type="com.cpc1hn.uimkk.model.History" />
     </data>
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"

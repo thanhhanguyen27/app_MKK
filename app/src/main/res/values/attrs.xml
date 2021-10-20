@@ -4,7 +4,12 @@
         <attr name="backgroundColor" format="color"/>
         <attr name="Text" format="color"/>
         <attr name="Text_head" format="color"/>
+        <attr name="Text_light" format="color"/>
         <attr name="backgroundColor1" format="color"/>
         <attr name="backgroundLight" format="color"/>
+        <attr name="light_linear" format="color"/>
+        <attr name="backgroundWhite" format="color"/>
+        <attr name="text_change" format="color"/>
+        <attr name="text_change_on" format="color"/>
     </declare-styleable>
 </resources>

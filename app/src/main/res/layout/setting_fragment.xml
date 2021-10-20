@@ -5,14 +5,13 @@
     <data>
         <variable
             name="set"
-            type="com.example.uimkk.model.SetClass" />
+            type="com.cpc1hn.uimkk.model.SetClass" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?attr/backgroundColor"
-        tools:context=".ui.fragment.setting.SettingFragment">
+        android:background="?attr/backgroundColor">
 
 
         <ScrollView
@@ -27,73 +26,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/lnAccount"
-                    android:background="?attr/backgroundLight"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent">
-                    <ImageView
-                        android:id="@+id/img1"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginBottom="15dp"
-                        android:layout_marginRight="20dp"
-                        android:layout_marginTop="15dp"
-                        android:layout_width="60dp"
-                        android:src="@drawable/ic_baseline_account_circle_24"
-                        android:layout_height="60dp"/>
-                    <LinearLayout
-                        android:layout_marginStart="10dp"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/img1"
-                        android:layout_marginTop="20dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/tvName"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="?attr/Text_head"
-                            android:textSize="18dp" />
-
-                        <TextView
-                            android:id="@+id/tvMail"
-                            android:layout_marginTop="8dp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-
-                    </LinearLayout>
-                    <LinearLayout
-                        android:id="@+id/lnEdit"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="10dp"
-                        android:gravity="center"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp">
-
-                        <ImageView
-                            android:id="@+id/tvEdit"
-                            android:layout_width="14dp"
-                            android:layout_height="14dp"
-                            android:src="@drawable/editt" />
-                    </LinearLayout>
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <LinearLayout
                     android:id="@+id/lnActive"
-                    android:layout_marginTop="25dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="?attr/backgroundLight"
@@ -137,220 +72,19 @@
                         android:drawableRight="@drawable/ic_baseline_navigate_next_24" />
 
                 </LinearLayout>
-
+                <TextView
+                    android:id="@+id/tv4"
+                    style="@style/line"
+                    android:background="@color/grayline"
+                    android:backgroundTint="@color/grayline" />
                 <LinearLayout
                     android:id="@+id/ln1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
                     android:orientation="vertical"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
-
-
-
-<!--                    <LinearLayout-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:background="?attr/backgroundLight"-->
-<!--                        android:orientation="horizontal"-->
-<!--                        android:paddingTop="8dp"-->
-<!--                        android:paddingBottom="8dp"-->
-<!--                        android:weightSum="3">-->
-
-<!--                        <LinearLayout-->
-<!--                            android:layout_width="0dp"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:layout_weight="2.3"-->
-<!--                            android:orientation="horizontal">-->
-
-<!--                            <ImageView-->
-<!--                                android:layout_width="24dp"-->
-<!--                                android:layout_height="24dp"-->
-<!--                                android:layout_marginLeft="16dp"-->
-<!--                                android:layout_marginTop="4dp"-->
-<!--                                android:layout_marginRight="10dp"-->
-<!--                                android:layout_marginBottom="4dp"-->
-<!--                                android:src="@drawable/led" />-->
-
-<!--                            <TextView-->
-<!--                                android:layout_width="wrap_content"-->
-<!--                                android:layout_height="wrap_content"-->
-<!--                                android:layout_gravity="center"-->
-<!--                                android:layout_marginRight="16dp"-->
-<!--                                android:gravity="left|center"-->
-<!--                                android:text="@string/kich_hoat_LED"-->
-
-<!--                                android:textColor="?attr/Text_head"-->
-<!--                                android:textSize="16dp" />-->
-<!--                        </LinearLayout>-->
-
-<!--                        <Switch-->
-<!--                            android:id="@+id/btSwitchLED"-->
-<!--                            android:layout_width="0dp"-->
-<!--                            android:layout_height="15dp"-->
-<!--                            android:layout_gravity="center"-->
-<!--                            android:layout_marginRight="16dp"-->
-<!--                            android:layout_weight="0.7"-->
-<!--                            android:gravity="end"-->
-<!--                            tools:ignore="UseSwitchCompatOrMaterialXml" />-->
-<!--                    </LinearLayout>-->
-
-<!--                    <TextView-->
-<!--                        style="@style/line"-->
-<!--                        android:background="@color/grayline"-->
-<!--                        android:backgroundTint="@color/grayline" />-->
-
-<!--                    <LinearLayout-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:background="?attr/backgroundLight"-->
-<!--                        android:orientation="horizontal"-->
-<!--                        android:paddingTop="8dp"-->
-<!--                        android:paddingBottom="8dp"-->
-<!--                        android:weightSum="3">-->
-
-<!--                        <LinearLayout-->
-<!--                            android:layout_width="0dp"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:layout_weight="2.3"-->
-<!--                            android:orientation="horizontal">-->
-
-<!--                            <ImageView-->
-<!--                                android:layout_width="24dp"-->
-<!--                                android:layout_height="24dp"-->
-<!--                                android:layout_marginLeft="16dp"-->
-<!--                                android:layout_marginTop="4dp"-->
-<!--                                android:layout_marginRight="10dp"-->
-<!--                                android:layout_marginBottom="4dp"-->
-<!--                                android:src="@drawable/scale" />-->
-
-<!--                            <TextView-->
-<!--                                android:layout_width="wrap_content"-->
-<!--                                android:layout_height="wrap_content"-->
-<!--                                android:layout_gravity="center"-->
-<!--                                android:layout_marginRight="16dp"-->
-<!--                                android:gravity="left|center"-->
-<!--                                android:text="@string/kich_hoat_can"-->
-<!--                                android:textColor="?attr/Text_head"-->
-<!--                                android:textSize="16dp" />-->
-<!--                        </LinearLayout>-->
-
-<!--                        <Switch-->
-<!--                            android:id="@+id/btSwitchScale"-->
-<!--                            android:layout_width="0dp"-->
-<!--                            android:layout_height="15dp"-->
-<!--                            android:layout_gravity="center"-->
-<!--                            android:layout_marginRight="16dp"-->
-<!--                            android:layout_weight="0.7"-->
-<!--                            android:gravity="end"-->
-<!--                            tools:ignore="UseSwitchCompatOrMaterialXml" />-->
-<!--                    </LinearLayout>-->
-
-<!--                    <TextView-->
-<!--                        style="@style/line"-->
-<!--                        android:background="@color/grayline"-->
-<!--                        android:backgroundTint="@color/grayline" />-->
-
-<!--                    <LinearLayout-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:background="?attr/backgroundLight"-->
-<!--                        android:orientation="horizontal"-->
-<!--                        android:paddingTop="8dp"-->
-<!--                        android:paddingBottom="8dp"-->
-<!--                        android:weightSum="3">-->
-
-<!--                        <LinearLayout-->
-<!--                            android:layout_width="0dp"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:layout_weight="2.3"-->
-<!--                            android:orientation="horizontal">-->
-
-<!--                            <ImageView-->
-<!--                                android:layout_width="24dp"-->
-<!--                                android:layout_height="24dp"-->
-<!--                                android:layout_marginLeft="16dp"-->
-<!--                                android:layout_marginTop="4dp"-->
-<!--                                android:layout_marginRight="10dp"-->
-<!--                                android:layout_marginBottom="4dp"-->
-<!--                                android:src="@drawable/notification" />-->
-
-<!--                            <TextView-->
-<!--                                android:id="@+id/tvBuzzer"-->
-<!--                                android:layout_width="wrap_content"-->
-<!--                                android:layout_height="wrap_content"-->
-<!--                                android:layout_gravity="center"-->
-<!--                                android:layout_marginRight="16dp"-->
-<!--                                android:gravity="left|center"-->
-<!--                                android:text="@string/kich_hoat_chuong"-->
-<!--                                android:textColor="?attr/Text_head"-->
-<!--                                android:textSize="16dp" />-->
-<!--                        </LinearLayout>-->
-
-<!--                        <Switch-->
-<!--                            android:id="@+id/btSwitchBuzzer"-->
-<!--                            android:layout_width="0dp"-->
-<!--                            android:layout_height="15dp"-->
-<!--                            android:layout_gravity="center"-->
-<!--                            android:layout_marginRight="16dp"-->
-<!--                            android:layout_weight="0.7"-->
-<!--                            android:gravity="end"-->
-<!--                            tools:ignore="UseSwitchCompatOrMaterialXml" />-->
-<!--                    </LinearLayout>-->
-
-<!--                    <TextView-->
-<!--                        style="@style/line"-->
-<!--                        android:background="@color/grayline"-->
-<!--                        android:backgroundTint="@color/grayline" />-->
-
-<!--                    <LinearLayout-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:background="?attr/backgroundLight"-->
-<!--                        android:orientation="horizontal"-->
-<!--                        android:paddingTop="8dp"-->
-<!--                        android:paddingBottom="8dp"-->
-<!--                        android:weightSum="3">-->
-
-<!--                        <LinearLayout-->
-<!--                            android:layout_width="0dp"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:layout_weight="2.3"-->
-<!--                            android:orientation="horizontal">-->
-
-<!--                            <ImageView-->
-<!--                                android:layout_width="24dp"-->
-<!--                                android:layout_height="24dp"-->
-<!--                                android:layout_marginLeft="16dp"-->
-<!--                                android:layout_marginTop="4dp"-->
-<!--                                android:layout_marginRight="10dp"-->
-<!--                                android:layout_marginBottom="4dp"-->
-<!--                                android:src="@drawable/fan" />-->
-
-<!--                            <TextView-->
-<!--                                android:layout_width="wrap_content"-->
-<!--                                android:layout_height="wrap_content"-->
-<!--                                android:layout_gravity="center"-->
-<!--                                android:layout_marginRight="16dp"-->
-<!--                                android:gravity="left|center"-->
-<!--                                android:text="@string/kich_hoat_quat_tan_nhiet"-->
-<!--                                android:textColor="?attr/Text_head"-->
-<!--                                android:textSize="16dp" />-->
-<!--                        </LinearLayout>-->
-
-<!--                        <Switch-->
-<!--                            android:id="@+id/btSwitchFan"-->
-<!--                            android:layout_width="0dp"-->
-<!--                            android:layout_height="15dp"-->
-<!--                            android:layout_gravity="center"-->
-<!--                            android:layout_marginRight="16dp"-->
-<!--                            android:layout_weight="0.7"-->
-<!--                            android:gravity="end"-->
-<!--                            tools:ignore="UseSwitchCompatOrMaterialXml" />-->
-<!--                    </LinearLayout>-->
-
 
 
 
@@ -459,7 +193,7 @@
                 </LinearLayout>
 
                     <LinearLayout
-                        android:layout_marginTop="16dp"
+                        android:layout_marginTop="8dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
@@ -656,36 +390,36 @@
 <!--                    android:textAllCaps="false"-->
 <!--                    android:textColor="?attr/Text_head"-->
 <!--                    android:textSize="18sp" />-->
-                <LinearLayout
-                    android:id="@+id/btLogout"
-                    style="@style/info_more_lines_layout"
-                    android:layout_width="match_parent"
-                    android:layout_marginTop="30dp"
-                    android:layout_marginBottom="10dp"
-                    android:background="?attr/backgroundLight"
-                    android:orientation="horizontal"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/ln1">
+<!--                <LinearLayout-->
+<!--                    android:id="@+id/btLogout"-->
+<!--                    style="@style/info_more_lines_layout"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_marginTop="30dp"-->
+<!--                    android:layout_marginBottom="10dp"-->
+<!--                    android:background="?attr/backgroundLight"-->
+<!--                    android:orientation="horizontal"-->
+<!--                    app:layout_constraintEnd_toEndOf="parent"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintTop_toBottomOf="@+id/ln1">-->
 
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_marginBottom="5dp"
-                        android:src="@drawable/logout" />
+<!--                    <ImageView-->
+<!--                        android:layout_width="24dp"-->
+<!--                        android:layout_height="24dp"-->
+<!--                        android:layout_marginLeft="16dp"-->
+<!--                        android:layout_marginTop="8dp"-->
+<!--                        android:layout_marginRight="10dp"-->
+<!--                        android:layout_marginBottom="5dp"-->
+<!--                        android:src="@drawable/logout" />-->
 
-                    <TextView
-                        android:id="@+id/tvLogout"
-                        style="@style/info_more_lines_text"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center"
-                        android:gravity="left|center"
-                        android:text="@string/dang_xuat" />
+<!--                    <TextView-->
+<!--                        android:id="@+id/tvLogout"-->
+<!--                        style="@style/info_more_lines_text"-->
+<!--                        android:layout_height="match_parent"-->
+<!--                        android:layout_gravity="center"-->
+<!--                        android:gravity="left|center"-->
+<!--                        android:text="@string/dang_xuat" />-->
 
-                </LinearLayout>
+<!--                </LinearLayout>-->
 
             </LinearLayout>
         </ScrollView>

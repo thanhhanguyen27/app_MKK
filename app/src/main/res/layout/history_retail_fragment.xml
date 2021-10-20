@@ -5,13 +5,12 @@
     <data>
         <variable
             name="history"
-            type="com.example.uimkk.model.History" />
+            type="com.cpc1hn.uimkk.model.History" />
     </data>
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/backgroundColor"
-    tools:context=".ui.fragment.history.HistoryRetailFragment">
+    android:background="?attr/backgroundColor">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -30,7 +29,6 @@
             android:id="@+id/ln1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:background="?attr/backgroundLight"
             android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"

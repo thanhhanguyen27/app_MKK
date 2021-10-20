@@ -3,17 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 <androidx.constraintlayout.widget.ConstraintLayout
-
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="?attr/backgroundColor"
-    tools:context=".ui.fragment.program.ProgramFragment">
+    android:layout_height="match_parent"
+    android:background="?attr/backgroundColor">
 
     <LinearLayout
         android:id="@+id/lnMain"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -42,21 +43,21 @@
                 android:id="@+id/imConnect"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:layout_marginRight="12dp"
+                android:layout_marginLeft="12dp"
                 android:src="@drawable/antenna"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/imSearch"
+                app:layout_constraintStart_toEndOf="@id/imAccount"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/tvConnect"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="5dp"
+                android:layout_marginLeft="5dp"
                 android:text="Không kết nối"
                 android:textSize="14dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/imConnect"
+                app:layout_constraintStart_toEndOf="@+id/imConnect"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
@@ -66,33 +67,62 @@
                 android:layout_marginRight="16dp"
                 android:src="@drawable/search_black"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/btAdd"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/btAdd"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:layout_marginRight="16dp"
+                android:src="@drawable/plus_blue"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <LinearLayout
             android:id="@+id/searchView"
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:orientation="horizontal"
             android:animateLayoutChanges="true"
             android:background="?attr/backgroundColor1"
-            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ctTop">
-
-            <androidx.appcompat.widget.SearchView
-                android:id="@+id/btSearview"
-                android:visibility="gone"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
+            <EditText
+                android:id="@+id/edtSearch"
+                android:background="@drawable/border_searchview"
+                android:padding="8dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
-                android:background="@drawable/border_searchview"
-                app:queryHint="Tìm kiếm" />
+                android:drawableStart="@drawable/search_black"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Tìm kiếm..."
+                android:textSize="16dp"
+                android:singleLine="true"
+                android:textColorHint="@color/text_gray"/>
+            <LinearLayout
+                android:id="@+id/btClear"
+                android:visibility="gone"
+                android:layout_width="50dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="-70dp"
+                android:layout_marginRight="-50dp"
+                android:layout_height="50dp">
+            <ImageButton
+                android:layout_width="11dp"
+                android:layout_marginTop="14dp"
+                android:layout_marginLeft="15dp"
+                android:src="@drawable/ic_baseline_clear_24"
+                android:layout_height="11dp"/>
+            </LinearLayout>
         </LinearLayout>
-
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/programRecyclerView"
@@ -104,24 +134,6 @@
             app:layout_constraintTop_toBottomOf="@+id/searchView"
             tools:listitem="@layout/item_program" />
     </LinearLayout>
-
-<!--    <com.google.android.material.floatingactionbutton.FloatingActionButton-->
-<!--        android:id="@+id/floatingAddProgram"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_gravity="bottom|right"-->
-<!--        app:fabSize="normal"-->
-<!--        android:layout_marginRight="15dp"-->
-<!--        android:backgroundTint="#ff7043"-->
-<!--        android:clickable="true"-->
-<!--        android:focusable="true"-->
-<!--        android:layout_marginBottom="20dp"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintVertical_bias="0.928"-->
-<!--        app:rippleColor="#ff7043"-->
-<!--        app:srcCompat="@drawable/ic_baseline_add_24"-->
-<!--        tools:ignore="VectorDrawableCompat" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

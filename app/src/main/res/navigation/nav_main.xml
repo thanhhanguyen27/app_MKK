@@ -7,71 +7,75 @@
 
     <fragment
         android:id="@+id/nav_history"
-        android:name="com.example.uimkk.ui.fragment.history.HistoryFragment"
+        android:name="com.cpc1hn.uimkk.ui.fragment.history.HistoryFragment"
         android:label="Lịch sử"
         tools:layout="@layout/history_fragment" >
         <action
-            android:id="@+id/action_historyFragment_to_historyRetailFragment"
+            android:id="@+id/action_nav_history_to_historyRetailFragment"
             app:destination="@id/historyRetailFragment" />
     </fragment>
     <fragment
         android:id="@+id/nav_home"
-        android:name="com.example.uimkk.ui.fragment.program.ProgramFragment"
+        android:name="com.cpc1hn.uimkk.ui.fragment.program.ProgramFragment"
         android:label="Chương trình"
         tools:layout="@layout/program_fragment" >
         <action
-            android:id="@+id/action_programFragment_to_programDependFragment"
+            android:id="@+id/action_nav_home_to_programDependFragment"
             app:destination="@id/programDependFragment" />
         <action
-            android:id="@+id/action_nav_home_to_editProfileFragment2"
-            app:destination="@id/editProfileFragment" />
+            android:id="@+id/action_nav_home_to_accountFragment"
+            app:destination="@id/accountFragment" />
     </fragment>
     <fragment
         android:id="@+id/nav_setting"
-        android:name="com.example.uimkk.ui.fragment.setting.SettingFragment"
+        android:name="com.cpc1hn.uimkk.ui.fragment.setting.SettingFragment"
         android:label="Cài đặt"
         tools:layout="@layout/setting_fragment">
         <action
-            android:id="@+id/action_settingFragment_to_editProfileFragment"
-            app:destination="@id/editProfileFragment" />
-        <action
-            android:id="@+id/action_settingFragment_to_activateFragment"
+            android:id="@+id/action_nav_setting_to_activateFragment"
             app:destination="@id/activateFragment" />
         <action
-            android:id="@+id/action_settingFragment_to_speedFragment"
+            android:id="@+id/action_nav_setting_to_speedFragment"
             app:destination="@id/speedFragment" />
         <action
-            android:id="@+id/action_settingFragment_to_scaleFragment"
+            android:id="@+id/action_nav_setting_to_scaleFragment"
             app:destination="@id/scaleFragment" />
     </fragment>
     <fragment
         android:id="@+id/nav_test"
-        android:name="com.example.uimkk.ui.fragment.test.TestFragment"
+        android:name="com.cpc1hn.uimkk.ui.fragment.test.TestFragment"
         android:label="Kiểm tra"
-        tools:layout="@layout/test_fragment"/>
+        tools:layout="@layout/test_fragment">
+        <action
+            android:id="@+id/action_nav_test_to_ledFragment"
+            app:destination="@id/ledFragment" />
+        <action
+            android:id="@+id/action_nav_test_to_motorACFragment"
+            app:destination="@id/motorACFragment" />
+    </fragment>
     <fragment
         android:id="@+id/programDependFragment"
-        android:name="com.example.uimkk.ui.fragment.program.ProgramDependFragment"
+        android:name="com.cpc1hn.uimkk.ui.fragment.program.ProgramDependFragment"
         android:label="Vận hành"
         tools:layout="@layout/program_depend_fragment">
-        <action
-            android:id="@+id/action_programDependFragment_to_programRetailFragment"
-            app:destination="@id/programRetailFragment" />
         <argument
             android:name="program"
-            app:argType="com.example.uimkk.model.Program" />
+            app:argType="com.cpc1hn.uimkk.model.Program" />
         <argument
             android:name="username"
             app:argType="string" />
+        <action
+            android:id="@+id/action_programDependFragment_to_programRetailFragment2"
+            app:destination="@id/programRetailFragment" />
     </fragment>
     <fragment
         android:id="@+id/programRetailFragment"
-        android:name="com.example.uimkk.ui.fragment.program.ProgramRetailFragment"
+        android:name="com.cpc1hn.uimkk.ui.fragment.program.ProgramRetailFragment"
         android:label="Vận hành"
         tools:layout="@layout/program_retail_fragment" >
         <argument
             android:name="program"
-            app:argType="com.example.uimkk.model.Program" />
+            app:argType="com.cpc1hn.uimkk.model.Program" />
         <argument
             android:name="numberOfRun"
             app:argType="integer" />
@@ -102,33 +106,58 @@
     </fragment>
     <fragment
         android:id="@+id/historyRetailFragment"
-        android:name="com.example.uimkk.ui.fragment.history.HistoryRetailFragment"
+        android:name="com.cpc1hn.uimkk.ui.fragment.history.HistoryRetailFragment"
         android:label="Lịch sử"
         tools:layout="@layout/history_retail_fragment">
         <argument
             android:name="history"
-            app:argType="com.example.uimkk.model.History" />
-    </fragment>
-    <fragment
-        android:id="@+id/editProfileFragment"
-        android:name="com.example.uimkk.ui.fragment.login.EditProfileFragment"
-        android:label="Cập nhật tài khoản" >
-        <argument
-            android:name="user"
-            app:argType="com.example.uimkk.model.UserClass" />
+            app:argType="com.cpc1hn.uimkk.model.History" />
     </fragment>
     <fragment
         android:id="@+id/activateFragment"
-        android:name="com.example.uimkk.ui.fragment.setting.ActivateFragment"
+        android:name="com.cpc1hn.uimkk.ui.fragment.setting.ActivateFragment"
         android:label="Kích hoạt" />
     <fragment
         android:id="@+id/speedFragment"
-        android:name="com.example.uimkk.ui.fragment.setting.SpeedFragment"
+        android:name="com.cpc1hn.uimkk.ui.fragment.setting.SpeedFragment"
         android:label="Tốc độ" />
     <fragment
         android:id="@+id/scaleFragment"
-        android:name="com.example.uimkk.ui.fragment.setting.ScaleFragment"
+        android:name="com.cpc1hn.uimkk.ui.fragment.setting.ScaleFragment"
         android:label="Căn chỉnh cân hóa chất"
         tools:layout="@layout/scale_fragment" />
+    <activity
+        android:id="@+id/mainActivity"
+        android:name="com.cpc1hn.uimkk.MainActivity"
+        android:label="MainActivity" />
+    <fragment
+        android:id="@+id/ledFragment"
+        android:name="com.cpc1hn.uimkk.ui.fragment.test.LedFragment"
+        android:label="Kiểm tra LED"
+        tools:layout="@layout/led_fragment" />
+    <fragment
+        android:id="@+id/motorACFragment"
+        android:name="com.cpc1hn.uimkk.ui.fragment.test.MotorACFragment"
+        android:label="Động cơ quay"
+        tools:layout="@layout/motor_a_c_fragment" />
+    <fragment
+        android:id="@+id/accountFragment"
+        android:name="com.cpc1hn.uimkk.ui.fragment.login.AccountFragment"
+        android:label="Thông tin tài khoản">
+        <argument
+            android:name="user"
+            app:argType="com.cpc1hn.uimkk.model.UserClass" />
+        <action
+            android:id="@+id/action_accountFragment_to_editProfileFragment"
+            app:destination="@id/editProfileFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editProfileFragment"
+        android:name="com.cpc1hn.uimkk.ui.fragment.login.EditProfileFragment"
+        android:label="Cập nhật thông tin">
+        <argument
+            android:name="user"
+            app:argType="com.cpc1hn.uimkk.model.UserClass" />
+    </fragment>
 
 </navigation>

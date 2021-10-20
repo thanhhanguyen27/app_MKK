@@ -5,7 +5,7 @@
     <data>
         <variable
             name="program"
-            type="com.example.uimkk.model.Program" />
+            type="com.cpc1hn.uimkk.model.Program" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_marginTop="2dp"
@@ -49,7 +49,7 @@
 
             <LinearLayout
                 android:layout_weight="1.6"
-                android:background="?attr/backgroundLight"
+                android:background="?attr/backgroundColor1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">

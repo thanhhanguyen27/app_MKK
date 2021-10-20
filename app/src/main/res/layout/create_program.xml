@@ -65,15 +65,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:weightSum="2">
+
             <Button
                 android:id="@+id/btCancel1"
                 android:layout_width="0dp"
-                android:layout_weight="1"
-                android:text="Hủy"
-                android:backgroundTint="#7e57c2"
-                android:textAllCaps="false"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="30dp"/>
+                android:layout_marginRight="30dp"
+                android:layout_weight="1"
+                android:backgroundTint="#7e57c2"
+                android:text="Hủy"
+                android:textAllCaps="false" />
+
             <Button
                 android:id="@+id/btOk"
                 android:text="Thêm"

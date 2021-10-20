@@ -5,8 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/main"
-    tools:context=".ui.fragment.login.RegisterFragment">
+    android:id="@+id/main">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/background"
@@ -25,8 +24,8 @@
         app:layout_constraintTop_toTopOf="@+id/main"
         app:cardCornerRadius="8dp"
         android:layout_marginTop="35dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
         <ScrollView
@@ -39,7 +38,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Đăng Ký"
+                android:text="Tài Khoản"
                 android:textColor="?attr/Text_head"
                 android:textSize="22dp"
                 android:textStyle="bold"

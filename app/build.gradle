@@ -7,7 +7,7 @@ apply plugin: 'com.google.firebase.crashlytics'
 apply plugin: 'com.google.gms.google-services'
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 31
     buildToolsVersion "30.0.3"
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -22,18 +22,19 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.example.uimkk"
+        applicationId "com.cpc1hn.uimkk"
         minSdkVersion 19
-        targetSdkVersion 30
-        versionCode 1
-        versionName "1.0"
+        targetSdkVersion 31
+        versionCode 8
+        versionName "1.0.2"
         multiDexEnabled true
-
+        resConfigs "en", "vi"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     dataBinding {
         enabled = true
     }
+
     buildTypes {
         release {
             minifyEnabled false

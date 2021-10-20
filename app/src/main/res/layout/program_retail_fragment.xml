@@ -5,8 +5,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/backgroundColor1"
-    tools:context=".ui.fragment.program.ProgramRetailFragment">
+    android:background="?attr/backgroundColor1">
 
     <LinearLayout
         android:id="@+id/mainLayout"

@@ -9,7 +9,7 @@
 
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.example.uimkk.ui.fragment.login.LoginFragment"
+        android:name="com.cpc1hn.uimkk.ui.fragment.login.LoginFragment"
         android:label="Đăng nhập"
         tools:layout="@layout/login_fragment">
         <action
@@ -18,7 +18,7 @@
     </fragment>
     <fragment
         android:id="@+id/registerFragment"
-        android:name="com.example.uimkk.ui.fragment.login.RegisterFragment"
+        android:name="com.cpc1hn.uimkk.ui.fragment.login.RegisterFragment"
         android:label="Đăng ký"
         tools:layout="@layout/register_fragment" />
 </navigation>
