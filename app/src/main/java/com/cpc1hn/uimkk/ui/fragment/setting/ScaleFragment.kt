@@ -42,27 +42,23 @@ class ScaleFragment : Fragment() {
         ipAddress= "192.168.4.1"
         port=8080
         binding.apply {
-            btZero.setOnClickListener (object: View.OnClickListener {
-                override fun onClick(v: View?) {
-                    checkOn(0x02, 0x08, 0x00, 0x00, 0x00, 0x01)
-                    dialogScaleZero()
-                }
-            })
+            btZero.setOnClickListener {
+                checkOn(0x02, 0x08, 0x00, 0x00, 0x00, 0x01)
+                dialogScaleZero()
+            }
 
-            btMax.setOnClickListener (object: View.OnClickListener {
-                override fun onClick(v: View?) {
-                    checkOn(0x02, 0x08, 0x00, 0x00, 0x00, 0x02)
-                    dialogScaleMax()
-                }
-            })
+            btMax.setOnClickListener {
+                checkOn(0x02, 0x08, 0x00, 0x00, 0x00, 0x02)
+                dialogScaleMax()
+            }
         }
 
 
         return binding.root
     }
-    fun dialogScaleMax(){
+    private fun dialogScaleMax(){
         val builder = AlertDialog.Builder(requireContext(), R.style.AlertDialogTheme)
-        val positiveButtonClick = { dialog: DialogInterface, which: Int ->
+        val positiveButtonClick = { _: DialogInterface, _: Int ->
             binding.btMax.setCheckMarkDrawable(R.drawable.ic_check_on)
         }
 
@@ -76,9 +72,9 @@ class ScaleFragment : Fragment() {
         }
         builder.show()
     }
-    fun dialogScaleZero(){
+    private fun dialogScaleZero(){
         val builder = AlertDialog.Builder(requireContext(), R.style.AlertDialogTheme)
-        val positiveButtonClick = { dialog: DialogInterface, which: Int ->
+        val positiveButtonClick = { _: DialogInterface, _: Int ->
             binding.btZero.setCheckMarkDrawable(R.drawable.ic_check_on)
         }
 
@@ -93,7 +89,7 @@ class ScaleFragment : Fragment() {
         builder.show()
     }
 
-    fun sendUDP(messageStr: ByteArray) {
+   private fun sendUDP(messageStr: ByteArray) {
         val policy = StrictMode.ThreadPolicy.Builder().permitAll().build()
         StrictMode.setThreadPolicy(policy)
         try {
@@ -102,10 +98,9 @@ class ScaleFragment : Fragment() {
             socket.reuseAddress=true
             socket.broadcast=true
             //socketReceive= DatagramSocket(port)
-            val sendData = messageStr
             val sendPacket = DatagramPacket(
-                sendData,
-                sendData.size,
+                messageStr,
+                messageStr.size,
                 InetAddress.getByName(ipAddress),
                 port
             )
@@ -120,26 +115,19 @@ class ScaleFragment : Fragment() {
         }
     }
 
-    fun byteArrayOfInts(vararg ints: Int) = ByteArray(ints.size) { pos -> ints[pos].toByte() }
+    private fun byteArrayOfInts(vararg ints: Int) = ByteArray(ints.size) { pos -> ints[pos].toByte() }
 
-    fun checkSum(b: ByteArray):Int{
-        val sum = b[0] +b[1]+ b[2]+ b[3] +b[4]+ b[5]
-        return sum
+    private fun checkSum(b: ByteArray): Int {
+        return b[0] + b[1] + b[2] + b[3] + b[4] + b[5]
     }
 
-    fun checkOn(B1: Int, B2: Int, B3: Int, B4: Int, B5: Int, B6: Int){
+    private fun checkOn(B1: Int, B2: Int, B3: Int, B4: Int, B5: Int, B6: Int){
         a = byteArrayOfInts(B1, B2, B3, B4, B5, B6)
         val B7 = checkSum(a)
         a=byteArrayOfInts(B1, B2, B3, B4, B5, B6, B7)
         sendUDP(a)
     }
 
-    fun checkOff(B1: Int, B2: Int, B3: Int, B4: Int, B5: Int, B6: Int){
-        a = byteArrayOfInts(B1, B2, B3, B4, B5, B6)
-        val B7 = checkSum(a)
-        a=byteArrayOfInts(B1, B2, B3, B4, B5, B6, B7)
-        sendUDP(a)
-    }
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(ScaleViewModel::class.java)

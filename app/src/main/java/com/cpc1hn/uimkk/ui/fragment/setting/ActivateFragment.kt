@@ -52,23 +52,23 @@ class ActivateFragment : Fragment() {
         saveData= SaveData(requireContext())
         //get data
         checkOn(0x02, 0x09, B3, B4, B5, 0x01)
-        ReceiveData1()
+        receiveData1()
         binding.apply {
-            binding.btSwitchLED.setOnCheckedChangeListener { buttonView, isChecked ->
+            binding.btSwitchLED.setOnCheckedChangeListener { _, isChecked ->
                 if (isChecked) {
                     checkOn(B1, B2, B3, B4, B5, B6)
                 } else {
                     checkOff(B1, B2, B3, B4, B5, 0x00)
                 }
             }
-            btSwitchFan.setOnCheckedChangeListener { buttonView, isChecked ->
+            btSwitchFan.setOnCheckedChangeListener { _, isChecked ->
                 if (isChecked){
                     checkOn(B1, 0x04, B3, B4, B5, B6)
                 }else {
                     checkOff(B1, 0x04, B3, B4, B5, 0x00)
                 }
             }
-            btSwitchBuzzer.setOnCheckedChangeListener { buttonView, isChecked ->
+            btSwitchBuzzer.setOnCheckedChangeListener { _, isChecked ->
                 if (isChecked){
                     checkOn(B1, 0x03, B3, B4, B5, B6)
 
@@ -76,7 +76,7 @@ class ActivateFragment : Fragment() {
                     checkOff(B1, 0x03, B3, B4, B5, 0x00)
                 }
             }
-            btSwitchScale.setOnCheckedChangeListener { buttonView, isChecked ->
+            btSwitchScale.setOnCheckedChangeListener { _, isChecked ->
                 if (isChecked){
                     checkOn(B1, 0x02, B3, B4, B5, B6)
                     saveData.setActiveScale(true)
@@ -89,28 +89,27 @@ class ActivateFragment : Fragment() {
         return binding.root
     }
 
-    fun byteArrayOfInts(vararg ints: Int) = ByteArray(ints.size) { pos -> ints[pos].toByte() }
+    private fun byteArrayOfInts(vararg ints: Int) = ByteArray(ints.size) { pos -> ints[pos].toByte() }
 
-    fun checkSum(b: ByteArray):Int{
-        val sum = b[0] +b[1]+ b[2]+ b[3] +b[4]+ b[5]
-        return sum
+    private fun checkSum(b: ByteArray): Int {
+        return b[0] + b[1] + b[2] + b[3] + b[4] + b[5]
     }
 
-    fun checkOn(B1: Int, B2: Int, B3: Int, B4: Int, B5: Int, B6: Int){
+   private fun checkOn(B1: Int, B2: Int, B3: Int, B4: Int, B5: Int, B6: Int){
         a = byteArrayOfInts(B1, B2, B3, B4, B5, B6)
         val B7 = checkSum(a)
         a=byteArrayOfInts(B1, B2, B3, B4, B5, B6, B7)
         sendUDP(a)
     }
 
-    fun checkOff(B1: Int, B2: Int, B3: Int, B4: Int, B5: Int, B6: Int){
+    private fun checkOff(B1: Int, B2: Int, B3: Int, B4: Int, B5: Int, B6: Int){
         a = byteArrayOfInts(B1, B2, B3, B4, B5, B6)
         val B7 = checkSum(a)
         a=byteArrayOfInts(B1, B2, B3, B4, B5, B6, B7)
         sendUDP(a)
     }
 
-    fun sendUDP(messageStr: ByteArray) {
+    private fun sendUDP(messageStr: ByteArray) {
         val policy = StrictMode.ThreadPolicy.Builder().permitAll().build()
         StrictMode.setThreadPolicy(policy)
         try {
@@ -119,10 +118,9 @@ class ActivateFragment : Fragment() {
             socket.reuseAddress=true
             socket.broadcast=true
             //socketReceive= DatagramSocket(port)
-            val sendData = messageStr
             val sendPacket = DatagramPacket(
-                sendData,
-                sendData.size,
+                messageStr,
+                messageStr.size,
                 InetAddress.getByName(ipAddress),
                 port
             )
@@ -137,7 +135,7 @@ class ActivateFragment : Fragment() {
         }
     }
 
-    fun ReceiveData1(){
+   private fun receiveData1(){
         var buffer = ByteArray(6566)
         object : Thread() {
             override fun run() {
@@ -160,8 +158,8 @@ class ActivateFragment : Fragment() {
             }
         }.start()
     }
-    fun display1(b: ByteArray) {
-        getActivity()?.runOnUiThread(java.lang.Runnable {
+    private fun display1(b: ByteArray) {
+        activity?.runOnUiThread {
             //Receive LED, Scale, Fan, Buzzer
             if ((b[0] == 0x02.toByte()) && (b[1] == 0x09.toByte()) && (b[6] == checkSum(b).toByte())) {
                 Log.d("_UDP", "LED, Scale, Fan, Buzzer")
@@ -186,7 +184,7 @@ class ActivateFragment : Fragment() {
                     binding.btSwitchFan.isChecked = false
                 }
             }
-        })
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

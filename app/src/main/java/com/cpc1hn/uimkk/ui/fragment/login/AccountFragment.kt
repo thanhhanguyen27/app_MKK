@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.net.wifi.SupplicantState
 import android.net.wifi.WifiInfo
 import android.net.wifi.WifiManager
 import android.os.Bundle
@@ -20,7 +19,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.cpc1hn.uimkk.LoginActivity
-import com.cpc1hn.uimkk.MainActivity
 import com.cpc1hn.uimkk.R
 import com.cpc1hn.uimkk.SaveData
 import com.cpc1hn.uimkk.databinding.AccountFragmentBinding
@@ -41,8 +39,6 @@ class AccountFragment : Fragment() {
     private lateinit var binding: AccountFragmentBinding
     private lateinit var auth: FirebaseAuth
     private lateinit var sharedPrefsHelper: SaveData
-    var databaseReference: DatabaseReference? = null
-    var database: FirebaseDatabase? = null
     private  var user: UserClass= UserClass()
 
     override fun onCreateView(
@@ -70,7 +66,7 @@ class AccountFragment : Fragment() {
         return binding.root
     }
 
-    fun requestLocationPermission(): Int {
+    private fun requestLocationPermission(): Int {
         if (ContextCompat.checkSelfPermission(requireContext(),
                 android.Manifest.permission.ACCESS_FINE_LOCATION)
             != PackageManager.PERMISSION_GRANTED) {
@@ -92,32 +88,22 @@ class AccountFragment : Fragment() {
         return PERMISSION_CODE_NOT_AVAILABLE
     }
 
-    fun getWifiSSID() {
+    private fun getWifiSSID() {
         val mWifiManager: WifiManager =
             ((activity as AppCompatActivity).applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager)
         val info: WifiInfo = mWifiManager.getConnectionInfo()
-        if (info==null){
-            binding.tvCode.text= "Chưa kết nối"
-        }else{
-            binding.tvCode.text= info.ssid
-            sharedPrefsHelper.setCodeMachine(info.ssid)
-            Log.d("_SSID", " ${info.ssid} ${info.bssid}, ${info.ipAddress}")
-        }
+        binding.tvCode.text= info.ssid
+        sharedPrefsHelper.setCodeMachine(info.ssid)
+        Log.d("_SSID", " ${info.ssid} ${info.bssid}, ${info.ipAddress}")
 
-//        if (info.supplicantState === SupplicantState.COMPLETED) {
-//            val ssid: String = info.ssid
-//            binding.tvCode.text= ssid
-//        } else {
-//            binding.tvCode.text= "Chưa kết nối"
-//        }
     }
 
-    fun showlogOut(){
+    private fun showlogOut(){
         val builder = androidx.appcompat.app.AlertDialog.Builder(requireContext(), R.style.AlertDialogTheme)
-        val positiveButtonClick = { dialog: DialogInterface, which: Int ->
+        val positiveButtonClick = { _: DialogInterface, _: Int ->
             logOut()
         }
-        val negativeButtonClick= { dialog: DialogInterface, which: Int ->
+        val negativeButtonClick= { _: DialogInterface, _: Int ->
 
         }
         with(builder) {
@@ -131,7 +117,7 @@ class AccountFragment : Fragment() {
         builder.show()
     }
 
-    fun logOut() {
+    private fun logOut() {
             auth.signOut()
             sharedPrefsHelper.clearAndPutLogout()
             val intent = Intent(requireContext(), LoginActivity::class.java)
@@ -139,7 +125,8 @@ class AccountFragment : Fragment() {
             requireActivity().finish()
     }
 
-    fun getAccount(){
+
+    private fun getAccount(){
         binding.tvName.text = user.name
         binding.tvMail.text = user.email
         binding.tvRoom.text= user.organization

@@ -1,6 +1,7 @@
 package com.cpc1hn.uimkk.ui.fragment.program
 
 
+import android.annotation.SuppressLint
 import android.content.DialogInterface
 import android.os.Bundle
 import android.os.StrictMode
@@ -67,7 +68,7 @@ class ProgramRetailFragment: Fragment(){
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         setHasOptionsMenu(true)
         (activity as AppCompatActivity).supportActionBar?.show()
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -102,7 +103,7 @@ class ProgramRetailFragment: Fragment(){
 
 
 
-        ReceiveData1(port)
+        receiveData1()
 //        if (socketReceive.isClosed){
 //            socketReceive.bind(InetSocketAddress(8081))
 //            Log.d("_UDP", "receive open")
@@ -111,7 +112,7 @@ class ProgramRetailFragment: Fragment(){
         return  binding.root
     }
 
-    private fun ReceiveData1(portNum: Int){
+    private fun receiveData1(){
         var buffer = ByteArray(6566)
         object : Thread() {
             override fun run() {
@@ -135,8 +136,9 @@ class ProgramRetailFragment: Fragment(){
         }.start()
     }
 
+    @SuppressLint("SetTextI18n")
     fun display1(b: ByteArray) {
-        activity?.runOnUiThread(java.lang.Runnable {
+        activity?.runOnUiThread {
             //cap nhat khi dang phun
 //            if ((b[1]==0x02.toByte()) &&(b[0]==0x03.toByte())){
 //                TransitionManager.beginDelayedTransition(binding.mainLayout)
@@ -180,12 +182,12 @@ class ProgramRetailFragment: Fragment(){
                 ).toByte())
             ) {
                 TransitionManager.beginDelayedTransition(binding.mainLayout)
-                    val visible = true
-                    if (visible) {
-                        binding.tv1.visibility = View.GONE
-                        binding.ln3.visibility = View.GONE
-                        binding.lnWarning.visibility = View.VISIBLE
-                    }
+                val visible = true
+                if (visible) {
+                    binding.tv1.visibility = View.GONE
+                    binding.ln3.visibility = View.GONE
+                    binding.lnWarning.visibility = View.VISIBLE
+                }
                 Log.d("_UDP1", "bat dau data= ${b}")
                 //truyen thoi gian dem nguoc
                 val b5 = b[4] * 256
@@ -206,10 +208,10 @@ class ProgramRetailFragment: Fragment(){
                     checkOn(0x03, 0x03, 0x00, 0x00, 0x00, 0x01)
                     Log.d("_UDP", "send 030300000000")
                     timeSpray = convertSectoDay(timeSum)
-                   // binding.progressBarTime.setProgress(0)
-                    error="Không có lỗi"
+                    // binding.progressBarTime.setProgress(0)
+                    error = "Không có lỗi"
                     saveHistory()
-                   // binding.tvTime.setText(convertSectoDay(0))
+                    // binding.tvTime.setText(convertSectoDay(0))
                     notifyEnd()
                 }
                 if (timeRun != 0.toString()) {
@@ -218,17 +220,17 @@ class ProgramRetailFragment: Fragment(){
                     binding.btStop.setOnClickListener {
                         val builder =
                             AlertDialog.Builder(requireContext(), R.style.AlertDialogTheme)
-                        val positiveButtonClick = { dialog: DialogInterface, which: Int ->
+                        val positiveButtonClick = { _: DialogInterface, _: Int ->
                             timeSpray = convertSectoDay(timeSum - timeRun.toInt())
                             socketReceive.close()
-                          //  binding.progressBarTime.setProgress(0)
+                            //  binding.progressBarTime.setProgress(0)
                             //binding.tvTime.setText(convertSectoDay(0))
                             checkOn(0x03, 0x03, 0x00, 0x00, 0x00, 0x01)
-                            error="Dừng đột ngột"
+                            error = "Dừng đột ngột"
                             saveHistory()
                             notifyEnd()
                         }
-                        val negativeButtonClick = { dialog: DialogInterface, which: Int ->
+                        val negativeButtonClick = { _: DialogInterface, _: Int ->
                         }
                         with(builder) {
                             setMessage("Dừng phun?")
@@ -257,10 +259,10 @@ class ProgramRetailFragment: Fragment(){
 //                saveHistory()
 //                notifyEnd()
 //            }
-        })
+        }
 
     }
-    fun checkTemp(){
+    private fun checkTemp(){
         //kiem tra qua nhiet, ket thuc phun hoa chat
         if ((savedata.loadTempSetting().isNotEmpty()) && (savedata.loadTemp().isNotEmpty())) {
             if (savedata.loadTemp().toInt() > savedata.loadTempSetting().toInt()) {
@@ -274,7 +276,7 @@ class ProgramRetailFragment: Fragment(){
             }
         }
     }
-    fun saveHistory(){
+    private fun saveHistory(){
         savedata.setRoomSpraying("")
         val id= (0..1000).random()
         val thetich= ProgramRetailFragmentArgs.fromBundle(requireArguments()).theTich
@@ -314,7 +316,7 @@ class ProgramRetailFragment: Fragment(){
             }
     }
 
-    fun convertSectoDay(time: Int):String {
+    private fun convertSectoDay(time: Int):String {
         var n = time
         val hour = n / 3600
         n %= 3600
@@ -338,10 +340,9 @@ class ProgramRetailFragment: Fragment(){
         return time1
     }
 
-    fun showNotify(){
+    private fun showNotify(){
         val builder = AlertDialog.Builder(requireContext(), R.style.AlertDialogTheme)
-        val positiveButtonClick = { dialog: DialogInterface, which: Int ->
-        }
+        val positiveButtonClick = { _: DialogInterface, _: Int -> }
         with(builder) {
             setMessage("Đang trong quá trình phun.")
             setPositiveButton(
@@ -365,7 +366,7 @@ class ProgramRetailFragment: Fragment(){
 
     private fun notifyEnd(){
         val builder = AlertDialog.Builder(requireContext(), R.style.AlertDialogTheme)
-        val positiveButtonClick = { dialog: DialogInterface, which: Int ->
+        val positiveButtonClick = { _: DialogInterface, _: Int ->
             requireActivity().onBackPressed()
         }
         with(builder) {
@@ -391,9 +392,8 @@ class ProgramRetailFragment: Fragment(){
     }
 
 
-    private fun checkSum(b: ByteArray):Int{
-        val sum = b[0] +b[1]+ b[2]+ b[3] +b[4]+ b[5]
-        return sum
+    private fun checkSum(b: ByteArray): Int {
+        return b[0] + b[1] + b[2] + b[3] + b[4] + b[5]
     }
 
     private fun checkOn(B1: Int, B2: Int, B3: Int, B4: Int, B5: Int, B6: Int){
@@ -411,10 +411,9 @@ class ProgramRetailFragment: Fragment(){
 //Open a port to send the package
             val socket = DatagramSocket(8082)
             socket.broadcast = true
-            val sendData = messageStr
             val sendPacket = DatagramPacket(
-                sendData,
-                sendData.size,
+                messageStr,
+                messageStr.size,
                 InetAddress.getByName(ipAddress),
                 port
             )

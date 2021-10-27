@@ -1,5 +1,6 @@
 package com.cpc1hn.uimkk.ui.fragment.history
 
+import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.content.DialogInterface
 import android.os.Bundle
@@ -37,11 +38,10 @@ class  HistoryFragment : Fragment(), IconHistoryAdapter.OnItemButtonClick {
     private lateinit var binding: HistoryFragmentBinding
     private lateinit var historyAdapter: IconHistoryAdapter
     private var histories: ArrayList<History> = arrayListOf()
-    private var historiesFilter:  ArrayList<History> = arrayListOf()
-    private var TAG="_GETHISTORY"
     private var mili:Long=0
 
 
+    @SuppressLint("SetTextI18n")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -63,8 +63,8 @@ class  HistoryFragment : Fragment(), IconHistoryAdapter.OnItemButtonClick {
 
         val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
         val currentDateandTime: String = sdf.format(Date())
-        binding.tvDateStart.setText(currentDateandTime)
-        binding.tvDateEnd.setText(currentDateandTime)
+        binding.tvDateStart.text = currentDateandTime
+        binding.tvDateEnd.text = currentDateandTime
         val c = Calendar.getInstance()
         val year = c.get(Calendar.YEAR)
         val month = c.get(Calendar.MONTH)
@@ -73,17 +73,16 @@ class  HistoryFragment : Fragment(), IconHistoryAdapter.OnItemButtonClick {
         binding.tvDateStart.setOnClickListener {
 
             val dpd = DatePickerDialog(
-                requireActivity(),
-                DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
+                requireActivity(), { _, year, monthOfYear, dayOfMonth ->
                     // Display Selected date in TextView
                     if ((dayOfMonth < 10) && (monthOfYear < 10)) {
-                        binding.tvDateStart.setText("0" + dayOfMonth + "/0" + (monthOfYear + 1) + "/" + year)
+                        binding.tvDateStart.text = "0" + dayOfMonth + "/0" + (monthOfYear + 1) + "/" + year
                     } else if (dayOfMonth < 10) {
-                        binding.tvDateStart.setText("0" + dayOfMonth + "/" + (monthOfYear + 1) + "/" + year)
+                        binding.tvDateStart.text = "0" + dayOfMonth + "/" + (monthOfYear + 1) + "/" + year
                     } else if (monthOfYear < 10) {
-                        binding.tvDateStart.setText("" + dayOfMonth + "/0" + (monthOfYear + 1) + "/" + year)
+                        binding.tvDateStart.text = "" + dayOfMonth + "/0" + (monthOfYear + 1) + "/" + year
                     } else
-                        binding.tvDateStart.setText("" + dayOfMonth + "/" + (monthOfYear + 1) + "/" + year)
+                        binding.tvDateStart.text = "" + dayOfMonth + "/" + (monthOfYear + 1) + "/" + year
                     historyFilter()
 
                 },
@@ -95,16 +94,15 @@ class  HistoryFragment : Fragment(), IconHistoryAdapter.OnItemButtonClick {
         }
         binding.tvDateEnd.setOnClickListener {
             val dpd = DatePickerDialog(
-                requireActivity(),
-                DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
+                requireActivity(), { _, year, monthOfYear, dayOfMonth ->
                     if ((dayOfMonth < 10) && (monthOfYear < 10)) {
-                        binding.tvDateEnd.setText("0" + dayOfMonth + "/0" + (monthOfYear + 1) + "/" + year)
+                        binding.tvDateEnd.text = "0" + dayOfMonth + "/0" + (monthOfYear + 1) + "/" + year
                     } else if (dayOfMonth < 10) {
-                        binding.tvDateEnd.setText("0" + dayOfMonth + "/" + (monthOfYear + 1) + "/" + year)
+                        binding.tvDateEnd.text = "0" + dayOfMonth + "/" + (monthOfYear + 1) + "/" + year
                     } else if (monthOfYear < 10) {
-                        binding.tvDateEnd.setText("" + dayOfMonth + "/0" + (monthOfYear + 1) + "/" + year)
+                        binding.tvDateEnd.text = "" + dayOfMonth + "/0" + (monthOfYear + 1) + "/" + year
                     } else
-                        binding.tvDateEnd.setText("" + dayOfMonth + "/" + (monthOfYear + 1) + "/" + year)
+                        binding.tvDateEnd.text = "" + dayOfMonth + "/" + (monthOfYear + 1) + "/" + year
                     historyFilter()
                 },
                 year,
@@ -118,7 +116,7 @@ class  HistoryFragment : Fragment(), IconHistoryAdapter.OnItemButtonClick {
         return binding.root
     }
 
-    fun historyFilter(){
+    private fun historyFilter(){
         val start= convertDateToLong("${binding.tvDateStart.text}")
         val end= convertDateToLong("${binding.tvDateEnd.text}")
         viewModel.getHisstoryFilter(start, end).observe(viewLifecycleOwner, { list ->
@@ -128,23 +126,22 @@ class  HistoryFragment : Fragment(), IconHistoryAdapter.OnItemButtonClick {
                     TransitionManager.beginDelayedTransition(binding.lnMain)
                     visible= !visible
                     if (visible){
-                        binding.noView.setVisibility(View.VISIBLE)
+                        binding.noView.visibility = View.VISIBLE
                     }
                 }else {
-                    binding.noView.setVisibility(View.GONE)
+                    binding.noView.visibility = View.GONE
                 }
                 historyAdapter.setListData(it)
             }
-            Log.d(TAG, "${list}")
         })
 
     }
 
-    fun convertDateToLong(date: String): Long {
+    private fun convertDateToLong(date: String): Long {
         try {
             val f: DateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
             val d = f.parse(date)
-            mili = d!!.getTime()
+            mili = d!!.time
         } catch (e: ParseException) {
             e.printStackTrace()
         }
@@ -166,7 +163,7 @@ class  HistoryFragment : Fragment(), IconHistoryAdapter.OnItemButtonClick {
         inflater.inflate(R.menu.history_menu, menu)
         val searchItem = menu.findItem(R.id.Search)
         val searchView = searchItem.actionView as androidx.appcompat.widget.SearchView
-        searchView.setQueryHint("Tìm kiếm")
+        searchView.queryHint = "Tìm kiếm"
         searchView.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 if (query != null && query.isNotEmpty()) {
@@ -205,9 +202,9 @@ class  HistoryFragment : Fragment(), IconHistoryAdapter.OnItemButtonClick {
     }
 
 
-    fun showAlert(){
+    private fun showAlert(){
         val builder = AlertDialog.Builder(requireContext(), R.style.AlertDialogTheme)
-        val positiveButtonClick = { dialog: DialogInterface, which: Int ->
+        val positiveButtonClick = { _: DialogInterface, _: Int ->
             viewModel.deleteHistoryInfo()
             getHistoryFirebase()
             viewModel.insertAll(getHistoryFirebase())
@@ -222,25 +219,22 @@ class  HistoryFragment : Fragment(), IconHistoryAdapter.OnItemButtonClick {
         builder.show()
     }
 
-    fun getHistoryFirebase():ArrayList<History>{
+    private fun getHistoryFirebase():ArrayList<History>{
         val db = FirebaseFirestore.getInstance()
         db.collection("histories").get()
             .addOnSuccessListener { result ->
                 histories= ArrayList(result.map {
                     it.toObject<History>()
                 })
-                Log.d(TAG, histories.toString())
                 historyAdapter.historys = histories
 
-                for (i in 0..histories.size-1){
+                for (i in 0 until histories.size){
                     histories[i].status=""
                 }
                 historyAdapter.historys = histories
                // historyAdapter.notifyDataSetChanged()
             }
-            .addOnFailureListener { exception ->
-                Log.d(TAG, "Error getting documents: ", exception)
-            }
+
         return histories
     }
     override fun onActivityCreated(savedInstanceState: Bundle?) {

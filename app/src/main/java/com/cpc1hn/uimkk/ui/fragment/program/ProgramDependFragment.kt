@@ -1,7 +1,6 @@
 package com.cpc1hn.uimkk.ui.fragment.program
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
 import android.os.StrictMode
@@ -86,7 +85,7 @@ class ProgramDependFragment : Fragment() {
         checkOn1(0x03, 0x04, 0x00, 0x00, 0x00, 0x00)
 
         //Nhan du lieu muc hoa chat
-        checkArray = ReceiveData()
+        checkArray = receiveData()
 
         savedata = SaveData(requireContext())
         if (savedata.loadSpray().isNotEmpty()) {
@@ -112,7 +111,7 @@ class ProgramDependFragment : Fragment() {
         return binding.root
     }
 
-    private fun ReceiveData(): ByteArray {
+    private fun receiveData(): ByteArray {
         var buffer = ByteArray(6566)
         object : Thread() {
             override fun run() {
@@ -165,13 +164,13 @@ class ProgramDependFragment : Fragment() {
         }
     }
 
-    fun estimateTime() {
+    private fun estimateTime() {
         timeSpeed = ((thetich.toInt() * nongdo.toInt()) * 60 / speedSpray.toInt()) + 10
         val time: String = ConvertSectoDay(timeSpeed)
         binding.tvTimeEstimate.text = "Thời gian phun ước tính ${time} "
     }
 
-    fun setNongDo_TheTich() {
+    private fun setNongDo_TheTich() {
         binding.apply {
             room.text = program.NameProgram
 
@@ -257,9 +256,9 @@ class ProgramDependFragment : Fragment() {
         }
     }
 
-    fun showAlert() {
+    private fun showAlert() {
         val builder = AlertDialog.Builder(requireContext(), R.style.AlertDialogTheme)
-        val positiveButtonClick = { dialog: DialogInterface, which: Int ->
+        val positiveButtonClick = { _: DialogInterface, _: Int ->
             if ((savedata.loadRoomSpraying().isNotEmpty())) {
                 if (savedata.loadRoomSpraying() != savedata.loadRoom()) {
                     showNotiSpray()
@@ -271,7 +270,7 @@ class ProgramDependFragment : Fragment() {
                 start()
             }
         }
-        val negativeButtonClick = { dialog: DialogInterface, which: Int ->
+        val negativeButtonClick = { _: DialogInterface, _: Int ->
         }
         with(builder) {
             setMessage("Chuẩn bị phun khử khuẩn. \nĐề nghị ra khỏi phòng!")
@@ -283,18 +282,16 @@ class ProgramDependFragment : Fragment() {
         builder.show()
     }
 
-    fun start() {
-        if (scaleActive == true) {
+    private fun start() {
+        if (scaleActive) {
             if (( binding.tvWarning.visibility != View.VISIBLE) ){
                  next()
              }
             else {
                 val builder1 =
                     AlertDialog.Builder(requireContext(), R.style.AlertDialogTheme)
-                val positiveButtonClick = { dialog: DialogInterface, which: Int ->
+                val positiveButtonClick = { _: DialogInterface, _: Int ->
 
-                }
-                val negativeButtonClick = { dialog: DialogInterface, which: Int ->
                 }
                 with(builder1) {
                     setMessage("Không đủ hóa chất")
@@ -313,7 +310,7 @@ class ProgramDependFragment : Fragment() {
 
     }
 
-    fun next(){
+    private fun next(){
         val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault())
         val sdf1 = SimpleDateFormat("HH:mm:ss", Locale.getDefault())
         timeCreate = sdf.format(Date())
@@ -344,9 +341,9 @@ class ProgramDependFragment : Fragment() {
         )
     }
 
-    fun showNotiSpray(){
+    private fun showNotiSpray(){
         val builder = AlertDialog.Builder(requireContext(), R.style.AlertDialogTheme)
-        val positiveButtonClick = { dialog: DialogInterface, which: Int ->
+        val positiveButtonClick = { _: DialogInterface, _: Int ->
         }
         with(builder) {
             setMessage("Đang phun tại ( ${savedata.loadRoomSpraying()} )")
@@ -358,7 +355,7 @@ class ProgramDependFragment : Fragment() {
         builder.show()
     }
 
-    fun ConvertSectoDay(time: Int):String {
+   private fun ConvertSectoDay(time: Int):String {
         var n = time
         val hour = n / 3600
         n %= 3600
@@ -381,24 +378,24 @@ class ProgramDependFragment : Fragment() {
         return time1
     }
 
-    fun byteArrayOfInts(vararg ints: Int) = ByteArray(ints.size) { pos -> ints[pos].toByte() }
+    private fun byteArrayOfInts(vararg ints: Int) = ByteArray(ints.size) { pos -> ints[pos].toByte() }
 
 
 
 
-    fun checkSum(b: ByteArray):Int{
+    private fun checkSum(b: ByteArray):Int{
         val sum = b[0] +b[1]+ b[2]+ b[3] +b[4]+ b[5]
         return sum
     }
 
-    fun checkOn(B1: Int, B2: Int, B3: Int, B4: Int, B5: Int, B6: Int){
+    private fun checkOn(B1: Int, B2: Int, B3: Int, B4: Int, B5: Int, B6: Int){
         var a = byteArrayOfInts(B1, B2, B3, B4, B5, B6)
         val B7 = checkSum(a)
         a=byteArrayOfInts(B1, B2, B3, B4, B5, B6, B7)
         sendUDP(a)
         Log.d("_UDP", "bat dau dem so 20s")
     }
-    fun checkOn1(B1: Int, B2: Int, B3: Int, B4: Int, B5: Int, B6: Int){
+    private fun checkOn1(B1: Int, B2: Int, B3: Int, B4: Int, B5: Int, B6: Int){
         var a = byteArrayOfInts(B1, B2, B3, B4, B5, B6)
         val B7 = checkSum(a)
         a=byteArrayOfInts(B1, B2, B3, B4, B5, B6, B7)
@@ -407,17 +404,16 @@ class ProgramDependFragment : Fragment() {
     }
 
 
-    fun sendUDP(messageStr: ByteArray) {
+    private fun sendUDP(messageStr: ByteArray) {
         val policy = StrictMode.ThreadPolicy.Builder().permitAll().build()
         StrictMode.setThreadPolicy(policy)
         try {
 //Open a port to send the package
             val socket = DatagramSocket(8082)
             socket.broadcast = true
-            val sendData = messageStr
             val sendPacket = DatagramPacket(
-                sendData,
-                sendData.size,
+                messageStr,
+                messageStr.size,
                 InetAddress.getByName(ipAddress),
                 port
             )
@@ -450,12 +446,12 @@ class ProgramDependFragment : Fragment() {
     }
 
 
-    fun showDialogSave(){
+    private fun showDialogSave(){
         val builder = AlertDialog.Builder(requireContext(), R.style.AlertDialogTheme)
-        val positiveButtonClick = { dialog: DialogInterface, which: Int ->
+        val positiveButtonClick = { _: DialogInterface, _: Int ->
             updateProgram()
         }
-        val negativeButtonClick= { dialog: DialogInterface, which: Int ->
+        val negativeButtonClick= { _: DialogInterface, _: Int ->
         }
 
         with(builder) {
@@ -469,7 +465,7 @@ class ProgramDependFragment : Fragment() {
         builder.show()
     }
 
-    fun updateProgram(){
+    private fun updateProgram(){
         val db = FirebaseFirestore.getInstance()
         db.collection("programs").document(program.id).update(mapOf(
             "thetich" to binding.tvTheTich.text.toString(),

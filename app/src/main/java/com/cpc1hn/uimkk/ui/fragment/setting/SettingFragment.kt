@@ -23,11 +23,7 @@ import androidx.navigation.fragment.findNavController
 import com.cpc1hn.uimkk.*
 import com.cpc1hn.uimkk.R
 import com.cpc1hn.uimkk.databinding.SettingFragmentBinding
-import com.cpc1hn.uimkk.model.SetClass
-import com.cpc1hn.uimkk.model.UserClass
 import com.cpc1hn.uimkk.ui.viewmodel.SettingViewModel
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.*
 import java.io.IOException
 import java.net.DatagramPacket
 import java.net.DatagramSocket
@@ -45,27 +41,18 @@ class SettingFragment : Fragment() {
     private lateinit var a: ByteArray
     private lateinit var ipAddress: String
     private var port: Int = 0
-    private var speed = 30
-    private var B1 = 0x02
-    private var B2 = 0x01
     private var B3 = 0x00
     private var B4 = 0x00
     private var B5 = 0x00
-    private var B6 = 0x01
     private lateinit var radioGroup: RadioGroup
     private lateinit var saveData: SaveData
-    private lateinit var auth: FirebaseAuth
-    var databaseReference: DatabaseReference? = null
-    var database: FirebaseDatabase? = null
-    var setClass = SetClass()
     private val TAG = "_SETTING"
-    private lateinit var user: UserClass
     private var socketReceive = DatagramSocket()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         (activity as AppCompatActivity).supportActionBar?.show()
         binding = DataBindingUtil.inflate(inflater, R.layout.setting_fragment, container, false)
 
@@ -78,7 +65,7 @@ class SettingFragment : Fragment() {
             binding.btEnglish.isChecked = true
         }
         if (saveData.loadTempSetting().isNotEmpty()){
-            binding.tvTemp.setText("${saveData.loadTempSetting()}")
+            binding.tvTemp.setText(saveData.loadTempSetting())
         }
         ipAddress = "192.168.4.1"
         port = 8080
@@ -131,7 +118,7 @@ class SettingFragment : Fragment() {
 
         getData()
         //Lay du lieu len may
-        ReceiveData1(port)
+        receiveData1()
 
         binding.apply {
             lnActive.setOnClickListener { findNavController().navigate(SettingFragmentDirections.actionNavSettingToActivateFragment()) }
@@ -154,8 +141,8 @@ class SettingFragment : Fragment() {
                     TransitionManager.beginDelayedTransition(transition)
                     visible = !visible
                     if (visible) {
-                        lnSetTemp.setVisibility(View.VISIBLE)
-                        tv3.setVisibility(View.GONE)
+                        lnSetTemp.visibility = View.VISIBLE
+                        tv3.visibility = View.GONE
                         moreSetTemp.animate().rotation(180f).start()
 
                         btSave.setOnClickListener {
@@ -164,12 +151,12 @@ class SettingFragment : Fragment() {
                                         .toInt() > 100) or (binding.tvTemp.text.toString()
                                         .toInt() < 0)
                                 ) {
-                                    val builder = androidx.appcompat.app.AlertDialog.Builder(
+                                    val builder = AlertDialog.Builder(
                                         requireContext(),
                                         R.style.AlertDialogTheme
                                     )
                                     val positiveButtonClick =
-                                        { dialog: DialogInterface, which: Int ->
+                                        { _: DialogInterface, _: Int ->
 
                                         }
                                     with(builder) {
@@ -204,7 +191,7 @@ class SettingFragment : Fragment() {
 
                                     R.style.AlertDialogTheme
                                 )
-                                val positiveButtonClick = { dialog: DialogInterface, which: Int ->
+                                val positiveButtonClick = { _: DialogInterface, _: Int ->
                                 }
                                 with(builder) {
                                     setMessage("Vui lòng cài đặt mức nhiệt!")
@@ -217,8 +204,8 @@ class SettingFragment : Fragment() {
                             }
                         }
                     } else {
-                        lnSetTemp.setVisibility(View.GONE)
-                        tv3.setVisibility(View.VISIBLE)
+                        lnSetTemp.visibility = View.GONE
+                        tv3.visibility = View.VISIBLE
                         moreSetTemp.animate().rotation(0f).start()
                     }
                 }
@@ -229,17 +216,17 @@ class SettingFragment : Fragment() {
     }
 
 
-        fun onRestartApp() {
+        private fun onRestartApp() {
             startActivity(Intent(requireContext(), MainActivity::class.java))
             requireActivity().finish()
 
         }
 
 
-        fun onRadioButtonClick() {
+       private fun onRadioButtonClick() {
             val pref = requireContext().getSharedPreferences("RADIOBUTTON", Context.MODE_PRIVATE)
             val editor = pref.edit()
-            binding.radioGroup.setOnCheckedChangeListener { group, checkedId ->
+            binding.radioGroup.setOnCheckedChangeListener { _, checkedId ->
                 if (checkedId == R.id.btVietnamese) {
                     dialogEnglish()
                     editor.putString(CHECK, checkedId.toString())
@@ -253,11 +240,11 @@ class SettingFragment : Fragment() {
             }
         }
 
-        fun dialogVietnamese() {
+      private  fun dialogVietnamese() {
             val pref = requireContext().getSharedPreferences(SHARE_NAME, Context.MODE_PRIVATE)
             val editor = pref.edit()
             val builder = AlertDialog.Builder(requireContext(), R.style.AlertDialogTheme)
-            val positiveButtonClick = { dialog: DialogInterface, which: Int ->
+            val positiveButtonClick = { _: DialogInterface, _: Int ->
                 saveData.setLocale("en")
                 editor.putString(LANGUAGE, "en")
                 editor.apply()
@@ -274,11 +261,11 @@ class SettingFragment : Fragment() {
             builder.show()
         }
 
-        fun dialogEnglish() {
+      private  fun dialogEnglish() {
             val pref = requireContext().getSharedPreferences(SHARE_NAME, Context.MODE_PRIVATE)
             val editor = pref.edit()
             val builder = AlertDialog.Builder(requireContext(), R.style.AlertDialogTheme)
-            val positiveButtonClick = { dialog: DialogInterface, which: Int ->
+            val positiveButtonClick = { _: DialogInterface, _: Int ->
                 saveData.setLocale("vi")
                 editor.putString(LANGUAGE, "vi")
                 editor.apply()
@@ -299,18 +286,18 @@ class SettingFragment : Fragment() {
         }
 
 
-        fun setLanguage() {
+       private fun setLanguage() {
             binding.lnLanguage.setOnClickListener(object : View.OnClickListener {
                 var visible: Boolean = false
                 override fun onClick(v: View?) {
                     TransitionManager.beginDelayedTransition(binding.transition)
                     visible = !visible
                     if (visible) {
-                        binding.radioGroup.setVisibility(View.VISIBLE)
+                        binding.radioGroup.visibility = View.VISIBLE
                         binding.moreLanguge.animate().rotation(180f).start()
                         onRadioButtonClick()
                     } else {
-                        binding.radioGroup.setVisibility(View.GONE)
+                        binding.radioGroup.visibility = View.GONE
                         binding.moreLanguge.animate().rotation(0f).start()
                         onRadioButtonClick()
                     }
@@ -319,7 +306,7 @@ class SettingFragment : Fragment() {
 
         }
 
-        fun getData() {
+      private  fun getData() {
             //get data LED, Scale, Buzzer, Fan
             //checkOn(0x02, 0x09, B3, B4, B5, 0x01)
             //get data Temp, Speed
@@ -328,28 +315,21 @@ class SettingFragment : Fragment() {
         }
 
 
-        fun byteArrayOfInts(vararg ints: Int) = ByteArray(ints.size) { pos -> ints[pos].toByte() }
+       private fun byteArrayOfInts(vararg ints: Int) = ByteArray(ints.size) { pos -> ints[pos].toByte() }
 
-        fun checkSum(b: ByteArray): Int {
-            val sum = b[0] + b[1] + b[2] + b[3] + b[4] + b[5]
-            return sum
-        }
+    private fun checkSum(b: ByteArray): Int {
+        return b[0] + b[1] + b[2] + b[3] + b[4] + b[5]
+    }
 
-        fun checkOn(B1: Int, B2: Int, B3: Int, B4: Int, B5: Int, B6: Int) {
+        private fun checkOn(B1: Int, B2: Int, B3: Int, B4: Int, B5: Int, B6: Int) {
             a = byteArrayOfInts(B1, B2, B3, B4, B5, B6)
             val B7 = checkSum(a)
             a = byteArrayOfInts(B1, B2, B3, B4, B5, B6, B7)
             sendUDP(a)
         }
 
-        fun checkOff(B1: Int, B2: Int, B3: Int, B4: Int, B5: Int, B6: Int) {
-            a = byteArrayOfInts(B1, B2, B3, B4, B5, B6)
-            val B7 = checkSum(a)
-            a = byteArrayOfInts(B1, B2, B3, B4, B5, B6, B7)
-            sendUDP(a)
-        }
 
-        fun sendUDP(messageStr: ByteArray) {
+       private fun sendUDP(messageStr: ByteArray) {
             val policy = StrictMode.ThreadPolicy.Builder().permitAll().build()
             StrictMode.setThreadPolicy(policy)
             try {
@@ -358,10 +338,9 @@ class SettingFragment : Fragment() {
                 socket.reuseAddress = true
                 socket.broadcast = true
                 //socketReceive= DatagramSocket(port)
-                val sendData = messageStr
                 val sendPacket = DatagramPacket(
-                    sendData,
-                    sendData.size,
+                    messageStr,
+                    messageStr.size,
                     InetAddress.getByName(ipAddress),
                     port
                 )
@@ -376,7 +355,7 @@ class SettingFragment : Fragment() {
             }
         }
 
-        fun ReceiveData1(portNum: Int) {
+    private fun receiveData1() {
             var buffer = ByteArray(6566)
             object : Thread() {
                 override fun run() {
@@ -400,8 +379,8 @@ class SettingFragment : Fragment() {
             }.start()
         }
 
-        fun display1(b: ByteArray) {
-            getActivity()?.runOnUiThread(java.lang.Runnable {
+       private fun display1(b: ByteArray) {
+            activity?.runOnUiThread {
                 //receive Temp, Speed
                 if ((b[0] == 0x02.toByte()) && (b[1] == 0x09.toByte()) && (b[5] == 0x02.toByte()) && (b[6] == checkSum(
                         b
@@ -438,9 +417,9 @@ class SettingFragment : Fragment() {
 //                        binding.btSwitchFan.isChecked = false
 //                    }
 //                }
-            })
+            }
 
-        }
+       }
 
 
 

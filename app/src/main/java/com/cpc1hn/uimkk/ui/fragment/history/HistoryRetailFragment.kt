@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.DialogInterface
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.os.StrictMode
 import android.util.Log
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
@@ -15,10 +14,6 @@ import com.cpc1hn.uimkk.databinding.HistoryRetailFragmentBinding
 import com.cpc1hn.uimkk.model.History
 import com.cpc1hn.uimkk.ui.viewmodel.history.HistoryRetailViewModel
 import com.google.firebase.firestore.FirebaseFirestore
-import java.io.IOException
-import java.net.DatagramPacket
-import java.net.DatagramSocket
-import java.net.InetAddress
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -36,7 +31,7 @@ class HistoryRetailFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
        // setHasOptionsMenu(true)
         (activity as AppCompatActivity).supportActionBar?.show()
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -53,26 +48,12 @@ class HistoryRetailFragment : Fragment() {
         return binding.root
     }
 
-    fun longToDate(data: Long, format: String?): String? {
+    private fun longToDate(data: Long, format: String?): String? {
         val date = Date(data)
         val df2 = SimpleDateFormat(format, Locale.getDefault())
         return df2.format(date)
     }
 
-    fun sendUDP(messageStr: String) {
-        val policy = StrictMode.ThreadPolicy.Builder().permitAll().build()
-        StrictMode.setThreadPolicy(policy)
-        try {
-//Open a port to send the package
-            val socket = DatagramSocket()
-            socket.broadcast = true
-            val sendData = messageStr.toByteArray()
-            val sendPacket = DatagramPacket(sendData, sendData.size, InetAddress.getByName("=192.168.0.103"), 80)
-            socket.send(sendPacket)
-        } catch (e: IOException) {
-// Log.e(FragmentActivity.TAG, "IOException: " + e.message)
-        }
-    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -93,15 +74,15 @@ class HistoryRetailFragment : Fragment() {
             }
         }
     }
-    fun showNotify(){
+    private fun showNotify(){
         val builder = androidx.appcompat.app.AlertDialog.Builder(requireContext(), R.style.AlertDialogTheme)
-        val positiveButtonClick = { dialog: DialogInterface, which: Int ->
+        val positiveButtonClick = { _: DialogInterface, _: Int ->
             val db = FirebaseFirestore.getInstance()
             db.collection("history").document(history.id.toString()).delete()
             viewModel.deleteHistoryInfo()
             requireActivity().onBackPressed()
         }
-        val negativeButtonClick = { dialog: DialogInterface, which: Int ->
+        val negativeButtonClick = { _: DialogInterface, _: Int ->
         }
         with(builder) {
             setMessage("Xóa bản ghi này?")

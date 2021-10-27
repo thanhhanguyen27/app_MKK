@@ -14,7 +14,6 @@ import com.cpc1hn.uimkk.R
 import com.cpc1hn.uimkk.SaveData
 import com.cpc1hn.uimkk.databinding.TestFragmentBinding
 import com.cpc1hn.uimkk.ui.viewmodel.TestViewModel
-import com.google.firebase.analytics.FirebaseAnalytics
 import java.io.IOException
 import java.net.DatagramPacket
 import java.net.DatagramSocket
@@ -30,21 +29,16 @@ class TestFragment : Fragment() {
     private lateinit var viewModel: TestViewModel
     private lateinit var binding: TestFragmentBinding
     private lateinit var a:ByteArray
-    private var temp = 50
     private  var B1 = 0x01
     private var B2= 0x01
     private var B3= 0x00
     private var B4 = 0x00
     private var B5 = 0x00
     private var B6= 0x01
-    private var B7= 0x00
     private lateinit var ipAddress:String
     private var port: Int=0
-    //private lateinit var saveData: SaveData
-    private  var TAG = "_TEST"
+    private lateinit var saveData: SaveData
     private var socketReceive= DatagramSocket(null)
-    private lateinit var firebaseAnalytics: FirebaseAnalytics
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -69,66 +63,61 @@ class TestFragment : Fragment() {
 
 
         saveData= SaveData(requireContext())
-//        if (saveData.loadTemp().isNotEmpty()){
-//            binding.arcProgress.progress= saveData.loadTemp().toInt()
-//        }
-        if (saveData.loadPer() != 0){
-          //  binding.progressBarHorizontal1.progress = saveData.loadPer()
-            binding.tvTimePercent.setText("${saveData.loadPer()}%")
+        if (saveData.loadTemp().isNotEmpty()){
+            binding.temperature.text= saveData.loadTemp()
         }
-        Log.d("_UDP", "Send Data ")
+        if (saveData.loadPer() != 0){
+            binding.progressBarHorizontal1.progress = saveData.loadPer()
+            binding.tvTimePercent.text = "${saveData.loadPer()}%"
+        }
 
-        ReceiveData(port)
+        receiveData()
 
         return binding.root
     }
 
-    fun ReceiveData(portNum: Int) {
+    private fun receiveData() {
         var buffer = ByteArray(1000)
-        Thread(
-            Runnable {
-                try {
-                    while (true) {
-                        socketReceive = DatagramSocket(null)
-                        Log.d("_UDP", "ReceiveData ")
-                        socketReceive.reuseAddress=true
-                        socketReceive.broadcast = true
-                        socketReceive.bind(InetSocketAddress(8081))
-                        //socketReceive.setSoTimeout(10000)
-                        val data = DatagramPacket(buffer, buffer.size)
-                        socketReceive.receive(data)
-                        Log.d("_UDP", "ReceiveData data= ${buffer}")
-                        display(buffer)
-                        //reset lại mảng
-                        buffer = byteArrayOfInts(0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00)
-                    }
-                } catch (e: java.lang.Exception) {
-                    Log.d("_UDPRC", " ${e.printStackTrace()}")
-                    e.printStackTrace()
+        Thread {
+            try {
+                while (true) {
+                    socketReceive = DatagramSocket(null)
+                    Log.d("_UDP", "ReceiveData ")
+                    socketReceive.reuseAddress = true
+                    socketReceive.broadcast = true
+                    socketReceive.bind(InetSocketAddress(8081))
+                    //socketReceive.setSoTimeout(10000)
+                    val data = DatagramPacket(buffer, buffer.size)
+                    socketReceive.receive(data)
+                    display(buffer)
+                    //reset lại mảng
+                    buffer = byteArrayOfInts(0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00)
                 }
-
+            } catch (e: java.lang.Exception) {
+                Log.d("_UDPRC", " ${e.printStackTrace()}")
+                e.printStackTrace()
             }
-        ).start()
+
+        }.start()
     }
 
-    fun display(buffer: ByteArray){
-        getActivity()?.runOnUiThread(java.lang.Runnable {
+    private fun display(buffer: ByteArray){
+        activity?.runOnUiThread {
             if ((buffer[0] == 0x03.toByte()) && (buffer[1] == 0x04.toByte()) && (buffer[6] == checkSum(
                     buffer
                 ).toByte())
             ) {
-                binding.tvNotify.setText("Đang kết nối")
+                binding.tvNotify.text = "Đang kết nối"
                 saveData.setConnect(binding.tvNotify.text.toString())
-                binding.arcProgress.progress = buffer[5].toInt()
-                Log.d(TAG, "${buffer[5].toInt()}  ${buffer[4].toInt()}")
+                binding.temperature.text = buffer[5].toString()
                 binding.progressBarHorizontal1.progress = (buffer[4].toInt())
-                binding.tvTimePercent.setText("${buffer[4].toInt()}%")
-                saveData.setTemp(binding.arcProgress.progress.toString())
+                binding.tvTimePercent.text = "${buffer[4].toInt()}%"
+                saveData.setTemp(binding.temperature.toString())
                 saveData.setPer(binding.progressBarHorizontal1.progress)
 
             }
 
-        })
+        }
     }
 
 //    fun setLedRed(){
@@ -174,7 +163,7 @@ class TestFragment : Fragment() {
 //        }
 //    }
 
-    fun setMotoAC() {
+    private fun setMotoAC() {
         binding.quaynguoc.setOnClickListener {
             checkOn(B1, 0x03, B3, B4, B5, 0x00)
         }
@@ -183,8 +172,8 @@ class TestFragment : Fragment() {
         }
     }
 
-    fun setBomNhuDong(){
-        binding.btPump.setOnCheckedChangeListener { buttonView, isChecked ->
+    private fun setBomNhuDong(){
+        binding.btPump.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 checkOn(B1, 0x02, B3, B4, B5, B6)
                    binding.lnPump.setBackgroundResource(R.drawable.checked_true)
@@ -196,8 +185,8 @@ class TestFragment : Fragment() {
 
     }
 
-    fun setMotorBlow(){
-        binding.btMotorBlow.setOnCheckedChangeListener { buttonView, isChecked ->
+    private fun setMotorBlow(){
+        binding.btMotorBlow.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 checkOn(B1, B2, B3, B4, B5, B6)
                 binding.lnThoi.setBackgroundResource(R.drawable.checked_true)
@@ -213,9 +202,9 @@ class TestFragment : Fragment() {
 
 
 
-    fun setFan(){
+    private fun setFan(){
 
-        binding.btFanOnOff.setOnCheckedChangeListener { buttonView, isChecked ->
+        binding.btFanOnOff.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 checkOn(B1, 0x04, B3, B4, B5, B6)
                 binding.lnFan.setBackgroundResource(R.drawable.checked_true)
@@ -229,8 +218,8 @@ class TestFragment : Fragment() {
     }
 
 
-    fun setBuzzer(){
-        binding.btNotifyOnOff.setOnCheckedChangeListener { buttonView, isChecked ->
+    private fun setBuzzer(){
+        binding.btNotifyOnOff.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked){
                 checkOn(B1, 0x08, B3, B4, B5, B6)
                binding.lnNotification.setBackgroundResource(R.drawable.checked_true)
@@ -250,18 +239,18 @@ class TestFragment : Fragment() {
         Log.d("_BACK", "OK")
     }
 
-    fun checkSum(b: ByteArray):Int{
+    private fun checkSum(b: ByteArray):Int{
         val sum = b[0] +b[1]+ b[2]+ b[3] +b[4]+ b[5]
         return sum
     }
-    fun checkOn(B1: Int, B2: Int, B3: Int, B4: Int, B5: Int, B6: Int){
+    private fun checkOn(B1: Int, B2: Int, B3: Int, B4: Int, B5: Int, B6: Int){
         a = byteArrayOfInts(B1, B2, B3, B4, B5, B6)
         val B7 = checkSum(a)
         a=byteArrayOfInts(B1, B2, B3, B4, B5, B6, B7)
         Log.d("_UDP", "Data: $B1-$B2-$B3-$B4-$B5-$B6-$B7")
         sendUDP(a)
     }
-    fun checkOff(B1: Int, B2: Int, B3: Int, B4: Int, B5: Int, B6: Int){
+    private fun checkOff(B1: Int, B2: Int, B3: Int, B4: Int, B5: Int, B6: Int){
         a = byteArrayOfInts(B1, B2, B3, B4, B5, B6)
         val B7 = checkSum(a)
         a=byteArrayOfInts(B1, B2, B3, B4, B5, B6, B7)
@@ -272,9 +261,9 @@ class TestFragment : Fragment() {
 
 
 
-    fun byteArrayOfInts(vararg ints: Int) = ByteArray(ints.size) { pos -> ints[pos].toByte() }
+    private fun byteArrayOfInts(vararg ints: Int) = ByteArray(ints.size) { pos -> ints[pos].toByte() }
 
-    fun sendUDP(messageStr: ByteArray) {
+    private fun sendUDP(messageStr: ByteArray) {
         val policy = StrictMode.ThreadPolicy.Builder().permitAll().build()
         StrictMode.setThreadPolicy(policy)
         try {

@@ -1,5 +1,6 @@
 package com.cpc1hn.uimkk.ui.fragment.program
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.DialogInterface
 import android.os.Bundle
@@ -51,8 +52,8 @@ class ProgramFragment : Fragment(), IconProgramAdapter.OnItemButtonClick  {
     private var programs: ArrayList<Program> = arrayListOf()
     private var programFilter: ArrayList<Program> = arrayListOf()
     private lateinit var auth: FirebaseAuth
-    var databaseReference : DatabaseReference? = null
-    var database: FirebaseDatabase? = null
+    private var databaseReference : DatabaseReference? = null
+   private var database: FirebaseDatabase? = null
     private var user:UserClass= UserClass()
     private lateinit var ipAddress:String
     private var port: Int=0
@@ -93,63 +94,62 @@ class ProgramFragment : Fragment(), IconProgramAdapter.OnItemButtonClick  {
 
             return binding.root
         }
-    fun search(){
-        binding.imSearch.setOnClickListener (object :View.OnClickListener {
-            override fun onClick(v: View?) {
-                TransitionManager.beginDelayedTransition(binding.lnMain)
-                if (binding.searchView.visibility== View.GONE) {
-                    binding.searchView.visibility = View.VISIBLE
-                    binding.edtSearch.addTextChangedListener(object : TextWatcher {
-                        override fun beforeTextChanged(
-                            s: CharSequence?,
-                            start: Int,
-                            count: Int,
-                            after: Int
-                        ) {
+    private fun search(){
+        binding.imSearch.setOnClickListener {
+            TransitionManager.beginDelayedTransition(binding.lnMain)
+            if (binding.searchView.visibility == View.GONE) {
+                binding.searchView.visibility = View.VISIBLE
+                binding.edtSearch.addTextChangedListener(object : TextWatcher {
+                    override fun beforeTextChanged(
+                        s: CharSequence?,
+                        start: Int,
+                        count: Int,
+                        after: Int
+                    ) {
 
+                    }
+
+                    override fun onTextChanged(
+                        s: CharSequence?,
+                        start: Int,
+                        before: Int,
+                        count: Int
+                    ) {
+                        if (binding.edtSearch.text.toString().isNotEmpty()) {
+                            binding.btClear.visibility = View.VISIBLE
+                        } else {
+                            binding.btClear.visibility = View.GONE
                         }
+                        binding.btClear.setOnClickListener { s!!.removeRange(0, 0) }
+                    }
 
-                        override fun onTextChanged(
-                            s: CharSequence?,
-                            start: Int,
-                            before: Int,
-                            count: Int
-                        ) {
-                            if (binding.edtSearch.text.toString().isNotEmpty()) {
-                                binding.btClear.visibility = View.VISIBLE
-                            } else {
-                                binding.btClear.visibility = View.GONE
-                            }
-                            binding.btClear.setOnClickListener { s!!.removeRange(0, 0) }
-                        }
+                    @SuppressLint("NotifyDataSetChanged")
+                    override fun afterTextChanged(s: Editable?) {
+                        binding.btClear.setOnClickListener { s!!.clear() }
 
-                        override fun afterTextChanged(s: Editable?) {
-                            binding.btClear.setOnClickListener { s!!.clear() }
-
-                            if (s != null && s.isNotEmpty()) {
-                                programFilter.clear()
-                                programs.forEach { program ->
-                                    if (program.NameProgram.toLowerCase()
-                                            .contains(s.toString().toLowerCase())
-                                    ) {
-                                        programFilter.add(program)
-                                    }
+                        if (s != null && s.isNotEmpty()) {
+                            programFilter.clear()
+                            programs.forEach { program ->
+                                if (program.NameProgram.toLowerCase()
+                                        .contains(s.toString().toLowerCase())
+                                ) {
+                                    programFilter.add(program)
                                 }
-                                programAdapter.programs = programFilter
-                                programAdapter.notifyDataSetChanged()
-                            } else {
-                                programAdapter.programs = programs
-                                programAdapter.notifyDataSetChanged()
                             }
-
+                            programAdapter.programs = programFilter
+                            programAdapter.notifyDataSetChanged()
+                        } else {
+                            programAdapter.programs = programs
+                            programAdapter.notifyDataSetChanged()
                         }
 
-                    })
-                }else{
-                    binding.searchView.visibility = View.GONE
-                }
+                    }
+
+                })
+            } else {
+                binding.searchView.visibility = View.GONE
             }
-        })
+        }
 
     }
 
@@ -199,7 +199,7 @@ class ProgramFragment : Fragment(), IconProgramAdapter.OnItemButtonClick  {
         }.start()
     }
 
-    fun display(buffer: ByteArray){
+    private fun display(buffer: ByteArray){
         activity?.runOnUiThread {
             if ((buffer[0] == 0x03.toByte()) && (buffer[1] == 0x04.toByte()) && (buffer[6] == checkSum(
                     buffer
@@ -210,7 +210,7 @@ class ProgramFragment : Fragment(), IconProgramAdapter.OnItemButtonClick  {
         }
     }
 
-    fun getProgram(){
+    private fun getProgram(){
         val db = FirebaseFirestore.getInstance()
             db.collection("programs").get()
                 .addOnSuccessListener { result ->
@@ -227,7 +227,7 @@ class ProgramFragment : Fragment(), IconProgramAdapter.OnItemButtonClick  {
                 }
     }
 
-    fun addProgram(){
+    private fun addProgram(){
         val mDialogView =
             LayoutInflater.from(requireContext()).inflate(R.layout.create_program, null)
         //AlertDialogBuilder
@@ -279,6 +279,7 @@ class ProgramFragment : Fragment(), IconProgramAdapter.OnItemButtonClick  {
                 return true
             }
 
+            @SuppressLint("NotifyDataSetChanged")
             override fun onQueryTextChange(newText: String?): Boolean {
                 if(newText != null && newText.isNotEmpty()){
                     programFilter.clear()
@@ -337,7 +338,7 @@ class ProgramFragment : Fragment(), IconProgramAdapter.OnItemButtonClick  {
         builder.show()
 
     }
-    fun deleteProgram(program: Program){
+   private fun deleteProgram(program: Program){
         programs.remove(program)
         val db = FirebaseFirestore.getInstance()
         db.collection("programs").document(program.id).delete()
@@ -354,19 +355,19 @@ class ProgramFragment : Fragment(), IconProgramAdapter.OnItemButtonClick  {
         )
     }
 
-    fun checkSum(b: ByteArray): Int {
+    private fun checkSum(b: ByteArray): Int {
         return b[0] + b[1] + b[2] + b[3] + b[4] + b[5]
     }
-    fun checkOn(B1: Int, B2: Int, B3: Int, B4: Int, B5: Int, B6: Int){
+    private fun checkOn(B1: Int, B2: Int, B3: Int, B4: Int, B5: Int, B6: Int){
         a = byteArrayOfInts(B1, B2, B3, B4, B5, B6)
         val B7 = checkSum(a)
         a=byteArrayOfInts(B1, B2, B3, B4, B5, B6, B7)
         Log.d("_UDP", "Data: $B1-$B2-$B3-$B4-$B5-$B6-$B7")
         sendUDP(a)
     }
-    fun byteArrayOfInts(vararg ints: Int) = ByteArray(ints.size) { pos -> ints[pos].toByte() }
+    private fun byteArrayOfInts(vararg ints: Int) = ByteArray(ints.size) { pos -> ints[pos].toByte() }
 
-    fun sendUDP(messageStr: ByteArray) {
+    private fun sendUDP(messageStr: ByteArray) {
         val policy = StrictMode.ThreadPolicy.Builder().permitAll().build()
         StrictMode.setThreadPolicy(policy)
         try {

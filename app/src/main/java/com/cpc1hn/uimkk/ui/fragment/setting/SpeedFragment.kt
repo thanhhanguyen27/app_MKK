@@ -36,12 +36,9 @@ class SpeedFragment : Fragment() {
     private lateinit var ipAddress:String
     private var port: Int=0
     private lateinit var a:ByteArray
-    private  var B1 = 0x02
-    private var B2= 0x01
     private var B3= 0x00
     private var B4 = 0x00
     private var B5 = 0x00
-    private var B6= 0x01
     private var socketReceive= DatagramSocket(null)
     private lateinit var editSpeed:EditText
     private lateinit var saveData: SaveData
@@ -61,7 +58,7 @@ class SpeedFragment : Fragment() {
         }
         //get data Temp, Speed
         checkOn(0x02, 0x09, B3, B4, B5, 0x02)
-        ReceiveData1()
+        receiveData1()
         binding.btEditSpeedSpray.setOnClickListener {
             DialogEditSpeed()
         }
@@ -94,7 +91,7 @@ class SpeedFragment : Fragment() {
                     checkOn(0x02, 0x07, 0x00, 0x00, 0x00, 0x02)
                 }
                 val builder = AlertDialog.Builder(requireContext(), R.style.AlertDialogTheme)
-                val positiveButtonClick = { dialog: DialogInterface, which: Int ->
+                val positiveButtonClick = { dialog: DialogInterface, _: Int ->
 
                 }
                 with(builder) {
@@ -114,14 +111,14 @@ class SpeedFragment : Fragment() {
         return  binding.root
     }
 
-    fun DialogEditSpeed(){
+    private fun DialogEditSpeed(){
         val builder = AlertDialog.Builder(requireContext(), R.style.AlertDialogTheme)
         val inflater = layoutInflater
         builder.setTitle("Tốc độ phun (30-37 ml/phút)")
         val dialogLayout = inflater.inflate(R.layout.alert_password, null)
         editSpeed  = dialogLayout.findViewById<EditText>(R.id.editText)
         builder.setView(dialogLayout)
-        builder.setPositiveButton("Lưu") { dialogInterface, i ->
+        builder.setPositiveButton("Lưu") { _, _ ->
             checkOn(0x02, 0x06, 0x00, 0x00, 0x00, editSpeed.text.toString().toInt())
             if (( editSpeed.text.toString().toInt() >=30) && ( editSpeed.text.toString().toInt()<=37)) {
                 binding.tvSpeedSpray.text = editSpeed.text
@@ -134,7 +131,7 @@ class SpeedFragment : Fragment() {
             }
             saveData.setSpray(binding.tvSpeedSpray.text.toString())
         }
-        builder.setNegativeButton("Hủy"){ dialogInterface, i ->  }
+        builder.setNegativeButton("Hủy"){ _, _ ->  }
         val dialog = builder.create()
         dialog.show()
 
@@ -149,28 +146,20 @@ class SpeedFragment : Fragment() {
     }
 
 
-    fun byteArrayOfInts(vararg ints: Int) = ByteArray(ints.size) { pos -> ints[pos].toByte() }
+   private fun byteArrayOfInts(vararg ints: Int) = ByteArray(ints.size) { pos -> ints[pos].toByte() }
 
-    fun checkSum(b: ByteArray):Int{
-        val sum = b[0] +b[1]+ b[2]+ b[3] +b[4]+ b[5]
-        return sum
+    private fun checkSum(b: ByteArray): Int {
+        return b[0] + b[1] + b[2] + b[3] + b[4] + b[5]
     }
 
-    fun checkOn(B1: Int, B2: Int, B3: Int, B4: Int, B5: Int, B6: Int){
+   private fun checkOn(B1: Int, B2: Int, B3: Int, B4: Int, B5: Int, B6: Int){
         a = byteArrayOfInts(B1, B2, B3, B4, B5, B6)
         val B7 = checkSum(a)
         a=byteArrayOfInts(B1, B2, B3, B4, B5, B6, B7)
         sendUDP(a)
     }
 
-    fun checkOff(B1: Int, B2: Int, B3: Int, B4: Int, B5: Int, B6: Int){
-        a = byteArrayOfInts(B1, B2, B3, B4, B5, B6)
-        val B7 = checkSum(a)
-        a=byteArrayOfInts(B1, B2, B3, B4, B5, B6, B7)
-        sendUDP(a)
-    }
-
-    fun sendUDP(messageStr: ByteArray) {
+    private fun sendUDP(messageStr: ByteArray) {
         val policy = StrictMode.ThreadPolicy.Builder().permitAll().build()
         StrictMode.setThreadPolicy(policy)
         try {
@@ -179,10 +168,9 @@ class SpeedFragment : Fragment() {
             socket.reuseAddress=true
             socket.broadcast=true
             //socketReceive= DatagramSocket(port)
-            val sendData = messageStr
             val sendPacket = DatagramPacket(
-                sendData,
-                sendData.size,
+                messageStr,
+                messageStr.size,
                 InetAddress.getByName(ipAddress),
                 port
             )
@@ -197,7 +185,7 @@ class SpeedFragment : Fragment() {
         }
     }
 
-    fun ReceiveData1(){
+   private fun receiveData1(){
         var buffer = ByteArray(6566)
         object : Thread() {
             override fun run() {
@@ -210,7 +198,6 @@ class SpeedFragment : Fragment() {
                     while (true) {
                         val data = DatagramPacket(buffer, buffer.size)
                         socketReceive.receive(data)
-                        Log.d("_UDP", "receive data = ${buffer}")
                         display1(buffer)
                         buffer = byteArrayOfInts(0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00)
                     }
@@ -221,8 +208,8 @@ class SpeedFragment : Fragment() {
         }.start()
     }
 
-    fun display1(b: ByteArray) {
-        getActivity()?.runOnUiThread(java.lang.Runnable {
+   private fun display1(b: ByteArray) {
+        activity?.runOnUiThread {
             //receive Temp, Speed
             if ((b[0] == 0x02.toByte()) && (b[1] == 0x09.toByte()) && (b[5] == 0x02.toByte()) && (b[6] == checkSum(
                     b
@@ -230,10 +217,10 @@ class SpeedFragment : Fragment() {
             ) {
                 Log.d("_UDP", "Speed")
                 binding.tvSpeed.setText(b[4].toInt().toString())
-                binding.tvSpeedSpray.text="$${b[4].toInt().toString()} ml/phút"
+                "$${b[4].toInt()} ml/phút".also { binding.tvSpeedSpray.text = it }
 
             }
-        })
-    }
+        }
+   }
 
 }
