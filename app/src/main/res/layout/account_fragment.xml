@@ -62,7 +62,7 @@
         <TextView
             style="@style/textview_device_title"
             android:layout_height="wrap_content"
-            android:text="Họ và tên"
+            android:text="@string/name"
             android:textColor="@color/text_gray" />
 
         <TextView
@@ -85,7 +85,7 @@
         <TextView
             style="@style/textview_device_title"
             android:layout_height="wrap_content"
-            android:text="Email"
+            android:text="@string/email"
             android:textColor="@color/text_gray" />
 
         <TextView
@@ -108,7 +108,7 @@
         <TextView
             style="@style/textview_device_title"
             android:layout_height="wrap_content"
-            android:text="Phòng ban"
+            android:text="@string/room"
             android:textColor="@color/text_gray" />
 
         <TextView
@@ -131,7 +131,7 @@
         <TextView
             style="@style/textview_device_title"
             android:layout_height="wrap_content"
-            android:text="Số điện thoại"
+            android:text="@string/phone"
             android:textColor="@color/text_gray" />
 
         <TextView
@@ -154,7 +154,7 @@
         <TextView
             style="@style/textview_device_title"
             android:layout_height="wrap_content"
-            android:text="Giới tính"
+            android:text="@string/sex"
             android:textColor="@color/text_gray" />
 
         <TextView
@@ -176,7 +176,7 @@
         <TextView
             style="@style/textview_device_title"
             android:layout_height="wrap_content"
-            android:text="Mã máy"
+            android:text="@string/code"
             android:textColor="@color/text_gray" />
 
         <TextView
@@ -197,7 +197,7 @@
             style="?attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Đăng xuất"
+            android:text="@string/log_out"
             android:textAllCaps="false"
             android:textSize="18sp" />
 

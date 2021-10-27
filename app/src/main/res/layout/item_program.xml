@@ -59,7 +59,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text='@{String.format("%s", program.name)}'
+                    android:text='@{String.format("%s", program.NameProgram)}'
                     />
                 <TextView
                     android:layout_width="match_parent"
@@ -71,13 +71,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     style="@style/content_text_recycler_item"
-                    android:text='@{String.format("Thể tích: %s m3", program.thetich)}'
+                    android:text='@{String.format("Thể tích: %s m3", program.Volume)}'
                     />
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     style="@style/content_text_recycler_item"
-                    android:text='@{String.format("Nồng độ: %s ml/m3", program.nongdo)}'
+                    android:text='@{String.format("Nồng độ: %s ml/m3", program.Concentration)}'
                     android:layout_marginBottom="4dp"
                     />
 

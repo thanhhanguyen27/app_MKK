@@ -33,7 +33,7 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="5dp"
                 android:paddingBottom="5dp"
-                android:text="Từ"
+                android:text="@string/from"
                 android:layout_marginRight="3dp"
                 android:textColor="?attr/Text_head"
                 android:textSize="16dp"
@@ -64,7 +64,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Đến"
+                android:text="@string/to"
                 android:paddingTop="5dp"
                 android:layout_marginRight="3dp"
                 android:paddingBottom="5dp"

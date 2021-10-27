@@ -244,6 +244,11 @@ class TestFragment : Fragment() {
 
     }
 
+    override fun onPause() {
+        super.onPause()
+        checkOn(0x01, 0x0C, 0x00, 0x00, 0x00, 0x01)
+        Log.d("_BACK", "OK")
+    }
 
     fun checkSum(b: ByteArray):Int{
         val sum = b[0] +b[1]+ b[2]+ b[3] +b[4]+ b[5]
