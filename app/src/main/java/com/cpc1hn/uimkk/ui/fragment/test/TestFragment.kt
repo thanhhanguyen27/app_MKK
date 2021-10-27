@@ -40,7 +40,7 @@ class TestFragment : Fragment() {
     private var B7= 0x00
     private lateinit var ipAddress:String
     private var port: Int=0
-    private lateinit var saveData: SaveData
+    //private lateinit var saveData: SaveData
     private  var TAG = "_TEST"
     private var socketReceive= DatagramSocket(null)
     private lateinit var firebaseAnalytics: FirebaseAnalytics
