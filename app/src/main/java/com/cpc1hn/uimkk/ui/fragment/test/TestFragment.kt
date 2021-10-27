@@ -40,7 +40,7 @@ class TestFragment : Fragment() {
     private var B7= 0x00
     private lateinit var ipAddress:String
     private var port: Int=0
-    private lateinit var saveData: SaveData
+    //private lateinit var saveData: SaveData
     private  var TAG = "_TEST"
     private var socketReceive= DatagramSocket(null)
     private lateinit var firebaseAnalytics: FirebaseAnalytics
@@ -69,11 +69,11 @@ class TestFragment : Fragment() {
 
 
         saveData= SaveData(requireContext())
-        if (saveData.loadTemp().isNotEmpty()){
-            binding.arcProgress.progress= saveData.loadTemp().toInt()
-        }
+//        if (saveData.loadTemp().isNotEmpty()){
+//            binding.arcProgress.progress= saveData.loadTemp().toInt()
+//        }
         if (saveData.loadPer() != 0){
-            binding.progressBarHorizontal1.progress = saveData.loadPer()
+          //  binding.progressBarHorizontal1.progress = saveData.loadPer()
             binding.tvTimePercent.setText("${saveData.loadPer()}%")
         }
         Log.d("_UDP", "Send Data ")
