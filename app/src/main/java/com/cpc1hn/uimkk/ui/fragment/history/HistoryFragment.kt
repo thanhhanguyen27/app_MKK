@@ -229,7 +229,7 @@ class  HistoryFragment : Fragment(), IconHistoryAdapter.OnItemButtonClick {
                 historyAdapter.historys = histories
 
                 for (i in 0 until histories.size){
-                    histories[i].status=""
+                    histories[i].Status= 1
                 }
                 historyAdapter.historys = histories
                // historyAdapter.notifyDataSetChanged()

@@ -4,15 +4,15 @@
     "type": "APK",
     "kind": "Directory"
   },
-  "applicationId": "com.example.uimkk",
+  "applicationId": "com.cpc1hn.uimkk",
   "variantName": "release",
   "elements": [
     {
       "type": "SINGLE",
       "filters": [],
       "properties": [],
-      "versionCode": 1,
-      "versionName": "1.0",
+      "versionCode": 8,
+      "versionName": "1.0.2",
       "enabled": true,
       "outputFile": "app-release.apk"
     }

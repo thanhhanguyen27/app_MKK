@@ -1,7 +1,11 @@
 package com.cpc1hn.uimkk.ui.fragment.program
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.DialogInterface
+import android.content.pm.PackageManager
+import android.net.wifi.WifiInfo
+import android.net.wifi.WifiManager
 import android.os.Bundle
 import android.os.StrictMode
 import android.text.Editable
@@ -13,6 +17,8 @@ import android.view.*
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
@@ -40,13 +46,15 @@ class ProgramDependFragment : Fragment() {
     private lateinit var viewModel: ProgramDependViewModel
     private lateinit var binding: ProgramDependFragmentBinding
     private lateinit var program: Program
+    private val PERMISSION_CODE_ACCEPTED = 1
+    private val PERMISSION_CODE_NOT_AVAILABLE = 0
     private var timeSpeed: Int = 0
-    private var thetich: String = ""
-    private var nongdo: String = ""
+    private var thetich: Int=0
+    private var nongdo:Int=0
     private var timeCreate = ""
     private var time1: String = ""
     private var username: String = ""
-    private var speedSpray: String = "30"
+    private var speedSpray: Int=30
     private var liqid: Float = 0.0f
     private lateinit var ipAddress: String
     private var port: Int = 0
@@ -88,15 +96,17 @@ class ProgramDependFragment : Fragment() {
         checkArray = receiveData()
 
         savedata = SaveData(requireContext())
-        if (savedata.loadSpray().isNotEmpty()) {
+        if (savedata.loadSpray()!=0) {
             speedSpray = savedata.loadSpray()
+        }else{
+            speedSpray=30
         }
 
         //  Toast.makeText(context, speedSpray, Toast.LENGTH_SHORT).show()
         binding.tvTheTich.setText(program.Volume.toString())
         binding.tvNongdo.setText(program.Concentration.toString())
-        thetich = binding.tvTheTich.text.toString()
-        nongdo = binding.tvNongdo.text.toString()
+        thetich = binding.tvTheTich.text.toString().toInt()
+        nongdo = binding.tvNongdo.text.toString().toInt()
         //cai thoi gian uoc tinh
         estimateTime()
         binding.apply {
@@ -108,9 +118,24 @@ class ProgramDependFragment : Fragment() {
 
             }
         }
+        val saveData=SaveData(requireContext())
+        activity.run {
+            when(saveData.getCheckPermissionLocation()){
+                1 -> getWifiSSID()
+            }
+        }
         return binding.root
     }
 
+
+    private fun getWifiSSID() {
+        val mWifiManager: WifiManager =
+            ((activity as AppCompatActivity).applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager)
+        val info: WifiInfo = mWifiManager.getConnectionInfo()
+        savedata.setCodeMachine(info.ssid)
+        Log.d("_SSID", " ${info.ssid} ${info.bssid}, ${info.ipAddress}")
+
+    }
     private fun receiveData(): ByteArray {
         var buffer = ByteArray(6566)
         object : Thread() {
@@ -145,16 +170,14 @@ class ProgramDependFragment : Fragment() {
                 TransitionManager.beginDelayedTransition(binding.linear)
                 val visible = true
                 if (visible) {
-                    binding.tvTimePercent.text = "${buffer[4].toInt()}%"
-                    binding.tvTimePercent.visibility = View.VISIBLE
-
+                    binding.tvPercent.text = "${buffer[4].toUInt()}%"
                 }
 
 
-                binding.progressBarHorizontal.progress = (buffer[4].toInt())
-                liquidlevel = buffer[4].toInt()
+                binding.progressBarHorizontal.progress = (buffer[4].toUInt().toInt())
+                liquidlevel = buffer[4].toUInt().toInt()
                 //tinh muc hoa chat
-                liqid = ((timeSpeed * speedSpray.toInt()) / 6000 + 1).toFloat()
+                liqid = ((timeSpeed * speedSpray) / 6000 + 1).toFloat()
                 if (liqid > liquidlevel) {
                     binding.tvWarning.visibility = View.VISIBLE
                 } else {
@@ -164,8 +187,9 @@ class ProgramDependFragment : Fragment() {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun estimateTime() {
-        timeSpeed = ((thetich.toInt() * nongdo.toInt()) * 60 / speedSpray.toInt()) + 10
+        timeSpeed = ((thetich * nongdo) * 60 / speedSpray) + 10
         val time: String = ConvertSectoDay(timeSpeed)
         binding.tvTimeEstimate.text = "Thời gian phun ước tính ${time} "
     }
@@ -186,12 +210,12 @@ class ProgramDependFragment : Fragment() {
 
                 @SuppressLint("SetTextI18n")
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    thetich = tvTheTich.text.toString()
-                    nongdo = tvNongdo.text.toString()
-                    if ((thetich.isNotEmpty()) && (nongdo.isNotEmpty())) {
+                    thetich = tvTheTich.text.toString().toInt()
+                    nongdo = tvNongdo.text.toString().toInt()
+                    if ((thetich!=0) && (nongdo!=0)) {
                         timeSpeed =
-                            ((thetich.toInt() * nongdo.toInt()) * 60 / speedSpray.toInt()) + 10
-                        liqid = ((timeSpeed * speedSpray.toInt()) / 6000 + 1).toFloat()
+                            ((thetich * nongdo) * 60 / speedSpray) + 10
+                        liqid = ((timeSpeed * speedSpray) / 6000 + 1).toFloat()
                         if (liqid > liquidlevel) {
                             TransitionManager.beginDelayedTransition(binding.linear)
                             val visible = true
@@ -224,12 +248,12 @@ class ProgramDependFragment : Fragment() {
                 }
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    thetich = tvTheTich.text.toString()
-                    nongdo = tvNongdo.text.toString()
-                    if ((thetich.isNotEmpty()) && (nongdo.isNotEmpty())) {
+                    thetich = tvTheTich.text.toString().toInt()
+                    nongdo = tvNongdo.text.toString().toInt()
+                    if ((thetich!=0) && (nongdo!=0)) {
                         timeSpeed =
-                            ((thetich.toInt() * nongdo.toInt()) * 60 / speedSpray.toInt()) + 10
-                        liqid = ((timeSpeed * speedSpray.toInt()) / 6000 + 1).toFloat()
+                            ((thetich * nongdo) * 60 / speedSpray) + 10
+                        liqid = ((timeSpeed * speedSpray) / 6000 + 1).toFloat()
                         if (liqid > liquidlevel) {
                             TransitionManager.beginDelayedTransition(binding.linear)
                             val visible = true
@@ -332,10 +356,9 @@ class ProgramDependFragment : Fragment() {
                 timeSpeed = time1,
                 hourStart = hourStart,
                 timeSum = timeSpeed,
-                theTich = binding.tvTheTich.text.toString(),
-                nongdo = binding.tvNongdo.text.toString(),
+                theTich = binding.tvTheTich.text.toString().toInt(),
+                nongdo = binding.tvNongdo.text.toString().toInt(),
                 username = username,
-                numberOfRun = numberOfRun,
                 speedSpray = speedSpray
             )
         )
@@ -467,16 +490,21 @@ class ProgramDependFragment : Fragment() {
 
     private fun updateProgram(){
         val db = FirebaseFirestore.getInstance()
-        db.collection("programs").document(program.id).update(mapOf(
-            "thetich" to binding.tvTheTich.text.toString(),
-            "nongdo" to binding.tvNongdo.text.toString()
-        )).addOnSuccessListener {
-            Toast.makeText(context, "Đã lưu chương trình", Toast.LENGTH_SHORT).show()
-        }
-            .addOnFailureListener { e ->
-                Log.w("ADD", "Có lỗi xảy ra", e)
+        db.collection("programs").whereEqualTo("TimeCreate", program.TimeCreate).get().addOnSuccessListener { documents->
+            for (document in documents){
+                db.collection("programs").document(document.id).update(mapOf(
+                    "Volume" to binding.tvTheTich.text.toString().toInt(),
+                    "Concentration" to binding.tvNongdo.text.toString().toInt()
+                )).addOnSuccessListener {
+                    hideKeyboard()
+                    Toast.makeText(context, "Đã lưu chương trình", Toast.LENGTH_SHORT).show()
+                }
+                    .addOnFailureListener { e ->
+                        Log.w("ADD", "Có lỗi xảy ra", e)
 
+                    }
             }
+        }
 
     }
 

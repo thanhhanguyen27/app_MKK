@@ -5,13 +5,13 @@ import com.cpc1hn.uimkk.model.History
 
 @Dao
 interface historyDao {
-    @Query("SELECT * FROM  History ORDER BY timeCreate DESC")
+    @Query("SELECT * FROM  History ORDER BY TimeCreate DESC")
     fun getAll(): List<History>
 
-    @Query("SELECT * FROM History WHERE timeEnd BETWEEN :daystart AND :dayend")
+    @Query("SELECT * FROM History WHERE timeEndLong BETWEEN :daystart AND :dayend")
     fun getHisFilter(daystart: Long, dayend: Long): kotlinx.coroutines.flow.Flow<List<History>>
 
-    @Query("SELECT * FROM History WHERE room LIKE :query")
+    @Query("SELECT * FROM History WHERE Room LIKE :query")
     fun searchQuery(query: String): kotlinx.coroutines.flow.Flow<List<History>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

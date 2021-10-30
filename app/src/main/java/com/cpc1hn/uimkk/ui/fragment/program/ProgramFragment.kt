@@ -2,6 +2,7 @@ package com.cpc1hn.uimkk.ui.fragment.program
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.content.ContentValues.TAG
 import android.content.DialogInterface
 import android.os.Bundle
 import android.os.StrictMode
@@ -23,12 +24,13 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.cpc1hn.uimkk.Adapter.IconProgramAdapter
 import com.cpc1hn.uimkk.R
+import com.cpc1hn.uimkk.SaveData
 import com.cpc1hn.uimkk.databinding.ProgramFragmentBinding
 import com.cpc1hn.uimkk.model.Program
 import com.cpc1hn.uimkk.model.UserClass
+import com.cpc1hn.uimkk.model.UserFirebase
+import com.cpc1hn.uimkk.requestLocationPermission
 import com.cpc1hn.uimkk.ui.viewmodel.ProgramViewModel
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.*
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.toObject
 import java.io.IOException
@@ -51,14 +53,12 @@ class ProgramFragment : Fragment(), IconProgramAdapter.OnItemButtonClick  {
     private lateinit var programAdapter: IconProgramAdapter
     private var programs: ArrayList<Program> = arrayListOf()
     private var programFilter: ArrayList<Program> = arrayListOf()
-    private lateinit var auth: FirebaseAuth
-    private var databaseReference : DatabaseReference? = null
-   private var database: FirebaseDatabase? = null
     private var user:UserClass= UserClass()
     private lateinit var ipAddress:String
     private var port: Int=0
     private var socketReceive= DatagramSocket(null)
     private lateinit var a:ByteArray
+    private val db = FirebaseFirestore.getInstance()
 
 
 
@@ -90,7 +90,8 @@ class ProgramFragment : Fragment(), IconProgramAdapter.OnItemButtonClick  {
         }
         search()
         receiveData()
-// setup navigation
+        val saveData= SaveData(requireContext())
+        saveData.setCheckPermissionLocation(requestLocationPermission())
 
             return binding.root
         }
@@ -154,24 +155,24 @@ class ProgramFragment : Fragment(), IconProgramAdapter.OnItemButtonClick  {
     }
 
     private fun getAccount(){
-        auth = FirebaseAuth.getInstance()
-        database = FirebaseDatabase.getInstance()
-        databaseReference = database?.getReference("account")
-        //loadProfile()
-        val currentUser = auth.currentUser
-        val currentUSerDb = databaseReference?.child((currentUser?.uid!!))
-        currentUSerDb!!.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                user = snapshot.getValue(UserClass::class.java)!!
-                val user1 =
-                    UserClass(user.id, user.name, user.phone,user.organization,user.email, user.sex)
-                viewModel.insertUser(user1)
+        val saveData= SaveData(requireContext())
+        val email = saveData.getMail()
+        db.collection("accounts").whereEqualTo("Email",email).get()
+            .addOnSuccessListener { documents ->
+                for (document in documents) {
+                  val id:String= document.id
+                    db.collection("accounts").document(id).get().addOnSuccessListener {
+                        if (it.data!=null){
+                            val user1 = it.toObject<UserFirebase>()
+                            user= UserClass(1, user1!!.FullName, user1.Sex,user1.Position, user1.Email,user1.PhoneNumber )
+                            viewModel.insertUser(user)
+                        }
+                    }
+                }
             }
-
-            override fun onCancelled(error: DatabaseError) {
-
+            .addOnFailureListener { exception ->
+                Log.w(TAG, "Error getting documents: ", exception)
             }
-        })
     }
 
     private fun receiveData() {
@@ -245,12 +246,10 @@ class ProgramFragment : Fragment(), IconProgramAdapter.OnItemButtonClick  {
         val currentDateandTime: String = sdf.format(Date())
             btOk.setOnClickListener {
                 val db = FirebaseFirestore.getInstance()
-                val room = Program(
-                    edtRoom.text.toString(),
-                    edtNongdo.text.toString().toLong(),
-                    edtThetich.text.toString().toLong(), currentDateandTime, user.name, UUID.randomUUID().toString()
-                )
-                db.collection("programs").document(room.id).set(room)
+                val room = hashMapOf("Concentration" to edtNongdo.text.toString().toInt(),
+                "Creator" to user.FullName, "Email" to user.Email, "NameProgram" to edtRoom.text.toString()
+                , "TimeCreate" to currentDateandTime, "Volume" to edtThetich.text.toString().toInt())
+                db.collection("programs").add(room)
                     .addOnSuccessListener {
                         getProgram()
                         Toast.makeText(context, "Đã lưu chương trình", Toast.LENGTH_SHORT).show()
@@ -340,17 +339,21 @@ class ProgramFragment : Fragment(), IconProgramAdapter.OnItemButtonClick  {
     }
    private fun deleteProgram(program: Program){
         programs.remove(program)
-        val db = FirebaseFirestore.getInstance()
-        db.collection("programs").document(program.id).delete()
-            .addOnSuccessListener {Toast.makeText(context, "Đã xóa chương trình", Toast.LENGTH_LONG).show() }
-            .addOnFailureListener { e -> Toast.makeText(context, "$e", Toast.LENGTH_LONG).show() }
-        programAdapter.notifyDataSetChanged()
+        db.collection("programs").whereEqualTo("TimeCreate", program.TimeCreate).get().addOnSuccessListener { documents->
+            for (document in documents) {
+            db.collection("programs").document(document.id).delete()
+                .addOnSuccessListener {Toast.makeText(context, "Đã xóa chương trình", Toast.LENGTH_LONG).show() }
+                .addOnFailureListener { e -> Toast.makeText(context, "$e", Toast.LENGTH_LONG).show() }
+            programAdapter.notifyDataSetChanged()
+            }
+        }
+
     }
 
     override fun seeMore(program: Program) {
         requireView().findNavController().navigate(
             ProgramFragmentDirections.actionNavHomeToProgramDependFragment(
-                program, username = viewModel.getUsername()
+                program, program.Creator
             )
         )
     }

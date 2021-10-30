@@ -33,8 +33,7 @@ class AccountFragment : Fragment() {
     companion object {
         fun newInstance() = AccountFragment()
     }
-    private val PERMISSION_CODE_ACCEPTED = 1
-    private val PERMISSION_CODE_NOT_AVAILABLE = 0
+
     private lateinit var viewModel: AccountViewModel
     private lateinit var binding: AccountFragmentBinding
     private lateinit var auth: FirebaseAuth
@@ -54,8 +53,12 @@ class AccountFragment : Fragment() {
         auth = FirebaseAuth.getInstance()
         user = viewModel.getUser()
         getAccount()
-        when(requestLocationPermission()){
-            PERMISSION_CODE_ACCEPTED -> getWifiSSID()
+
+        val saveData=SaveData(requireContext())
+        activity.run {
+            when(saveData.getCheckPermissionLocation()){
+                1 -> getWifiSSID()
+            }
         }
         binding.btEdit.setOnClickListener {
             findNavController().navigate(AccountFragmentDirections.actionAccountFragmentToEditProfileFragment(user))
@@ -66,33 +69,14 @@ class AccountFragment : Fragment() {
         return binding.root
     }
 
-    private fun requestLocationPermission(): Int {
-        if (ContextCompat.checkSelfPermission(requireContext(),
-                android.Manifest.permission.ACCESS_FINE_LOCATION)
-            != PackageManager.PERMISSION_GRANTED) {
-
-            if (ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(),
-                    android.Manifest.permission.ACCESS_FINE_LOCATION)) {
-            } else {
-                // request permission
-                ActivityCompat.requestPermissions(requireActivity(),
-                    arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
-                   PERMISSION_CODE_ACCEPTED)
-            }
-        } else {
-            // already granted
-            return PERMISSION_CODE_ACCEPTED
-        }
-
-        // not available
-        return PERMISSION_CODE_NOT_AVAILABLE
-    }
 
     private fun getWifiSSID() {
         val mWifiManager: WifiManager =
             ((activity as AppCompatActivity).applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager)
         val info: WifiInfo = mWifiManager.getConnectionInfo()
-        binding.tvCode.text= info.ssid
+        activity?.runOnUiThread{
+            binding.tvCode.text= info.ssid
+        }
         sharedPrefsHelper.setCodeMachine(info.ssid)
         Log.d("_SSID", " ${info.ssid} ${info.bssid}, ${info.ipAddress}")
 
@@ -125,16 +109,15 @@ class AccountFragment : Fragment() {
             requireActivity().finish()
     }
 
-
     private fun getAccount(){
-        binding.tvName.text = user.name
-        binding.tvMail.text = user.email
-        binding.tvRoom.text= user.organization
-        if (user.phone.isNotEmpty()){
-            binding.tvPhone.text= user.phone
+        binding.tvName.text = user.FullName
+        binding.tvMail.text = user.Email
+        binding.tvRoom.text= user.Position
+        if (user.PhoneNumber.isNotEmpty()){
+            binding.tvPhone.text= user.PhoneNumber
         }
-        if (user.sex.isNotEmpty()){
-            binding.tvSex.text= user.sex
+        if (user.Sex.isNotEmpty()){
+            binding.tvSex.text= user.Sex
         }
     }
 

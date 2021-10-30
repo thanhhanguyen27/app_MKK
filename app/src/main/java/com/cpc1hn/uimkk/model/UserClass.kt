@@ -9,9 +9,10 @@ import java.io.Serializable
 class UserClass(
     @PrimaryKey
     @ColumnInfo(name = "id") var id:Int=1,
-    @ColumnInfo(name="name") var name:String="",
-    @ColumnInfo(name= "sex") var sex: String="",
-    @ColumnInfo(name= "organization")var organization: String="",
-    @ColumnInfo(name="email") var email:String="",
-    @ColumnInfo(name= "phone")var phone: String="",
+    @ColumnInfo(name="FullName") var FullName:String="",
+    @ColumnInfo(name= "Sex") var Sex: String="",
+    @ColumnInfo(name= "Position")var Position: String="",
+    @ColumnInfo(name="Email") var Email:String="",
+    @ColumnInfo(name= "PhoneNumber")var PhoneNumber: String="",
+    @ColumnInfo(name = "Password")  var Password:String=""
     ):Serializable

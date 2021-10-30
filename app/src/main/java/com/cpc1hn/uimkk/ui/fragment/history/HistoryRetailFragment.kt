@@ -39,11 +39,12 @@ class HistoryRetailFragment : Fragment() {
         viewModel = ViewModelProviders.of(this).get(HistoryRetailViewModel::class.java)
         // sendUDP(binding.tvCreater.text.toString())
         history= HistoryRetailFragmentArgs.fromBundle(requireArguments()).history
-        val time= longToDate(history.timeEnd, "dd/MM/yyyy")
-        Log.d("_HIS", "${history.creater} ${history.timeRun}")
+       // val time= longToDate(history.timeEndLong, "dd/MM/yyyy")
+        Log.d("_HIS", "${history.Creator} ${history.TimeRun}")
         binding.history= history
-        binding.tvTimeEnd.text= "${time} ${history.hourEnd}"
-        binding.tvTimeCreate.text= "${history.timeCreate}"
+        binding.tvTimeEnd.text= history.TimeEnd
+        binding.tvTimeCreate.text= "${history.TimeCreate}"
+        binding.tvError.text= history.checkError()
 
         return binding.root
     }
@@ -77,10 +78,7 @@ class HistoryRetailFragment : Fragment() {
     private fun showNotify(){
         val builder = androidx.appcompat.app.AlertDialog.Builder(requireContext(), R.style.AlertDialogTheme)
         val positiveButtonClick = { _: DialogInterface, _: Int ->
-            val db = FirebaseFirestore.getInstance()
-            db.collection("history").document(history.id.toString()).delete()
-            viewModel.deleteHistoryInfo()
-            requireActivity().onBackPressed()
+            deleteHistory()
         }
         val negativeButtonClick = { _: DialogInterface, _: Int ->
         }
@@ -99,4 +97,14 @@ class HistoryRetailFragment : Fragment() {
 
     }
 
+    private fun deleteHistory(){
+        val db = FirebaseFirestore.getInstance()
+        db.collection("history").whereEqualTo("TimeCreate", history.TimeCreate).get().addOnSuccessListener {
+            for (document in it){
+                db.collection("history").document(document.id).delete()
+                viewModel.deleteHistoryInfo()
+                requireActivity().onBackPressed()
+            }
+        }
+    }
 }

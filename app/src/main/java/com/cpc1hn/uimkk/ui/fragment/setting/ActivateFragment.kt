@@ -71,7 +71,7 @@ class ActivateFragment : Fragment() {
             btSwitchBuzzer.setOnCheckedChangeListener { _, isChecked ->
                 if (isChecked){
                     checkOn(B1, 0x03, B3, B4, B5, B6)
-
+                    saveData.setActiveScale(true)
                 }else {
                     checkOff(B1, 0x03, B3, B4, B5, 0x00)
                 }

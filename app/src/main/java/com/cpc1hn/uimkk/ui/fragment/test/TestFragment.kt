@@ -109,10 +109,10 @@ class TestFragment : Fragment() {
             ) {
                 binding.tvNotify.text = "Đang kết nối"
                 saveData.setConnect(binding.tvNotify.text.toString())
-                binding.temperature.text = buffer[5].toString()
+                binding.temperature.text = buffer[5].toUInt().toString()
                 binding.progressBarHorizontal1.progress = (buffer[4].toInt())
-                binding.tvTimePercent.text = "${buffer[4].toInt()}%"
-                saveData.setTemp(binding.temperature.toString())
+                binding.tvTimePercent.text = "${buffer[4].toUInt()}%"
+                saveData.setTemp(binding.temperature.text.toString())
                 saveData.setPer(binding.progressBarHorizontal1.progress)
 
             }

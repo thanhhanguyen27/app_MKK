@@ -44,7 +44,7 @@ class ProgramRetailFragment: Fragment(){
     private lateinit var ipAddress:String
     private var port: Int=0
     private var timeCreate: String=""
-    private var timeEnd:Long=0
+    private var timeEndLong:Long=0
     private var mili:Long=0
     private lateinit var program: Program
     private var timeRun:String=""
@@ -57,11 +57,10 @@ class ProgramRetailFragment: Fragment(){
     private var TAG="_HISTORY"
     private var socketReceive= DatagramSocket()
     private lateinit var savedata:SaveData
-    private var spraySpeed:String=""
+    private var spraySpeed:Int=0
     private var hourEnd:String=""
     private var hourStart:String=""
-    private var numberOfRun:Int=0
-    private var error:String=""
+    private var error:Int=0
 
 
 
@@ -88,11 +87,10 @@ class ProgramRetailFragment: Fragment(){
         username=  ProgramRetailFragmentArgs.fromBundle(requireArguments()).username
         hourStart=ProgramRetailFragmentArgs.fromBundle(requireArguments()).hourStart
         spraySpeed=  ProgramRetailFragmentArgs.fromBundle(requireArguments()).speedSpray
-        numberOfRun= ProgramRetailFragmentArgs.fromBundle(requireArguments()).numberOfRun
         binding.tvTime.text = timeRun
         savedata= SaveData(requireContext())
         savedata.setRoomSpraying(program.NameProgram)
-        if (savedata.loadSpray().isNotEmpty()){
+        if (savedata.loadSpray()!=0){
             spraySpeed= savedata.loadSpray()
         }
         //Receive Data
@@ -101,14 +99,7 @@ class ProgramRetailFragment: Fragment(){
             Log.d("_UDP", "receive open")
         }
 
-
-
         receiveData1()
-//        if (socketReceive.isClosed){
-//            socketReceive.bind(InetSocketAddress(8081))
-//            Log.d("_UDP", "receive open")
-//        }
-
         return  binding.root
     }
 
@@ -139,17 +130,6 @@ class ProgramRetailFragment: Fragment(){
     @SuppressLint("SetTextI18n")
     fun display1(b: ByteArray) {
         activity?.runOnUiThread {
-            //cap nhat khi dang phun
-//            if ((b[1]==0x02.toByte()) &&(b[0]==0x03.toByte())){
-//                TransitionManager.beginDelayedTransition(binding.mainLayout)
-//                val visible = true
-//                if (visible) {
-//                    binding.tv1.setVisibility(View.GONE)
-//                    binding.ln3.setVisibility(View.GONE)
-//                    binding.lnWarning.setVisibility(View.VISIBLE)
-//                }
-//            }
-
 
             //cap nhat phan tram hoa chat
             if ((b[0] == 0x03.toByte()) && (b[1] == 0x04.toByte()) && (b[6] == checkSum(
@@ -158,7 +138,7 @@ class ProgramRetailFragment: Fragment(){
             ) {
                 Log.d("_UDP1", "hoa chat data= ${b}")
                 binding.progressBarHorizontal1.progress = (b[4].toInt())
-                binding.tvTimePercent.text = "${b[4].toInt()}%"
+                binding.tvTimePercent.text = "${b[4].toUInt()}%"
             }
 
             //Canh bao chuan bi phun hoa chat(20s) đếm ngược
@@ -209,7 +189,7 @@ class ProgramRetailFragment: Fragment(){
                     Log.d("_UDP", "send 030300000000")
                     timeSpray = convertSectoDay(timeSum)
                     // binding.progressBarTime.setProgress(0)
-                    error = "Không có lỗi"
+                    error = 0
                     saveHistory()
                     // binding.tvTime.setText(convertSectoDay(0))
                     notifyEnd()
@@ -226,7 +206,7 @@ class ProgramRetailFragment: Fragment(){
                             //  binding.progressBarTime.setProgress(0)
                             //binding.tvTime.setText(convertSectoDay(0))
                             checkOn(0x03, 0x03, 0x00, 0x00, 0x00, 0x01)
-                            error = "Dừng đột ngột"
+                            error = 1
                             saveHistory()
                             notifyEnd()
                         }
@@ -269,7 +249,7 @@ class ProgramRetailFragment: Fragment(){
                 checkOn(0x03, 0x04, 0x00, 0x00, 0x00, 0x00)
                // socketReceive.close()
                 //timeSpray = convertSectoDay(timeSum - timeRun.toInt())
-                error="Dừng do quá nhiệt"
+                error=2
                 // saveHistory()
                 //notifyEnd()
 
@@ -278,35 +258,41 @@ class ProgramRetailFragment: Fragment(){
     }
     private fun saveHistory(){
         savedata.setRoomSpraying("")
-        val id= (0..1000).random()
         val thetich= ProgramRetailFragmentArgs.fromBundle(requireArguments()).theTich
         val nongdo= ProgramRetailFragmentArgs.fromBundle(requireArguments()).nongdo
         val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-        timeEnd =convertDateToLong(sdf.format(Date()))
+        timeEndLong =convertDateToLong(sdf.format(Date()))
         val sdf1= SimpleDateFormat("HH:mm:ss", Locale.getDefault())
         hourEnd=sdf1.format(Date())
 
         history= History(
-            id,
-            numberOfRun.toString(),
-            nongdo,
-            thetich,
-            timeCreate,
-            hourStart,
-            timeEnd,
-            hourEnd,
-            username,
-            "",
-            program.NameProgram,
-            timeSpray,
-            error,
-            spraySpeed,
-            "Chưa đồng bộ"
+            TimeCreate = timeCreate,
+            CodeMachine= savedata.getCodeMachine(),
+            Concentration= nongdo,
+            Volume= thetich,
+            TimeEnd= "${convertTimeLongToDate(timeEndLong)} ${hourEnd} ",
+            Creator=username,
+           Room= program.NameProgram,
+            TimeRun= timeSpray,
+            Error= error,
+            SpeedSpray= spraySpeed,
+            Status = 0
         )
+        val historyFirebase= hashMapOf( "TimeCreate" to timeCreate,
+            "CodeMachine" to savedata.getCodeMachine(),
+            "Concentration" to nongdo,
+            "Volume" to thetich,
+            "TimeEnd" to "${convertTimeLongToDate(timeEndLong)} $hourEnd ",
+            "Creator" to username,
+            "Room" to program.NameProgram,
+            "TimeRun" to timeSpray,
+            "Error" to error,
+            "SpeedSpray" to spraySpeed,
+            "Status" to 0)
         viewModel.insert(history)
         sendInfo()
         val db = FirebaseFirestore.getInstance()
-        db.collection("histories").document(history.id.toString()).set(history)
+        db.collection("histories").add(historyFirebase)
             .addOnSuccessListener {
                 histories.add(history)
                 Log.d(TAG, "tải lên firebase thành công")
@@ -426,6 +412,9 @@ class ProgramRetailFragment: Fragment(){
         }
     }
 
+    private fun convertTimeLongToDate(time:Long):String{
+       return SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(Date(time))
+    }
 
     private fun byteArrayOfInts(vararg ints: Int) = ByteArray(ints.size) { pos -> ints[pos].toByte() }
 

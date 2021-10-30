@@ -16,6 +16,16 @@ class SaveData(context:Context) {
             .apply()
     }
 
+    fun setCheckPermissionLocation(check:Int){
+        val editor= sharedPreferences.edit()
+        editor.putInt("Permission Location",check)
+        editor.apply()
+    }
+
+    fun getCheckPermissionLocation(): Int {
+        return sharedPreferences.getInt("Permission Location", 0)
+    }
+
     fun setConnect(connect:String){
         val editor= sharedPreferences.edit()
         editor.putString(CONNECT, connect)
@@ -66,14 +76,14 @@ class SaveData(context:Context) {
         return room!!
     }
 
-    fun setSpray(spray:String){
+    fun setSpray(spray:Int){
         val editor= sharedPreferences.edit()
-        editor.putString(SPEED, spray)
+        editor.putInt(SPEED,spray)
         editor.apply()
     }
 
-    fun loadSpray():String{
-        val spray= sharedPreferences.getString(SPEED, "")
+    fun loadSpray():Int{
+        val spray= sharedPreferences.getInt(SPEED, 0)
         return spray!!
     }
     fun setTemp(temp:String){
@@ -126,6 +136,16 @@ class SaveData(context:Context) {
         }
        setLocale(Lang)
         return Lang
+    }
+
+    fun setMail(mail:String){
+        val editor= sharedPreferences.edit()
+        editor.putString("MAIL", mail)
+        editor.apply()
+    }
+
+    fun getMail():String{
+        return sharedPreferences.getString("MAIL", "")!!
     }
 
     fun setLocale(Lang:String){

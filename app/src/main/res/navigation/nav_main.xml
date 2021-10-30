@@ -77,17 +77,14 @@
             android:name="program"
             app:argType="com.cpc1hn.uimkk.model.Program" />
         <argument
-            android:name="numberOfRun"
-            app:argType="integer" />
-        <argument
             android:name="timeSpeed"
             app:argType="string" />
         <argument
             android:name="theTich"
-            app:argType="string" />
+            app:argType="integer" />
         <argument
             android:name="nongdo"
-            app:argType="string" />
+            app:argType="integer" />
         <argument
             android:name="timeSum"
             app:argType="integer" />
@@ -102,7 +99,7 @@
             app:argType="string" />
         <argument
             android:name="speedSpray"
-            app:argType="string" />
+            app:argType="integer" />
     </fragment>
     <fragment
         android:id="@+id/historyRetailFragment"

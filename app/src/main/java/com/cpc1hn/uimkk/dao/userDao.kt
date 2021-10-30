@@ -10,7 +10,7 @@ interface userDao {
     @Update
     fun update(user:UserClass)
 
-    @Query("SELECT name from User WHERE id==1")
+    @Query("SELECT FullName from User WHERE id==1")
     fun getUsername():String
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

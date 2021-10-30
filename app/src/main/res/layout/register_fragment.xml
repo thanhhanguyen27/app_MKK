@@ -59,7 +59,7 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/edtEmail"
-                    android:inputType="textEmailAddress"
+                    android:inputType="textEmailAddress|textEmailSubject"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     />

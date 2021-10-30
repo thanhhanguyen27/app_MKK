@@ -43,4 +43,14 @@
     <string name="toc_do_phun_bom">Pump injection speed</string>
     <string name="Toc_do_quay">Spin speed</string>
     <string name="dang_xuat">Log out</string>
+    <string name="khongketnoi">Disconnected</string>
+    <string name="from">From</string>
+    <string name="to">To</string>
+    <string name="name">Name</string>
+    <string name="email">Email</string>
+    <string name="room">Position</string>
+    <string name="phone">Phone</string>
+    <string name="sex">Sex</string>
+    <string name="code">Machine Code</string>
+    <string name="log_out">Log out</string>
 </resources>

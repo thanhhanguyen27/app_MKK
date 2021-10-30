@@ -71,30 +71,6 @@ class SettingFragment : Fragment() {
         port = 8080
         radioGroup = binding.radioGroup
 
-
-//        auth = FirebaseAuth.getInstance()
-//        database = FirebaseDatabase.getInstance()
-//        databaseReference = database?.getReference("account")
-//        //loadProfile()
-//        val currentUser = auth.currentUser
-//        val currentUSerDb = databaseReference?.child((currentUser?.uid!!))
-//        currentUSerDb!!.addValueEventListener(object : ValueEventListener {
-//            override fun onDataChange(snapshot: DataSnapshot) {
-//                user = snapshot.getValue(UserClass::class.java)!!
-//                Log.d(TAG, "${user.name} ${user.email}")
-//                binding.tvName.text = user.name
-//                binding.tvMail.text = user.email
-//                val user1 =
-//                    UserClass(user.name, user.phone, user.email, user.organization, user.sex)
-//                val user2 = User1(1, user.name, user.email)
-//                viewModel.insertUser(user2)
-//            }
-
-//            override fun onCancelled(error: DatabaseError) {
-//
-//            }
- //       })
-
         viewModel = ViewModelProviders.of(this).get(SettingViewModel::class.java)
         Log.d(TAG, "Setting")
 

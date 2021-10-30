@@ -53,8 +53,8 @@ class SpeedFragment : Fragment() {
         ipAddress="192.168.4.1"
         port=8080
         saveData= SaveData(requireContext())
-        if (saveData.loadSpray().isNotEmpty()){
-            binding.tvSpeedSpray.text= saveData.loadSpray()
+        if (saveData.loadSpray()!=0){
+            binding.tvSpeedSpray.text= saveData.loadSpray().toString()
         }
         //get data Temp, Speed
         checkOn(0x02, 0x09, B3, B4, B5, 0x02)
@@ -64,48 +64,48 @@ class SpeedFragment : Fragment() {
         }
         val items = listOf("Chậm", "Bình thường", "Nhanh")
         val adapter = ArrayAdapter(requireContext(), R.layout.list_item, items)
-        (binding.tocdoquay.editText as? AutoCompleteTextView)?.setAdapter(adapter)
-        binding.btSet.setOnClickListener {
-            if (binding.textSpeed.text.isEmpty()){
-                val builder1 = AlertDialog.Builder(requireContext(), R.style.AlertDialogTheme)
-                val positiveButtonClick = { dialog: DialogInterface, which: Int ->
-
-                }
-                with(builder1) {
-                    setMessage("Bạn chưa chọn tốc độ quay. Vui lòng thiết lập lại.")
-                    setPositiveButton(
-                        "Ok",
-                        DialogInterface.OnClickListener(function = positiveButtonClick)
-                    )
-                }
-                val dialog1 = builder1.create()
-                dialog1.show()
-            }else{
-                if (binding.textSpeed.text.toString() =="Chậm"){
-                    checkOn(0x02, 0x07, 0x00, 0x00, 0x00, 0x00)
-                }
-                if (binding.textSpeed.text.toString() =="Bình thường"){
-                    checkOn(0x02, 0x07, 0x00, 0x00, 0x00, 0x01)
-                }
-                if (binding.textSpeed.text.toString() =="Nhanh"){
-                    checkOn(0x02, 0x07, 0x00, 0x00, 0x00, 0x02)
-                }
-                val builder = AlertDialog.Builder(requireContext(), R.style.AlertDialogTheme)
-                val positiveButtonClick = { dialog: DialogInterface, _: Int ->
-
-                }
-                with(builder) {
-                    setMessage("Thiết lập tốc độ quay thành công.")
-                    setPositiveButton(
-                        "Ok",
-                        DialogInterface.OnClickListener(function = positiveButtonClick)
-                    )
-                }
-                val dialog = builder.create()
-                dialog.show()
-
-            }
-        }
+//        (binding.tocdoquay.editText as? AutoCompleteTextView)?.setAdapter(adapter)
+//        binding.btSet.setOnClickListener {
+//            if (binding.textSpeed.text.isEmpty()){
+//                val builder1 = AlertDialog.Builder(requireContext(), R.style.AlertDialogTheme)
+//                val positiveButtonClick = { dialog: DialogInterface, which: Int ->
+//
+//                }
+//                with(builder1) {
+//                    setMessage("Bạn chưa chọn tốc độ quay. Vui lòng thiết lập lại.")
+//                    setPositiveButton(
+//                        "Ok",
+//                        DialogInterface.OnClickListener(function = positiveButtonClick)
+//                    )
+//                }
+//                val dialog1 = builder1.create()
+//                dialog1.show()
+//            }else{
+//                if (binding.textSpeed.text.toString() =="Chậm"){
+//                    checkOn(0x02, 0x07, 0x00, 0x00, 0x00, 0x00)
+//                }
+//                if (binding.textSpeed.text.toString() =="Bình thường"){
+//                    checkOn(0x02, 0x07, 0x00, 0x00, 0x00, 0x01)
+//                }
+//                if (binding.textSpeed.text.toString() =="Nhanh"){
+//                    checkOn(0x02, 0x07, 0x00, 0x00, 0x00, 0x02)
+//                }
+//                val builder = AlertDialog.Builder(requireContext(), R.style.AlertDialogTheme)
+//                val positiveButtonClick = { dialog: DialogInterface, _: Int ->
+//
+//                }
+//                with(builder) {
+//                    setMessage("Thiết lập tốc độ quay thành công.")
+//                    setPositiveButton(
+//                        "Ok",
+//                        DialogInterface.OnClickListener(function = positiveButtonClick)
+//                    )
+//                }
+//                val dialog = builder.create()
+//                dialog.show()
+//
+ //            }
+   //     }
 
 
         return  binding.root
@@ -129,7 +129,7 @@ class SpeedFragment : Fragment() {
             if ( editSpeed.text.toString().toInt()>37){
                 binding.tvSpeedSpray.text = "37"
             }
-            saveData.setSpray(binding.tvSpeedSpray.text.toString())
+           // saveData.setSpray(binding.tvSpeedSpray.text.toString())
         }
         builder.setNegativeButton("Hủy"){ _, _ ->  }
         val dialog = builder.create()
@@ -216,7 +216,7 @@ class SpeedFragment : Fragment() {
                 ).toByte())
             ) {
                 Log.d("_UDP", "Speed")
-                binding.tvSpeed.setText(b[4].toInt().toString())
+              //  binding.tvSpeed.setText(b[4].toInt().toString())
                 "$${b[4].toInt()} ml/phút".also { binding.tvSpeedSpray.text = it }
 
             }

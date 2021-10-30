@@ -14,6 +14,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
 import com.cpc1hn.uimkk.MainActivity
 import com.cpc1hn.uimkk.R
+import com.cpc1hn.uimkk.SaveData
 import com.cpc1hn.uimkk.databinding.LoginFragmentBinding
 import com.cpc1hn.uimkk.ui.viewmodel.login.LoginViewModel
 import com.google.firebase.auth.FirebaseAuth
@@ -27,6 +28,7 @@ class LoginFragment : Fragment() {
     private lateinit var viewModel: LoginViewModel
     private lateinit var binding: LoginFragmentBinding
     lateinit var auth: FirebaseAuth
+    private lateinit var saveData:SaveData
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,6 +44,7 @@ class LoginFragment : Fragment() {
             requireActivity().finish()
         }
         login()
+        saveData= SaveData(requireContext())
 
         binding.btRegister.setOnClickListener {
             findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToRegisterFragment())
@@ -54,10 +57,10 @@ class LoginFragment : Fragment() {
         binding.apply {
             btLogin.setOnClickListener {
                 if (TextUtils.isEmpty(edtEmail.text.toString())) {
-                    edtEmail.setError("Bạn cần nhập email! ")
+                    edtEmail.error = "Bạn cần nhập email! "
                     return@setOnClickListener
                 } else if (TextUtils.isEmpty(edtPass.text.toString())) {
-                    edtPass.setError("Bạn cần điền mật khẩu! ")
+                    edtPass.error = "Bạn cần điền mật khẩu! "
                     return@setOnClickListener
                 }
 
@@ -70,6 +73,8 @@ class LoginFragment : Fragment() {
                                 "Đăng nhập thành công ",
                                 Toast.LENGTH_LONG
                             ).show()
+                            saveData.setMail(edtEmail.text.toString())
+
                         } else {
                             Toast.makeText(
                                 context,

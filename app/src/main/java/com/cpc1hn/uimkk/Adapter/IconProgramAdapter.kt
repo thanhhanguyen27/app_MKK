@@ -15,7 +15,7 @@ class IconProgramAdapter( var programs: ArrayList<Program>, private val onItemBu
     ): RecyclerView.ViewHolder(binding.root){
         fun bindView(program: Program) {
             binding.program = program
-            binding.timeCreatee.text= "Người tạo: ${program.Creater}"
+            binding.timeCreatee.text= "Người tạo: ${program.Creator}"
             binding.root.setOnClickListener{
                 onItemButtonClick.onItemClick(program)
             }

@@ -44,4 +44,14 @@
     <string name="toc_do_phun_bom">Tốc độ phun bơm nhu động</string>
     <string name="Toc_do_quay">Tốc độ quay</string>
     <string name="dang_xuat">Đăng xuất</string>
+    <string name="khongketnoi">Không kết nối</string>
+    <string name="from">Từ</string>
+    <string name="to">Đến</string>
+    <string name="name">Họ và tên</string>
+    <string name="email">Email</string>
+    <string name="room">Phòng ban</string>
+    <string name="phone">Số điện thoại</string>
+    <string name="sex">Giới tính</string>
+    <string name="code">Mã máy</string>
+    <string name="log_out">Đăng xuất</string>
 </resources>

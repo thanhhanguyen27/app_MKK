@@ -71,7 +71,7 @@
                 <TextView
                     android:id="@+id/tvCreater"
                     style="@style/info_more_lines_text"
-                    android:text='@{String.format("%s",history.creater)}' />
+                    android:text='@{String.format("%s",history.Creator)}' />
 
             </LinearLayout>
 
@@ -113,8 +113,9 @@
                     android:text="@string/loi" />
 
                 <TextView
+                    android:id="@+id/tvError"
                     style="@style/info_more_lines_text"
-                    android:text='@{String.format("%s", history.error)}' />
+                    />
 
             </LinearLayout>
 
@@ -163,7 +164,7 @@
 
                 <TextView
                     style="@style/info_more_lines_text"
-                    android:text='@{String.format("%s", history.nongdo)}' />
+                    android:text='@{String.format("%s", history.Concentration)}' />
 
             </LinearLayout>
 
@@ -184,7 +185,7 @@
 
                 <TextView
                     style="@style/info_more_lines_text"
-                    android:text='@{String.format("%s", history.thetich)}' />
+                    android:text='@{String.format("%s", history.Volume)}' />
 
             </LinearLayout>
 

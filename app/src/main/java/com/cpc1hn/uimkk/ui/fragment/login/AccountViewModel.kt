@@ -13,10 +13,6 @@ class AccountViewModel (app: Application): AndroidViewModel(app) {
         allUser= MutableLiveData()
     }
 
-    fun insertUser(user: UserClass){
-        val userDao= AppDatabase.getAppdatabase(getApplication())!!.userDao()
-        userDao.insert(user)
-    }
     fun getUser():UserClass{
         val userDao= AppDatabase.getAppdatabase(getApplication())!!.userDao()
         val user= userDao.getId()

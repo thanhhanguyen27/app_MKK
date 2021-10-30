@@ -13,12 +13,15 @@ import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import com.cpc1hn.uimkk.LoginActivity
 import com.cpc1hn.uimkk.R
+import com.cpc1hn.uimkk.SaveData
 import com.cpc1hn.uimkk.databinding.RegisterFragmentBinding
 import com.cpc1hn.uimkk.model.UserClass
 import com.cpc1hn.uimkk.ui.viewmodel.login.RegisterViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.android.synthetic.main.edit_profile_fragment.*
 
 class RegisterFragment : Fragment() {
 
@@ -38,7 +41,6 @@ class RegisterFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         (activity as LoginActivity).supportActionBar?.show()
-       // (activity as LoginActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding= DataBindingUtil.inflate(inflater, R.layout.register_fragment, container, false)
         auth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance()
@@ -51,27 +53,39 @@ class RegisterFragment : Fragment() {
 
         return binding.root
     }
-    fun register(){
+    private fun register(){
         binding.apply {
             btRegister.setOnClickListener {
                 if (TextUtils.isEmpty(edtEmail.text.toString())) {
-                    edtEmail.setError("Bạn cần nhập email! ")
+                    edtEmail.error = "Bạn cần nhập email! "
                     return@setOnClickListener
                 } else if (TextUtils.isEmpty(edtPass.text.toString())) {
-                    edtPass.setError("Bạn cần điền mật khẩu! ")
+                    edtPass.error = "Bạn cần điền mật khẩu! "
                     return@setOnClickListener
                 }
                 auth.createUserWithEmailAndPassword(edtEmail.text.toString(), edtPass.text.toString())
                     .addOnCompleteListener(requireActivity()) {task->
                         if(task.isSuccessful) {
-                            val currentUser = auth.currentUser
-                            val currentUSerDb = databaseReference?.child((currentUser?.uid!!))
-                           val account: UserClass= UserClass(1,edtName.text.toString(),"",edtRoom.text.toString(),edtEmail.text.toString(), "")
-                            currentUSerDb!!.setValue(account)
+                         //   val account= UserClass(1,edtName.text.toString(),"",edtRoom.text.toString(),edtEmail.text.toString(), "")
+                           val account= hashMapOf("FullName" to edtName.text.toString(),
+                           "Position" to edtRoom.text.toString(),
+                           "Email" to edtEmail.text.toString(),
+                           "Password" to edtPass.text.toString())
+                            val db = FirebaseFirestore.getInstance()
+                            db.collection("accounts")
+                                .add(account)
+                                .addOnSuccessListener { _ ->
+
+                                }
+                                .addOnFailureListener { e ->
+                                    Toast.makeText(requireContext(), "Có lỗi xảy ", Toast.LENGTH_LONG).show()
+                                }
                             Toast.makeText(requireContext(), " Đăng ký thành công! ", Toast.LENGTH_LONG).show()
+                            val saveData= SaveData(requireContext())
+                            saveData.setMail(edtEmail.text.toString())
                             requireActivity().onBackPressed()
                         } else {
-                            Toast.makeText(requireContext(), " Đăng ký thất bại!", Toast.LENGTH_LONG).show()
+                            Toast.makeText(requireContext(), " Đăng ký thất bại! ${task.exception}", Toast.LENGTH_LONG).show()
                         }
                     }
             }
@@ -79,22 +93,9 @@ class RegisterFragment : Fragment() {
     }
 
 
-    fun showAlert(){
-        val builder = AlertDialog.Builder(requireContext(), R.style.AlertDialogTheme)
-        val positiveButtonClick = { dialog: DialogInterface, which: Int ->
-            requireActivity().onBackPressed()
-        }
-        with(builder) {
-            setMessage("Đăng ký tài khoản thành công.")
-            setPositiveButton("OK", DialogInterface.OnClickListener(function = positiveButtonClick))
-        }
-        builder.show()
-    }
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(RegisterViewModel::class.java)
-        // TODO: Use the ViewModel
     }
 
 }

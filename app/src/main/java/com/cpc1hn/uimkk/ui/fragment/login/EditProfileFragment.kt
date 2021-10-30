@@ -13,9 +13,11 @@ import com.cpc1hn.uimkk.R
 import com.cpc1hn.uimkk.databinding.EditProfileFragmentBinding
 import com.cpc1hn.uimkk.model.UserClass
 import com.cpc1hn.uimkk.ui.viewmodel.login.EditProfileViewModel
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.firestore.FirebaseFirestore
 
 class EditProfileFragment : Fragment() {
 
@@ -27,12 +29,11 @@ class EditProfileFragment : Fragment() {
     private lateinit var binding: EditProfileFragmentBinding
     private lateinit var auth: FirebaseAuth
     var databaseReference : DatabaseReference? = null
-    var database: FirebaseDatabase? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         (activity as AppCompatActivity).supportActionBar?.show()
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding= DataBindingUtil.inflate(inflater, R.layout.edit_profile_fragment, container, false)
@@ -40,32 +41,44 @@ class EditProfileFragment : Fragment() {
         binding.btCancel1.setOnClickListener {
             requireActivity().onBackPressed()
         }
-        auth = FirebaseAuth.getInstance()
-        database = FirebaseDatabase.getInstance()
-        databaseReference = database?.getReference("account")
-        //loadProfile()
-        val currentUser = auth.currentUser
-        val currentUSerDb = databaseReference?.child((currentUser?.uid!!))
+        val db = FirebaseFirestore.getInstance()
         val user= EditProfileFragmentArgs.fromBundle(requireArguments()).user
         binding.apply {
-            edtName.setText(user.name)
-            edtMail.setText(user.email)
-            edtRoom.setText(user.organization)
-            edtPhone.setText(user.phone)
-            edtSex.setText(user.sex)
+            edtName.setText(user.FullName)
+            edtMail.setText(user.Email)
+            edtRoom.setText(user.Position)
+            edtPhone.setText(user.PhoneNumber)
+            edtSex.setText(user.Sex)
 
             btSave.setOnClickListener {
-                val account= mapOf<String, String>("name" to binding.edtName.text.toString(), "sex" to binding.edtSex.text.toString(), "organization" to binding.edtRoom.text.toString(), "email" to  binding.edtMail.text.toString(), "phone" to binding.edtPhone.text.toString())
-                currentUSerDb!!.updateChildren(account).addOnSuccessListener {
-                  Toast.makeText(context, "Cập nhật thành công", Toast.LENGTH_SHORT).show()
-                    requireActivity().onBackPressed()
-              }
-                  .addOnFailureListener {
-                      Toast.makeText(context, "Cập nhật không thành công", Toast.LENGTH_SHORT).show()
-                  }
+                val accountRoom= UserClass(1, edtName.text.toString(), edtSex.text.toString(), edtRoom.text.toString(), edtMail.text.toString(), edtPhone.text.toString() )
+               val account= hashMapOf("FullName" to edtName.text.toString(),
+                   "Position" to edtRoom.text.toString(),
+                   "Email" to edtMail.text.toString(),
+                   "PhoneNumber" to edtPhone.text.toString(),
+                   "Sex" to edtSex.text.toString()
+                  )
+                if (edtMail.text.toString().isNotEmpty()){
+                    db.collection("accounts").whereEqualTo("Email", binding.edtMail.text.toString()).get().addOnSuccessListener {
+                        for (document in it){
+                            db.collection("accounts").document(document.id).set(account).addOnSuccessListener {
+                                Toast.makeText(context,"Cập nhật thành công", Toast.LENGTH_LONG).show()
+                                viewModel.updatetUser(accountRoom)
+                                requireActivity().onBackPressed()
+                            }.addOnFailureListener {
+                                Toast.makeText(context, "Cập nhật không thành công", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                    }.addOnFailureListener {
+                        Toast.makeText(context, "Có lỗi xảy ra", Toast.LENGTH_LONG).show()
+                    }
 
-                val userRoom =UserClass(1,binding.edtName.text.toString(), binding.edtSex.text.toString(),binding.edtRoom.text.toString(),  binding.edtMail.text.toString(), binding.edtPhone.text.toString())
-                viewModel.updatetUser(userRoom)
+                }else{
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setMessage("Không được để trống Email")
+                        .setPositiveButton("Ok"){_, _ ->
+                        }.show()
+                }
             }
         }
 

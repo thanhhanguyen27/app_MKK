@@ -15,8 +15,9 @@ class IconHistoryAdapter (var historys: List<History>, private val onItemButtonC
     ): RecyclerView.ViewHolder(binding.root){
         fun bindView(history: History) {
             binding.history= history
-            binding.tvTimeRun.text= "Thời gian phun: ${history.timeRun}"
-            binding.tvTime.text= "Ngày phun: ${history.timeCreate}"
+            binding.tvTimeRun.text= "Thời gian phun: ${history.TimeRun}"
+            binding.tvTime.text= "Ngày phun: ${history.TimeCreate}"
+            binding.tvError.text= history.checkError()
             binding.root.setOnClickListener{
                 onItemButtonClick.onItemClick(history)
             }

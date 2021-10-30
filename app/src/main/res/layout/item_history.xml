@@ -88,7 +88,7 @@
                         android:layout_width="346dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="6dp"
-                        android:text='@{String.format("%s", history.room)}'
+                        android:text='@{String.format("%s", history.Room)}'
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.0"
                         app:layout_constraintStart_toStartOf="parent"
@@ -120,7 +120,6 @@
                         style="@style/content_text_recycler_item"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text='@{String.format("%s", history.error)}'
                         android:textColor="#e65100"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
