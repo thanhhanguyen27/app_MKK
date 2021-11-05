@@ -1,5 +1,6 @@
 package com.cpc1hn.uimkk.model
 
+import android.os.health.TimerStat
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -8,8 +9,8 @@ import java.io.Serializable
 @Entity(tableName = "History")
 class History(
     @PrimaryKey
-    @ColumnInfo(name = "TimeCreate")
-    var TimeCreate: String = "",
+    @ColumnInfo(name = "TimeStart")
+    var TimeStart: String = "",
     @ColumnInfo(name = "CodeMachine")
     var CodeMachine:String="",
     @ColumnInfo(name = "Concentration")
@@ -29,7 +30,7 @@ class History(
     @ColumnInfo(name = "Room")
     var Room:String ="",
     @ColumnInfo(name = "TimeRun")
-    var TimeRun: String = "",
+    var TimeRun: Int= 0,
     @ColumnInfo(name = "Error")
     var Error: Int = 0,
     @ColumnInfo(name = "SpeedSpray")
@@ -37,23 +38,24 @@ class History(
     @ColumnInfo(name = "Status")
     var Status: Int=0,
     @ColumnInfo(name="TimeProgram")
-    var TimeProgram: String=""
+    var TimeCreateProgram: String=""
 ): Serializable {
     fun isNoCode(): Boolean {
         return Status==0
     }
-    constructor(timeCreate:String,CodeMachine:String,Concentration:Int,Volume: Int,TimeEnd:String, Creator: String,
-                Room:String, TimeRun: String,Error: Int, SpeedSpray: Int,Status: Int ) : this() {
-        this.TimeCreate=timeCreate
-        this.CodeMachine= CodeMachine
-        this.Concentration=Concentration
-        this.Volume=Volume
-        this.TimeEnd=TimeEnd
+    constructor(timerStart:String, CodeMachine:String,Concentration:Int,Volume: Int,TimeEnd:String, Creator: String,
+                Room:String, TimeRun: Int ,Error: Int, SpeedSpray: Int,timeCreateProgram: String, Status: Int ) : this() {
+        this.TimeStart =timerStart
+        this.CodeMachine = CodeMachine
+        this.Concentration = Concentration
+        this.Volume = Volume
+        this.TimeEnd = TimeEnd
         this.Creator=Creator
         this.Room=Room
         this.TimeRun= TimeRun
         this.Error=Error
         this.SpeedSpray=SpeedSpray
+        this.TimeCreateProgram= timeCreateProgram
         this.Status=Status
     }
     fun checkError():String{

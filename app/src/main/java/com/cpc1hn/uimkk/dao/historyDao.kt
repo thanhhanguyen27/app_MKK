@@ -5,7 +5,7 @@ import com.cpc1hn.uimkk.model.History
 
 @Dao
 interface historyDao {
-    @Query("SELECT * FROM  History ORDER BY TimeCreate DESC")
+    @Query("SELECT * FROM  History ORDER BY TimeStart DESC")
     fun getAll(): List<History>
 
     @Query("SELECT * FROM History WHERE timeEndLong BETWEEN :daystart AND :dayend")

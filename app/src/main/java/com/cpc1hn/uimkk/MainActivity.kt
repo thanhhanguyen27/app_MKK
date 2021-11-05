@@ -10,10 +10,11 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
-import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.NavigationUI.setupWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.cpc1hn.uimkk.databinding.ActivityMainBinding
 import com.cpc1hn.uimkk.helper.hideKeyboard
+import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -27,13 +28,8 @@ class MainActivity : AppCompatActivity() {
         binding= DataBindingUtil.setContentView(this, R.layout.activity_main)
 
         navController = Navigation.findNavController(this, R.id.navHostHome)
-        NavigationUI.setupActionBarWithNavController(this, navController)
-        navController = Navigation.findNavController(this, R.id.navHostHome)
-        val navView = binding.bottomNavigation
-        val appBarConfiguration= AppBarConfiguration(
-            topLevelDestinationIds = setOf(R.id.nav_home, R.id.nav_test, R.id.nav_history, R.id.nav_setting)
-        )
-        setupActionBarWithNavController(navController, appBarConfiguration)
+        setupBottomNavMenu(navController)
+        setupWithNavController(bottom_navigation, navController)
         navController.addOnDestinationChangedListener{_, destination, _ ->
             when(destination.id){
                 R.id.nav_test, R.id.nav_history, R.id.nav_setting-> {
@@ -46,7 +42,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-        navView.setupWithNavController(navController)
+        binding.bottomNavigation.setupWithNavController(navController)
 
 
         saveData= SaveData(this)
@@ -56,6 +52,12 @@ class MainActivity : AppCompatActivity() {
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+    }
+
+    private fun setupBottomNavMenu(navController: NavController){
+        bottom_navigation?.let {
+            NavigationUI.setupWithNavController(it, navController)
+        }
     }
 
     private fun hideBottomBar(){

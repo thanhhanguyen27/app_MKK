@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.cpc1hn.uimkk.R
 import com.cpc1hn.uimkk.SaveData
@@ -45,7 +46,6 @@ class MotorACFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding= DataBindingUtil.inflate(inflater,R.layout.motor_a_c_fragment, container, false)
-        ipAddress= "192.168.4.1"
         port= 8080
         binding.quaynguoc.setOnClickListener {
             checkOn(B1, 0x03, B3, B4, B5, 0x00)

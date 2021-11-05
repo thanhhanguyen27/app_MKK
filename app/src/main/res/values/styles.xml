@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="colorPrimary">#0277bd</item>
         <item name="colorPrimaryDark">#004c8c</item>
         <item name="colorAccent">#64b5f6</item>
@@ -17,6 +17,20 @@
         <item name="text_change_on">#f8f8fb</item>
         <item name="android:windowEnterAnimation">@style/WindowAnimationTransition</item>
 
+    </style>
+
+
+    <style name="ToolbarTheme" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+        <!-- android:textColorPrimary: Màu chữ Tiêu đề  -->
+        <item name="android:textColorPrimary">@color/white</item>
+        <!-- actionMenuTextColor: Màu chữ Menu  -->
+        <!-- Tints -->
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">normal</item>
+        <!-- Màu áp dụng cho các View ở trạng thái bình thường -->
+        <!-- Màu View đang hoạt động -->
+        <!-- Highlight (i.e ripples or list selectors) -->
+        <item name="colorControlHighlight">#111</item>
     </style>
 
     <style name="Change_theme" parent="Theme.MaterialComponents.Light.DarkActionBar">

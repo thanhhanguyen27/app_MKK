@@ -51,7 +51,7 @@ class ProgramFragment : Fragment(), IconProgramAdapter.OnItemButtonClick  {
     private lateinit var viewModel: ProgramViewModel
     private lateinit var binding: ProgramFragmentBinding
     private lateinit var programAdapter: IconProgramAdapter
-    private var programs: ArrayList<Program> = arrayListOf()
+    private var listPrograms: ArrayList<Program> = arrayListOf()
     private var programFilter: ArrayList<Program> = arrayListOf()
     private var user:UserClass= UserClass()
     private lateinit var ipAddress:String
@@ -69,8 +69,12 @@ class ProgramFragment : Fragment(), IconProgramAdapter.OnItemButtonClick  {
         setHasOptionsMenu(true)
         (activity as AppCompatActivity).supportActionBar?.hide()
         viewModel = ViewModelProviders.of(this).get(ProgramViewModel::class.java)
+        //get Program
+        viewModel.getAllProgramObserves().observe(viewLifecycleOwner,{
+            listPrograms= ArrayList(it)
+        })
         binding = DataBindingUtil.inflate(inflater, R.layout.program_fragment, container, false)
-        programAdapter = IconProgramAdapter(programs, this)
+        programAdapter = IconProgramAdapter(listPrograms, this)
         getProgram()
         getAccount()
         ipAddress= "192.168.4.1"
@@ -93,7 +97,7 @@ class ProgramFragment : Fragment(), IconProgramAdapter.OnItemButtonClick  {
         val saveData= SaveData(requireContext())
         saveData.setCheckPermissionLocation(requestLocationPermission())
 
-            return binding.root
+        return binding.root
         }
     private fun search(){
         binding.imSearch.setOnClickListener {
@@ -130,7 +134,7 @@ class ProgramFragment : Fragment(), IconProgramAdapter.OnItemButtonClick  {
 
                         if (s != null && s.isNotEmpty()) {
                             programFilter.clear()
-                            programs.forEach { program ->
+                            listPrograms.forEach { program ->
                                 if (program.NameProgram.toLowerCase()
                                         .contains(s.toString().toLowerCase())
                                 ) {
@@ -140,7 +144,7 @@ class ProgramFragment : Fragment(), IconProgramAdapter.OnItemButtonClick  {
                             programAdapter.programs = programFilter
                             programAdapter.notifyDataSetChanged()
                         } else {
-                            programAdapter.programs = programs
+                            programAdapter.programs = listPrograms
                             programAdapter.notifyDataSetChanged()
                         }
 
@@ -216,11 +220,11 @@ class ProgramFragment : Fragment(), IconProgramAdapter.OnItemButtonClick  {
             db.collection("programs").get()
                 .addOnSuccessListener { result ->
 
-                    programs = ArrayList(result.map {
+                    listPrograms = ArrayList(result.map {
                         it.toObject<Program>()
                     })
-                    Log.d("_FragmentProgram", programs.toString())
-                    programAdapter.programs = programs
+                    viewModel.insertListProgram(listPrograms)
+                    programAdapter.programs = listPrograms
                     programAdapter.notifyDataSetChanged()
                 }
                 .addOnFailureListener { exception ->
@@ -242,7 +246,7 @@ class ProgramFragment : Fragment(), IconProgramAdapter.OnItemButtonClick  {
         val btCancel:Button = mDialogView.findViewById(R.id.btCancel1)
         val edtNongdo:EditText = mDialogView.findViewById(R.id.edtNongdo)
         val edtThetich:EditText = mDialogView.findViewById(R.id.edtThetich)
-        val sdf = SimpleDateFormat("dd/MM/yyyy-HH:mm", Locale.getDefault())
+        val sdf = SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.getDefault())
         val currentDateandTime: String = sdf.format(Date())
             btOk.setOnClickListener {
                 val db = FirebaseFirestore.getInstance()
@@ -282,7 +286,7 @@ class ProgramFragment : Fragment(), IconProgramAdapter.OnItemButtonClick  {
             override fun onQueryTextChange(newText: String?): Boolean {
                 if(newText != null && newText.isNotEmpty()){
                     programFilter.clear()
-                    programs.forEach {program ->
+                    listPrograms.forEach {program ->
                         if(program.NameProgram.toLowerCase().contains(newText.toLowerCase())){
                             programFilter.add(program)
                         }
@@ -290,7 +294,7 @@ class ProgramFragment : Fragment(), IconProgramAdapter.OnItemButtonClick  {
                     programAdapter.programs = programFilter
                     programAdapter.notifyDataSetChanged()
                 }else {
-                    programAdapter.programs = programs
+                    programAdapter.programs = listPrograms
                     programAdapter.notifyDataSetChanged()
                 }
 
@@ -338,7 +342,7 @@ class ProgramFragment : Fragment(), IconProgramAdapter.OnItemButtonClick  {
 
     }
    private fun deleteProgram(program: Program){
-        programs.remove(program)
+        listPrograms.remove(program)
         db.collection("programs").whereEqualTo("TimeCreate", program.TimeCreate).get().addOnSuccessListener { documents->
             for (document in documents) {
             db.collection("programs").document(document.id).delete()

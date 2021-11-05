@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
+import androidx.navigation.ui.NavigationUI.setupWithNavController
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var navController: NavController
@@ -12,7 +13,7 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
         navController = Navigation.findNavController(this, R.id.navHostHome1)
-        NavigationUI.setupActionBarWithNavController(this, navController)
+       // NavigationUI.setupActionBarWithNavController(this, navController)
     }
     override fun onSupportNavigateUp(): Boolean {
         navController.navigateUp()

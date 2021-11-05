@@ -49,7 +49,7 @@ class ProgramRetailFragment: Fragment(){
     private lateinit var program: Program
     private var timeRun:String=""
     private var timeSum:Int=0
-    private var timeSpray: String=""
+    private var timeSpray: Int=0
     private var time1:String=""
     private var username: String=""
     private lateinit var history: History
@@ -88,6 +88,9 @@ class ProgramRetailFragment: Fragment(){
         hourStart=ProgramRetailFragmentArgs.fromBundle(requireArguments()).hourStart
         spraySpeed=  ProgramRetailFragmentArgs.fromBundle(requireArguments()).speedSpray
         binding.tvTime.text = timeRun
+        binding.lnBack.setOnClickListener {
+            requireActivity().onBackPressed()
+        }
         savedata= SaveData(requireContext())
         savedata.setRoomSpraying(program.NameProgram)
         if (savedata.loadSpray()!=0){
@@ -146,11 +149,12 @@ class ProgramRetailFragment: Fragment(){
             if ((b[0] == 0x03.toByte()) && (b[1] == 0x01.toByte()) && (b[6] == checkSum(b).toByte())) {
                 // luu ten phong dang phun hoa chat
                 savedata.setRoomSpraying(program.NameProgram)
+                binding.btBack.visibility=View.GONE
                 binding.textViewPrimary.text = b[5].toString()
                 Log.d("_UDP1", "dem20s data= ${b}")
                 if (b[5].toInt() != 1) {
                     binding.btStop.setOnClickListener {
-                        showNotify()
+                        confirmEnd()
 
                     }
                 }
@@ -161,13 +165,11 @@ class ProgramRetailFragment: Fragment(){
                     b
                 ).toByte())
             ) {
+                binding.btBack.visibility=View.GONE
                 TransitionManager.beginDelayedTransition(binding.mainLayout)
-                val visible = true
-                if (visible) {
-                    binding.tv1.visibility = View.GONE
-                    binding.ln3.visibility = View.GONE
-                    binding.lnWarning.visibility = View.VISIBLE
-                }
+                binding.tv1.visibility = View.GONE
+                binding.ln3.visibility = View.GONE
+                binding.lnWarning.visibility = View.VISIBLE
                 Log.d("_UDP1", "bat dau data= ${b}")
                 //truyen thoi gian dem nguoc
                 val b5 = b[4] * 256
@@ -185,9 +187,10 @@ class ProgramRetailFragment: Fragment(){
                 Log.d(TAG, "${binding.progressBarTime.progress}  $timeSum  $timeRun")
                 binding.tvTime.text = convertSectoDay(timeRun.toInt())
                 if (timeRun == 0.toString()) {
-                    checkOn(0x03, 0x03, 0x00, 0x00, 0x00, 0x01)
+                    checkOn(0x03, 0x03, 0x00, 0x00, 0x00, 0x00)
                     Log.d("_UDP", "send 030300000000")
-                    timeSpray = convertSectoDay(timeSum)
+                    //timeSpray = convertSectoDay(timeSum)
+                    timeSpray= timeSum
                     // binding.progressBarTime.setProgress(0)
                     error = 0
                     saveHistory()
@@ -201,7 +204,8 @@ class ProgramRetailFragment: Fragment(){
                         val builder =
                             AlertDialog.Builder(requireContext(), R.style.AlertDialogTheme)
                         val positiveButtonClick = { _: DialogInterface, _: Int ->
-                            timeSpray = convertSectoDay(timeSum - timeRun.toInt())
+                           // timeSpray = convertSectoDay(timeSum - timeRun.toInt())
+                            timeSpray= timeSum- timeRun.toInt()
                             socketReceive.close()
                             //  binding.progressBarTime.setProgress(0)
                             //binding.tvTime.setText(convertSectoDay(0))
@@ -228,25 +232,37 @@ class ProgramRetailFragment: Fragment(){
                 }
             }
 
-            //bao hieu ket thuc phun hoa chat(10s) dem nguoc
-
-            //Ket thuc phun hoa chat
-//            if ((b[0] == 0x03.toByte()) && (b[1] == 0x03.toByte()) && (b[5] == 0x00.toByte()) && (b[6] == checkSum(
-//                    b
-//                ).toByte())
-//            ) {
-//                Log.d("_UDP", "END")
-//                saveHistory()
-//                notifyEnd()
-//            }
+  
         }
 
     }
+     private fun confirmEnd(){
+         val builder =
+             AlertDialog.Builder(requireContext(), R.style.AlertDialogTheme)
+         val positiveButtonClick = { _: DialogInterface, _: Int ->
+             checkOn(0x03, 0x03, 0x00, 0x00, 0x00, 0x00)
+             requireActivity().onBackPressed()
+         }
+         val negativeButtonClick = { _: DialogInterface, _: Int ->
+         }
+         with(builder) {
+             setMessage("Dừng phun?")
+             setPositiveButton(
+                 "Ok",
+                 DialogInterface.OnClickListener(function = positiveButtonClick)
+             )
+             setNegativeButton(
+                 "Hủy",
+                 DialogInterface.OnClickListener(function = negativeButtonClick)
+             )
+         }
+         builder.show()
+     }
     private fun checkTemp(){
         //kiem tra qua nhiet, ket thuc phun hoa chat
         if ((savedata.loadTempSetting().isNotEmpty()) && (savedata.loadTemp().isNotEmpty())) {
             if (savedata.loadTemp().toInt() > savedata.loadTempSetting().toInt()) {
-                checkOn(0x03, 0x04, 0x00, 0x00, 0x00, 0x00)
+                checkOn(0x03, 0x03, 0x00, 0x00, 0x00, 0x00)
                // socketReceive.close()
                 //timeSpray = convertSectoDay(timeSum - timeRun.toInt())
                 error=2
@@ -260,13 +276,13 @@ class ProgramRetailFragment: Fragment(){
         savedata.setRoomSpraying("")
         val thetich= ProgramRetailFragmentArgs.fromBundle(requireArguments()).theTich
         val nongdo= ProgramRetailFragmentArgs.fromBundle(requireArguments()).nongdo
-        val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        val sdf = SimpleDateFormat("yyyy/MM/dd", Locale.getDefault())
         timeEndLong =convertDateToLong(sdf.format(Date()))
         val sdf1= SimpleDateFormat("HH:mm:ss", Locale.getDefault())
         hourEnd=sdf1.format(Date())
 
         history= History(
-            TimeCreate = timeCreate,
+            TimeStart= timeCreate,
             CodeMachine= savedata.getCodeMachine(),
             Concentration= nongdo,
             Volume= thetich,
@@ -415,6 +431,8 @@ class ProgramRetailFragment: Fragment(){
     private fun convertTimeLongToDate(time:Long):String{
        return SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(Date(time))
     }
+
+
 
     private fun byteArrayOfInts(vararg ints: Int) = ByteArray(ints.size) { pos -> ints[pos].toByte() }
 

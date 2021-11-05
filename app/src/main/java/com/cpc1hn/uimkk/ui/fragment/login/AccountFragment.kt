@@ -44,11 +44,12 @@ class AccountFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        (activity as AppCompatActivity).supportActionBar?.show()
-        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
         viewModel = ViewModelProvider(this).get(AccountViewModel::class.java)
         binding= DataBindingUtil.inflate(inflater, R.layout.account_fragment, container, false)
-        //user= AccountFragmentArgs.fromBundle(requireArguments()).user
+        val toolbar= binding.toolbar
+        (activity as AppCompatActivity).setSupportActionBar(toolbar)
+        (activity as AppCompatActivity).supportActionBar?.show()
+        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
         sharedPrefsHelper= SaveData(requireContext())
         auth = FirebaseAuth.getInstance()
         user = viewModel.getUser()

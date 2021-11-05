@@ -34,9 +34,11 @@ class EditProfileFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        binding= DataBindingUtil.inflate(inflater, R.layout.edit_profile_fragment, container, false)
+        val toolbar= binding.toolbar
+        (activity as AppCompatActivity).setSupportActionBar(toolbar)
         (activity as AppCompatActivity).supportActionBar?.show()
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        binding= DataBindingUtil.inflate(inflater, R.layout.edit_profile_fragment, container, false)
         viewModel = ViewModelProviders.of(this).get(EditProfileViewModel::class.java)
         binding.btCancel1.setOnClickListener {
             requireActivity().onBackPressed()

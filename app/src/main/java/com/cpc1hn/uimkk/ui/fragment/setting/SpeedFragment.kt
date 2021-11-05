@@ -46,10 +46,12 @@ class SpeedFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
+        binding= DataBindingUtil.inflate(inflater,R.layout.speed_fragment, container, false)
+        val toolbar= binding.toolbar
+        (activity as AppCompatActivity).setSupportActionBar(toolbar)
         (activity as AppCompatActivity).supportActionBar?.show()
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        binding= DataBindingUtil.inflate(inflater,R.layout.speed_fragment, container, false)
         ipAddress="192.168.4.1"
         port=8080
         saveData= SaveData(requireContext())

@@ -43,10 +43,12 @@ class ActivateFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View{
+        binding= DataBindingUtil.inflate(inflater, R.layout.activate_fragment, container, false)
+        val toolbar= binding.toolbar
+        (activity as AppCompatActivity).setSupportActionBar(toolbar)
         (activity as AppCompatActivity).supportActionBar?.show()
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        binding= DataBindingUtil.inflate(inflater, R.layout.activate_fragment, container, false)
         ipAddress= "192.168.4.1"
         port=8080
         saveData= SaveData(requireContext())
@@ -99,6 +101,7 @@ class ActivateFragment : Fragment() {
         a = byteArrayOfInts(B1, B2, B3, B4, B5, B6)
         val B7 = checkSum(a)
         a=byteArrayOfInts(B1, B2, B3, B4, B5, B6, B7)
+       Log.d("_ACTIVE", "send udp")
         sendUDP(a)
     }
 

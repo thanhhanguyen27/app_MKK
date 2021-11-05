@@ -17,8 +17,6 @@ import android.view.*
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
@@ -46,8 +44,6 @@ class ProgramDependFragment : Fragment() {
     private lateinit var viewModel: ProgramDependViewModel
     private lateinit var binding: ProgramDependFragmentBinding
     private lateinit var program: Program
-    private val PERMISSION_CODE_ACCEPTED = 1
-    private val PERMISSION_CODE_NOT_AVAILABLE = 0
     private var timeSpeed: Int = 0
     private var thetich: Int=0
     private var nongdo:Int=0
@@ -64,7 +60,7 @@ class ProgramDependFragment : Fragment() {
     private var hourStart: String = ""
     private var numberOfRun: Int = 0
     private lateinit var checkArray: ByteArray
-    private var scaleActive: Boolean = true
+    private var scaleActive: Int=0
 
 
     override fun onCreateView(
@@ -72,14 +68,16 @@ class ProgramDependFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View{
         setHasOptionsMenu(true)
-        (activity as AppCompatActivity).supportActionBar?.show()
-        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding = DataBindingUtil.inflate(
             inflater,
             R.layout.program_depend_fragment,
             container,
             false
         )
+        val toolbar= binding.toolbar
+        (activity as AppCompatActivity).setSupportActionBar(toolbar)
+        (activity as AppCompatActivity).supportActionBar?.show()
+        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
         viewModel = ViewModelProviders.of(this).get(ProgramDependViewModel::class.java)
         program = ProgramDependFragmentArgs.fromBundle(requireArguments()).program
         username = ProgramDependFragmentArgs.fromBundle(requireArguments()).username
@@ -87,7 +85,6 @@ class ProgramDependFragment : Fragment() {
         port = 8080
         savedata = SaveData(requireContext())
         savedata.setRoom(program.NameProgram)
-        scaleActive = savedata.loadActiveScale()
 
         //lay du lieu hoa chat
         checkOn1(0x03, 0x04, 0x00, 0x00, 0x00, 0x00)
@@ -172,6 +169,11 @@ class ProgramDependFragment : Fragment() {
                 if (visible) {
                     binding.tvPercent.text = "${buffer[4].toUInt()}%"
                 }
+                if (buffer[3].toInt()==0){
+                    scaleActive =0
+                }else if (buffer[3].toInt()==1){
+                    scaleActive =1
+                }
 
 
                 binding.progressBarHorizontal.progress = (buffer[4].toUInt().toInt())
@@ -210,32 +212,34 @@ class ProgramDependFragment : Fragment() {
 
                 @SuppressLint("SetTextI18n")
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    thetich = tvTheTich.text.toString().toInt()
-                    nongdo = tvNongdo.text.toString().toInt()
-                    if ((thetich!=0) && (nongdo!=0)) {
-                        timeSpeed =
-                            ((thetich * nongdo) * 60 / speedSpray) + 10
-                        liqid = ((timeSpeed * speedSpray) / 6000 + 1).toFloat()
-                        if (liqid > liquidlevel) {
-                            TransitionManager.beginDelayedTransition(binding.linear)
-                            val visible = true
-                            if (visible) {
-                                binding.tvWarning.visibility = View.VISIBLE
+                    if (tvTheTich.text.toString().isNotEmpty() and tvNongdo.text.toString().isNotEmpty()) {
+                        thetich = tvTheTich.text.toString().toInt()
+                        nongdo = tvNongdo.text.toString().toInt()
+                        if ((thetich != 0) && (nongdo != 0)) {
+                            timeSpeed =
+                                ((thetich * nongdo) * 60 / speedSpray) + 10
+                            liqid = ((timeSpeed * speedSpray) / 6000 + 1).toFloat()
+                            if (liqid > liquidlevel) {
+                                TransitionManager.beginDelayedTransition(binding.linear)
+                                val visible = true
+                                if (visible) {
+                                    binding.tvWarning.visibility = View.VISIBLE
+                                }
+                            } else {
+                                TransitionManager.beginDelayedTransition(binding.linear)
+                                val visible = true
+                                if (visible) {
+                                    binding.tvWarning.visibility = View.GONE
+                                }
                             }
-                        } else {
-                            TransitionManager.beginDelayedTransition(binding.linear)
-                            val visible = true
-                            if (visible) {
-                                binding.tvWarning.visibility = View.GONE
-                            }
+                            val time: String = ConvertSectoDay(timeSpeed)
+                            tvTimeEstimate.text = "Thời gian phun ước tính ${time} "
                         }
-                        val time: String = ConvertSectoDay(timeSpeed)
-                        tvTimeEstimate.text = "Thời gian phun ước tính ${time} "
                     }
                 }
 
-                override fun afterTextChanged(s: Editable?) {
-                }
+                    override fun afterTextChanged(s: Editable?) {
+                    }
             })
             tvTheTich.addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(
@@ -248,27 +252,31 @@ class ProgramDependFragment : Fragment() {
                 }
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    thetich = tvTheTich.text.toString().toInt()
-                    nongdo = tvNongdo.text.toString().toInt()
-                    if ((thetich!=0) && (nongdo!=0)) {
-                        timeSpeed =
-                            ((thetich * nongdo) * 60 / speedSpray) + 10
-                        liqid = ((timeSpeed * speedSpray) / 6000 + 1).toFloat()
-                        if (liqid > liquidlevel) {
-                            TransitionManager.beginDelayedTransition(binding.linear)
-                            val visible = true
-                            if (visible) {
-                                binding.tvWarning.visibility = View.VISIBLE
+                    if (tvTheTich.text.toString().isNotEmpty() and tvNongdo.text.toString()
+                            .isNotEmpty()
+                    ) {
+                        thetich = tvTheTich.text.toString().toInt()
+                        nongdo = tvNongdo.text.toString().toInt()
+                        if ((thetich != 0) && (nongdo != 0)) {
+                            timeSpeed =
+                                ((thetich * nongdo) * 60 / speedSpray) + 10
+                            liqid = ((timeSpeed.toFloat() * speedSpray.toFloat()) / 6000)
+                            if (liqid > liquidlevel) {
+                                TransitionManager.beginDelayedTransition(binding.linear)
+                                val visible = true
+                                if (visible) {
+                                    binding.tvWarning.visibility = View.VISIBLE
+                                }
+                            } else {
+                                TransitionManager.beginDelayedTransition(binding.linear)
+                                val visible = true
+                                if (visible) {
+                                    binding.tvWarning.visibility = View.GONE
+                                }
                             }
-                        } else {
-                            TransitionManager.beginDelayedTransition(binding.linear)
-                            val visible = true
-                            if (visible) {
-                                binding.tvWarning.visibility = View.GONE
-                            }
+                            val time: String = ConvertSectoDay(timeSpeed)
+                            tvTimeEstimate.text = "Thời gian phun ước tính ${time} "
                         }
-                        val time: String = ConvertSectoDay(timeSpeed)
-                        tvTimeEstimate.text = "Thời gian phun ước tính ${time} "
                     }
                 }
 
@@ -307,11 +315,12 @@ class ProgramDependFragment : Fragment() {
     }
 
     private fun start() {
-        if (scaleActive) {
+        if (scaleActive==1) {
             if (( binding.tvWarning.visibility != View.VISIBLE) ){
                  next()
              }
             else {
+                hideKeyboard()
                 val builder1 =
                     AlertDialog.Builder(requireContext(), R.style.AlertDialogTheme)
                 val positiveButtonClick = { _: DialogInterface, _: Int ->
@@ -335,7 +344,7 @@ class ProgramDependFragment : Fragment() {
     }
 
     private fun next(){
-        val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault())
+        val sdf = SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.getDefault())
         val sdf1 = SimpleDateFormat("HH:mm:ss", Locale.getDefault())
         timeCreate = sdf.format(Date())
         hourStart = sdf1.format(Date())
@@ -489,6 +498,8 @@ class ProgramDependFragment : Fragment() {
     }
 
     private fun updateProgram(){
+        val programUpdate = Program(program.NameProgram,binding.tvNongdo.text.toString().toInt(),binding.tvTheTich.text.toString().toInt(), program.TimeCreate,program.Creator, program.Email  )
+        viewModel.updateProgram(programUpdate)
         val db = FirebaseFirestore.getInstance()
         db.collection("programs").whereEqualTo("TimeCreate", program.TimeCreate).get().addOnSuccessListener { documents->
             for (document in documents){

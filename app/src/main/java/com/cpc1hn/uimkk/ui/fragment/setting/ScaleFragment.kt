@@ -36,9 +36,11 @@ class ScaleFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        binding= DataBindingUtil.inflate(inflater,R.layout.scale_fragment, container, false)
+        val toolbar= binding.toolbar
+        (activity as AppCompatActivity).setSupportActionBar(toolbar)
         (activity as AppCompatActivity).supportActionBar?.show()
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        binding= DataBindingUtil.inflate(inflater,R.layout.scale_fragment, container, false)
         ipAddress= "192.168.4.1"
         port=8080
         binding.apply {

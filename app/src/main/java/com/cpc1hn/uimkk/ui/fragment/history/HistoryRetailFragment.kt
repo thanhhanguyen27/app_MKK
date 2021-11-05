@@ -10,8 +10,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.databinding.DataBindingUtil
 import com.cpc1hn.uimkk.R
+import com.cpc1hn.uimkk.convertSectoDay
 import com.cpc1hn.uimkk.databinding.HistoryRetailFragmentBinding
 import com.cpc1hn.uimkk.model.History
+import com.cpc1hn.uimkk.modifyDateLayout
 import com.cpc1hn.uimkk.ui.viewmodel.history.HistoryRetailViewModel
 import com.google.firebase.firestore.FirebaseFirestore
 import java.text.SimpleDateFormat
@@ -32,27 +34,23 @@ class HistoryRetailFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-       // setHasOptionsMenu(true)
+        binding= DataBindingUtil.inflate(inflater,R.layout.history_retail_fragment, container, false)
+        val toolbar= binding.toolbar
+        (activity as AppCompatActivity).setSupportActionBar(toolbar)
         (activity as AppCompatActivity).supportActionBar?.show()
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        binding= DataBindingUtil.inflate(inflater,R.layout.history_retail_fragment, container, false)
         viewModel = ViewModelProviders.of(this).get(HistoryRetailViewModel::class.java)
         // sendUDP(binding.tvCreater.text.toString())
         history= HistoryRetailFragmentArgs.fromBundle(requireArguments()).history
        // val time= longToDate(history.timeEndLong, "dd/MM/yyyy")
         Log.d("_HIS", "${history.Creator} ${history.TimeRun}")
         binding.history= history
-        binding.tvTimeEnd.text= history.TimeEnd
-        binding.tvTimeCreate.text= "${history.TimeCreate}"
+        binding.tvTimeEnd.text= modifyDateLayout(history.TimeEnd)
+        binding.tvTimeCreate.text= modifyDateLayout(history.TimeStart)
         binding.tvError.text= history.checkError()
+        binding.tvTimeRun.text= convertSectoDay(history.TimeRun)
 
         return binding.root
-    }
-
-    private fun longToDate(data: Long, format: String?): String? {
-        val date = Date(data)
-        val df2 = SimpleDateFormat(format, Locale.getDefault())
-        return df2.format(date)
     }
 
 
@@ -99,7 +97,7 @@ class HistoryRetailFragment : Fragment() {
 
     private fun deleteHistory(){
         val db = FirebaseFirestore.getInstance()
-        db.collection("history").whereEqualTo("TimeCreate", history.TimeCreate).get().addOnSuccessListener {
+        db.collection("history").whereEqualTo("TimeCreate", history.TimeStart).get().addOnSuccessListener {
             for (document in it){
                 db.collection("history").document(document.id).delete()
                 viewModel.deleteHistoryInfo()

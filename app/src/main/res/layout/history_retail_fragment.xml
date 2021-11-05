@@ -11,14 +11,28 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/backgroundColor">
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        app:title="Chi tiết "
+        app:titleTextColor="@color/white"
+        android:background="@color/or"
+        android:layout_width="match_parent"
+        android:elevation="1dp"
+        android:theme="@style/ToolbarTheme"
+        android:layout_height="50dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+    </androidx.appcompat.widget.Toolbar>
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/toolbar">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -92,8 +106,8 @@
                     android:text="@string/thoi_gian_phun" />
 
                 <TextView
-                    style="@style/info_more_lines_text"
-                    android:text='@{String.format("%s", history.timeRun)}' />
+                    android:id="@+id/tvTimeRun"
+                    style="@style/info_more_lines_text" />
 
             </LinearLayout>
 

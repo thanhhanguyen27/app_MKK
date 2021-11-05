@@ -46,9 +46,12 @@ class  HistoryFragment : Fragment(), IconHistoryAdapter.OnItemButtonClick {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        setHasOptionsMenu(true)
-        (activity as AppCompatActivity).supportActionBar?.show()
         binding= DataBindingUtil.inflate(inflater, R.layout.history_fragment, container, false)
+        setHasOptionsMenu(true)
+        val toolbar= binding.toolbar
+        (activity as AppCompatActivity).setSupportActionBar(toolbar)
+        (activity as AppCompatActivity).supportActionBar?.show()
+
         viewModel = ViewModelProviders.of(this).get(HistoryViewModel::class.java)
         viewModel.getAllHistory()
         viewModel.getAllHistoryObserves().observe(viewLifecycleOwner, {

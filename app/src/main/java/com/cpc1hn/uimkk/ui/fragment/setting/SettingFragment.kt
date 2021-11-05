@@ -99,24 +99,58 @@ class SettingFragment : Fragment() {
         binding.apply {
             lnActive.setOnClickListener { findNavController().navigate(SettingFragmentDirections.actionNavSettingToActivateFragment()) }
             lnScale.setOnClickListener { findNavController().navigate(SettingFragmentDirections.actionNavSettingToScaleFragment()) }
-            lnSpeed.setOnClickListener { findNavController().navigate(SettingFragmentDirections.actionNavSettingToSpeedFragment()) }
 
-//            binding.lnEdit.setOnClickListener {
-//                findNavController().navigate(
-//                    SettingFragmentDirections.actionSettingFragmentToEditProfileFragment(
-//                        user = user
-//                    )
-//                )
-//            }
-
-
-//set Temp
-            lnTemp.setOnClickListener(object : View.OnClickListener {
-                var visible = false
+//set speed
+            lnSpeed.setOnClickListener (object : View.OnClickListener {
                 override fun onClick(v: View?) {
                     TransitionManager.beginDelayedTransition(transition)
-                    visible = !visible
-                    if (visible) {
+                    if (lnSetSpeed.visibility== View.GONE){
+                        lnSetSpeed.visibility= View.VISIBLE
+                        tvLineSpeed.visibility= View.GONE
+                        tvMoreSpeed.animate().rotation(180f).start()
+                        btSaveSpeed.setOnClickListener {
+                            if (edtSpeed.text.isNotEmpty()){
+                                if (( edtSpeed.text.toString().toInt() >=30) && ( edtSpeed.text.toString().toInt()<=37)) {
+                                    binding.edtSpeed.text = edtSpeed.text
+                                    checkOn(0x02, 0x06, 0x00, 0x00, 0x00, edtSpeed.text.toString().toInt())
+                                    hideKeyboard()
+                                    Toast.makeText(context,"Đã lưu tốc độ phun", Toast.LENGTH_SHORT).show()
+                                }
+                                if ( (edtSpeed.text.toString().toInt()<30) or (edtSpeed.text.toString().toInt()>37)){
+                                    hideKeyboard()
+                                    warningSpeed()
+                                }
+                            }else{
+                                hideKeyboard()
+                                val builder = AlertDialog.Builder(
+                                    requireContext(),
+                                    R.style.AlertDialogTheme
+                                )
+                                val positiveButtonClick = { _: DialogInterface, _: Int ->
+                                }
+                                with(builder) {
+                                    setMessage("Bajn chuwa nhaa")
+                                    setPositiveButton(
+                                        "OK",
+                                        DialogInterface.OnClickListener(function = positiveButtonClick)
+                                    )
+                                }
+                                builder.show()
+                            }
+                        }
+                    }else{
+                        lnSetSpeed.visibility = View.GONE
+                        tvLineSpeed.visibility = View.VISIBLE
+                        tvMoreSpeed.animate().rotation(0f).start()
+                    }
+                }
+
+            })
+//set Temp
+            lnTemp.setOnClickListener(object : View.OnClickListener {
+                override fun onClick(v: View?) {
+                    TransitionManager.beginDelayedTransition(transition)
+                    if (lnSetTemp.visibility== View.GONE) {
                         lnSetTemp.visibility = View.VISIBLE
                         tv3.visibility = View.GONE
                         moreSetTemp.animate().rotation(180f).start()
@@ -127,6 +161,7 @@ class SettingFragment : Fragment() {
                                         .toInt() > 100) or (binding.tvTemp.text.toString()
                                         .toInt() < 0)
                                 ) {
+                                    hideKeyboard()
                                     val builder = AlertDialog.Builder(
                                         requireContext(),
                                         R.style.AlertDialogTheme
@@ -136,7 +171,7 @@ class SettingFragment : Fragment() {
 
                                         }
                                     with(builder) {
-                                        setMessage("Nhiệt độ giới hạn từ 0-100*C. \nMời nhập lại")
+                                        setMessage("Nhiệt độ giới hạn từ 0-100°C. \nMời nhập lại")
                                         setPositiveButton(
                                             "OK",
                                             DialogInterface.OnClickListener(function = positiveButtonClick)
@@ -162,6 +197,7 @@ class SettingFragment : Fragment() {
                                     saveData.setTempSetting(binding.tvTemp.text.toString())
                                 }
                             } else {
+                                hideKeyboard()
                                 val builder = AlertDialog.Builder(
                                     requireContext(),
 
@@ -191,6 +227,22 @@ class SettingFragment : Fragment() {
         }
     }
 
+    private fun warningSpeed(){
+        val builder = AlertDialog.Builder(
+            requireContext(),
+            R.style.AlertDialogTheme
+        )
+        val positiveButtonClick = { _: DialogInterface, _: Int ->
+        }
+        with(builder) {
+            setMessage("Tốc độ phun có giá trị từ 30-37 ml/phút")
+            setPositiveButton(
+                "OK",
+                DialogInterface.OnClickListener(function = positiveButtonClick)
+            )
+        }
+        builder.show()
+    }
 
         private fun onRestartApp() {
             startActivity(Intent(requireContext(), MainActivity::class.java))
