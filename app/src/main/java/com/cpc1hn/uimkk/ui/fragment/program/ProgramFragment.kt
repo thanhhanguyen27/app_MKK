@@ -26,11 +26,13 @@ import com.cpc1hn.uimkk.Adapter.IconProgramAdapter
 import com.cpc1hn.uimkk.R
 import com.cpc1hn.uimkk.SaveData
 import com.cpc1hn.uimkk.databinding.ProgramFragmentBinding
+import com.cpc1hn.uimkk.hideKeyboard
 import com.cpc1hn.uimkk.model.Program
 import com.cpc1hn.uimkk.model.UserClass
 import com.cpc1hn.uimkk.model.UserFirebase
 import com.cpc1hn.uimkk.requestLocationPermission
 import com.cpc1hn.uimkk.ui.viewmodel.ProgramViewModel
+import com.cpc1hn.uimkk.ui.viewmodel.history.HistoryRetailViewModel
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.toObject
 import java.io.IOException
@@ -68,15 +70,13 @@ class ProgramFragment : Fragment(), IconProgramAdapter.OnItemButtonClick  {
     ): View {
         setHasOptionsMenu(true)
         (activity as AppCompatActivity).supportActionBar?.hide()
-        viewModel = ViewModelProviders.of(this).get(ProgramViewModel::class.java)
-        //get Program
-        viewModel.getAllProgramObserves().observe(viewLifecycleOwner,{
-            listPrograms= ArrayList(it)
-        })
+
         binding = DataBindingUtil.inflate(inflater, R.layout.program_fragment, container, false)
+        viewModel = ViewModelProviders.of(this).get(ProgramViewModel::class.java)
+
         programAdapter = IconProgramAdapter(listPrograms, this)
-        getProgram()
         getAccount()
+        getProgram()
         ipAddress= "192.168.4.1"
         port= 8080
         checkOn(0x01, 0x0B, 0x00, 0x00, 0x00, 0x01)
@@ -96,6 +96,12 @@ class ProgramFragment : Fragment(), IconProgramAdapter.OnItemButtonClick  {
         receiveData()
         val saveData= SaveData(requireContext())
         saveData.setCheckPermissionLocation(requestLocationPermission())
+        viewModel.getAllProgramObserves().observe(viewLifecycleOwner,{
+            if (it.isNotEmpty()){
+                programAdapter.setListData(ArrayList(it))
+                listPrograms= ArrayList(it)
+            }
+        })
 
         return binding.root
         }
@@ -224,12 +230,11 @@ class ProgramFragment : Fragment(), IconProgramAdapter.OnItemButtonClick  {
                         it.toObject<Program>()
                     })
                     viewModel.insertListProgram(listPrograms)
-                    programAdapter.programs = listPrograms
-                    programAdapter.notifyDataSetChanged()
                 }
                 .addOnFailureListener { exception ->
-                    Log.d("GETProgram", "Error getting documents: ", exception)
+                    viewModel.getAllProgram()
                 }
+        viewModel.getAllProgram()
     }
 
     private fun addProgram(){
@@ -253,17 +258,25 @@ class ProgramFragment : Fragment(), IconProgramAdapter.OnItemButtonClick  {
                 val room = hashMapOf("Concentration" to edtNongdo.text.toString().toInt(),
                 "Creator" to user.FullName, "Email" to user.Email, "NameProgram" to edtRoom.text.toString()
                 , "TimeCreate" to currentDateandTime, "Volume" to edtThetich.text.toString().toInt())
+
+                val programNew = Program(edtRoom.text.toString(), edtNongdo.text.toString().toInt(),edtThetich.text.toString().toInt()
+                , currentDateandTime, user.FullName, user.Email)
+
                 db.collection("programs").add(room)
                     .addOnSuccessListener {
-                        getProgram()
-                        Toast.makeText(context, "Đã lưu chương trình", Toast.LENGTH_SHORT).show()
-                        programAdapter.notifyDataSetChanged()
-                        mAlertDialog.dismiss()
+                        Log.d("_PROGRAM", "Firebase")
                     }
                     .addOnFailureListener { e ->
                         Log.w("ADD", "có lỗi xảy ra", e)
 
                     }
+                //add program to offline
+                viewModel.insertProgram(programNew)
+                Log.d("_PROGRAM", "offline")
+                hideKeyboard()
+                Toast.makeText(context, "Đã lưu chương trình", Toast.LENGTH_SHORT).show()
+                mAlertDialog.dismiss()
+                //add program to firebase
 
             }
             btCancel.setOnClickListener {
@@ -342,13 +355,22 @@ class ProgramFragment : Fragment(), IconProgramAdapter.OnItemButtonClick  {
 
     }
    private fun deleteProgram(program: Program){
-        listPrograms.remove(program)
+       viewModel.delete(program)
+       Toast.makeText(context, "Đã xóa chương trình", Toast.LENGTH_LONG).show()
         db.collection("programs").whereEqualTo("TimeCreate", program.TimeCreate).get().addOnSuccessListener { documents->
             for (document in documents) {
             db.collection("programs").document(document.id).delete()
-                .addOnSuccessListener {Toast.makeText(context, "Đã xóa chương trình", Toast.LENGTH_LONG).show() }
-                .addOnFailureListener { e -> Toast.makeText(context, "$e", Toast.LENGTH_LONG).show() }
-            programAdapter.notifyDataSetChanged()
+                .addOnSuccessListener {
+                    for (document in documents) {
+                        db.collection("programs").document(document.id).delete()
+                            .addOnSuccessListener {
+                                 }
+                            .addOnFailureListener { e ->
+                                 }
+                    }
+                }
+                .addOnFailureListener { e ->
+                    }
             }
         }
 

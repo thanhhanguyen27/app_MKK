@@ -19,10 +19,12 @@ class ProgramViewModel (app: Application): AndroidViewModel(app) {
     fun insertProgram(program: Program){
         val programDao = AppDatabase.getAppdatabase((getApplication()))?.programDao()
         programDao?.insert(program)
+        getAllProgram()
     }
     fun insertListProgram(programs: ArrayList<Program>){
         val programDao = AppDatabase.getAppdatabase((getApplication()))?.programDao()
         programDao?.insertAll(programs)
+        getAllProgram()
     }
 
     fun getAllProgramObserves(): MutableLiveData<List<Program>>{

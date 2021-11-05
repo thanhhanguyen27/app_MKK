@@ -24,6 +24,19 @@ fun modifyDateLayout(inputDate: String): String {
     return SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(date!!)
 
 }
+
+fun Fragment.showDialogShort(title: String, message: String?) {
+    val builder = androidx.appcompat.app.AlertDialog.Builder(requireContext())
+    builder.setTitle(title)
+    message?.let {
+        builder.setMessage(message)
+    }
+    builder.setPositiveButton("OK") { dialogInterface, i ->
+    }
+        .create()
+        .show()
+}
+
 //@Throws(ParseException::class)
 //private fun modifyDateLayout(inputDate: String): String? {
 //    val date: Date = SimpleDateFormat("yyyy-MM-dd HH:mm:ss z").parse(inputDate)

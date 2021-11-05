@@ -6,6 +6,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.cpc1hn.uimkk.R
 import com.cpc1hn.uimkk.databinding.ItemProgramBinding
+import com.cpc1hn.uimkk.model.History
 import com.cpc1hn.uimkk.model.Program
 
 class IconProgramAdapter( var programs: ArrayList<Program>, private val onItemButtonClick: OnItemButtonClick): RecyclerView.Adapter<IconProgramAdapter.ViewHolder>() {
@@ -46,6 +47,10 @@ class IconProgramAdapter( var programs: ArrayList<Program>, private val onItemBu
 
     fun remove(program:Program) {
         programs.remove(program)
+    }
+    fun setListData(data:ArrayList<Program>){
+        this.programs = data
+        notifyDataSetChanged()
     }
 
     interface OnItemButtonClick{

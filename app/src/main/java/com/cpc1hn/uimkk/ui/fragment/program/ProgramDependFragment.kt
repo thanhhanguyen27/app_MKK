@@ -63,6 +63,7 @@ class ProgramDependFragment : Fragment() {
     private var scaleActive: Int=0
 
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -110,10 +111,10 @@ class ProgramDependFragment : Fragment() {
             //cai thoi gian uoc tinh
             setNongDo_TheTich()
             //setMucHoaChat()
-            tvRun.setOnClickListener {
-                showAlert()
-
-            }
+//            tvRun.setOnClickListener {
+//                showAlert()
+//
+//            }
         }
         val saveData=SaveData(requireContext())
         activity.run {
@@ -175,7 +176,6 @@ class ProgramDependFragment : Fragment() {
                     scaleActive =1
                 }
 
-
                 binding.progressBarHorizontal.progress = (buffer[4].toUInt().toInt())
                 liquidlevel = buffer[4].toUInt().toInt()
                 //tinh muc hoa chat
@@ -184,6 +184,15 @@ class ProgramDependFragment : Fragment() {
                     binding.tvWarning.visibility = View.VISIBLE
                 } else {
                         binding.tvWarning.visibility = View.GONE
+                }
+
+                binding.tvRun.setOnClickListener {
+                    showAlert()
+
+                }
+            }else{
+                binding.tvRun.setOnClickListener {
+                    showDialogShort("", "Chưa kết nối với máy phun")
                 }
             }
         }
@@ -235,6 +244,8 @@ class ProgramDependFragment : Fragment() {
                             val time: String = ConvertSectoDay(timeSpeed)
                             tvTimeEstimate.text = "Thời gian phun ước tính ${time} "
                         }
+                    }else{
+                        tvTimeEstimate.text = "Thời gian phun ước tính 00:00 "
                     }
                 }
 
@@ -277,6 +288,8 @@ class ProgramDependFragment : Fragment() {
                             val time: String = ConvertSectoDay(timeSpeed)
                             tvTimeEstimate.text = "Thời gian phun ước tính ${time} "
                         }
+                    }else{
+                        tvTimeEstimate.text = "Thời gian phun ước tính 00:00 "
                     }
                 }
 
@@ -291,16 +304,7 @@ class ProgramDependFragment : Fragment() {
     private fun showAlert() {
         val builder = AlertDialog.Builder(requireContext(), R.style.AlertDialogTheme)
         val positiveButtonClick = { _: DialogInterface, _: Int ->
-            if ((savedata.loadRoomSpraying().isNotEmpty())) {
-                if (savedata.loadRoomSpraying() != savedata.loadRoom()) {
-                    showNotiSpray()
-                } else {
-                    start()
-                }
-            }
-            if (savedata.loadRoomSpraying().isEmpty()) {
-                start()
-            }
+           start()
         }
         val negativeButtonClick = { _: DialogInterface, _: Int ->
         }
@@ -373,19 +377,6 @@ class ProgramDependFragment : Fragment() {
         )
     }
 
-    private fun showNotiSpray(){
-        val builder = AlertDialog.Builder(requireContext(), R.style.AlertDialogTheme)
-        val positiveButtonClick = { _: DialogInterface, _: Int ->
-        }
-        with(builder) {
-            setMessage("Đang phun tại ( ${savedata.loadRoomSpraying()} )")
-            setPositiveButton(
-                "Trở về",
-                DialogInterface.OnClickListener(function = positiveButtonClick)
-            )
-        }
-        builder.show()
-    }
 
    private fun ConvertSectoDay(time: Int):String {
         var n = time
@@ -498,17 +489,18 @@ class ProgramDependFragment : Fragment() {
     }
 
     private fun updateProgram(){
-        val programUpdate = Program(program.NameProgram,binding.tvNongdo.text.toString().toInt(),binding.tvTheTich.text.toString().toInt(), program.TimeCreate,program.Creator, program.Email  )
+        val programUpdate = Program(program.NameProgram,binding.tvNongdo.text.toString().toInt(),binding.tvTheTich.text.toString().toInt(), program.TimeCreate,username, program.Email  )
         viewModel.updateProgram(programUpdate)
+        hideKeyboard()
+        Toast.makeText(context, "Đã lưu chương trình", Toast.LENGTH_SHORT).show()
         val db = FirebaseFirestore.getInstance()
         db.collection("programs").whereEqualTo("TimeCreate", program.TimeCreate).get().addOnSuccessListener { documents->
             for (document in documents){
                 db.collection("programs").document(document.id).update(mapOf(
                     "Volume" to binding.tvTheTich.text.toString().toInt(),
-                    "Concentration" to binding.tvNongdo.text.toString().toInt()
+                    "Concentration" to binding.tvNongdo.text.toString().toInt(), "Creator" to username
                 )).addOnSuccessListener {
-                    hideKeyboard()
-                    Toast.makeText(context, "Đã lưu chương trình", Toast.LENGTH_SHORT).show()
+
                 }
                     .addOnFailureListener { e ->
                         Log.w("ADD", "Có lỗi xảy ra", e)

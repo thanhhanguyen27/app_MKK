@@ -54,6 +54,7 @@ class  HistoryFragment : Fragment(), IconHistoryAdapter.OnItemButtonClick {
 
         viewModel = ViewModelProviders.of(this).get(HistoryViewModel::class.java)
         viewModel.getAllHistory()
+
         viewModel.getAllHistoryObserves().observe(viewLifecycleOwner, {
             historyAdapter.setListData(ArrayList(it))
         })
@@ -235,7 +236,7 @@ class  HistoryFragment : Fragment(), IconHistoryAdapter.OnItemButtonClick {
                     histories[i].Status= 1
                 }
                 historyAdapter.historys = histories
-               // historyAdapter.notifyDataSetChanged()
+                // historyAdapter.notifyDataSetChanged()
             }
 
         return histories

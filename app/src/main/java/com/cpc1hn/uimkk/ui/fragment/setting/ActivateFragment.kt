@@ -13,6 +13,7 @@ import androidx.databinding.DataBindingUtil
 import com.cpc1hn.uimkk.R
 import com.cpc1hn.uimkk.SaveData
 import com.cpc1hn.uimkk.databinding.ActivateFragmentBinding
+import com.cpc1hn.uimkk.showDialogShort
 import com.cpc1hn.uimkk.ui.viewmodel.setting.ActivateViewModel
 import java.io.IOException
 import java.net.DatagramPacket
@@ -56,30 +57,31 @@ class ActivateFragment : Fragment() {
         checkOn(0x02, 0x09, B3, B4, B5, 0x01)
         receiveData1()
         binding.apply {
-            binding.btSwitchLED.setOnCheckedChangeListener { _, isChecked ->
-                if (isChecked) {
+            btSwitchLED.setOnClickListener {
+                if (btSwitchLED.isChecked){
                     checkOn(B1, B2, B3, B4, B5, B6)
-                } else {
+                }else{
                     checkOff(B1, B2, B3, B4, B5, 0x00)
                 }
             }
-            btSwitchFan.setOnCheckedChangeListener { _, isChecked ->
-                if (isChecked){
+
+            btSwitchFan.setOnClickListener {
+                if (btSwitchFan.isChecked){
                     checkOn(B1, 0x04, B3, B4, B5, B6)
                 }else {
                     checkOff(B1, 0x04, B3, B4, B5, 0x00)
                 }
             }
-            btSwitchBuzzer.setOnCheckedChangeListener { _, isChecked ->
-                if (isChecked){
+
+            btSwitchBuzzer.setOnClickListener {
+                if (btSwitchBuzzer.isChecked){
                     checkOn(B1, 0x03, B3, B4, B5, B6)
-                    saveData.setActiveScale(true)
                 }else {
                     checkOff(B1, 0x03, B3, B4, B5, 0x00)
                 }
             }
-            btSwitchScale.setOnCheckedChangeListener { _, isChecked ->
-                if (isChecked){
+            btSwitchScale.setOnClickListener {
+                if (btSwitchScale.isChecked){
                     checkOn(B1, 0x02, B3, B4, B5, B6)
                     saveData.setActiveScale(true)
                 }else {
@@ -87,6 +89,7 @@ class ActivateFragment : Fragment() {
                     saveData.setActiveScale(false)
                 }
             }
+
         }
         return binding.root
     }

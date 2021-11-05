@@ -187,7 +187,7 @@ class ProgramRetailFragment: Fragment(){
                 Log.d(TAG, "${binding.progressBarTime.progress}  $timeSum  $timeRun")
                 binding.tvTime.text = convertSectoDay(timeRun.toInt())
                 if (timeRun == 0.toString()) {
-                    checkOn(0x03, 0x03, 0x00, 0x00, 0x00, 0x00)
+                    checkOn(0x03, 0x03, 0x00, 0x00, 0x00, 0x01)
                     Log.d("_UDP", "send 030300000000")
                     //timeSpray = convertSectoDay(timeSum)
                     timeSpray= timeSum
@@ -240,7 +240,7 @@ class ProgramRetailFragment: Fragment(){
          val builder =
              AlertDialog.Builder(requireContext(), R.style.AlertDialogTheme)
          val positiveButtonClick = { _: DialogInterface, _: Int ->
-             checkOn(0x03, 0x03, 0x00, 0x00, 0x00, 0x00)
+             checkOn(0x03, 0x03, 0x00, 0x00, 0x00, 0x01)
              requireActivity().onBackPressed()
          }
          val negativeButtonClick = { _: DialogInterface, _: Int ->
@@ -262,7 +262,7 @@ class ProgramRetailFragment: Fragment(){
         //kiem tra qua nhiet, ket thuc phun hoa chat
         if ((savedata.loadTempSetting().isNotEmpty()) && (savedata.loadTemp().isNotEmpty())) {
             if (savedata.loadTemp().toInt() > savedata.loadTempSetting().toInt()) {
-                checkOn(0x03, 0x03, 0x00, 0x00, 0x00, 0x00)
+                checkOn(0x03, 0x03, 0x00, 0x00, 0x00, 0x01)
                // socketReceive.close()
                 //timeSpray = convertSectoDay(timeSum - timeRun.toInt())
                 error=2
@@ -294,7 +294,7 @@ class ProgramRetailFragment: Fragment(){
             SpeedSpray= spraySpeed,
             Status = 0
         )
-        val historyFirebase= hashMapOf( "TimeCreate" to timeCreate,
+        val historyFirebase= hashMapOf( "TimeStart" to timeCreate,
             "CodeMachine" to savedata.getCodeMachine(),
             "Concentration" to nongdo,
             "Volume" to thetich,
@@ -304,7 +304,7 @@ class ProgramRetailFragment: Fragment(){
             "TimeRun" to timeSpray,
             "Error" to error,
             "SpeedSpray" to spraySpeed,
-            "Status" to 0)
+            "Status" to 1)
         viewModel.insert(history)
         sendInfo()
         val db = FirebaseFirestore.getInstance()
@@ -429,7 +429,7 @@ class ProgramRetailFragment: Fragment(){
     }
 
     private fun convertTimeLongToDate(time:Long):String{
-       return SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(Date(time))
+       return SimpleDateFormat("yyyy/MM/dd").format(Date(time))
     }
 
 

@@ -22,7 +22,7 @@
             android:id="@+id/lnBack"
             android:gravity="center"
             android:layout_gravity="center"
-            android:layout_width="70dp"
+            android:layout_width="60dp"
             android:layout_height="wrap_content">
         <ImageView
             android:id="@+id/btBack"
