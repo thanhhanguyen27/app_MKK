@@ -2,11 +2,15 @@ package com.cpc1hn.uimkk.ui.fragment.history
 
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
+import android.content.Context
 import android.content.DialogInterface
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import android.os.Bundle
 import android.transition.TransitionManager
 import android.util.Log
 import android.view.*
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -17,10 +21,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.cpc1hn.uimkk.Adapter.IconHistoryAdapter
 import com.cpc1hn.uimkk.R
 import com.cpc1hn.uimkk.databinding.HistoryFragmentBinding
+import com.cpc1hn.uimkk.dateToLong
 import com.cpc1hn.uimkk.model.History
+import com.cpc1hn.uimkk.showDialogShort
 import com.cpc1hn.uimkk.ui.viewmodel.HistoryViewModel
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.toObject
+import java.lang.Exception
+import java.net.InetAddress
 import java.text.DateFormat
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -57,6 +65,7 @@ class  HistoryFragment : Fragment(), IconHistoryAdapter.OnItemButtonClick {
 
         viewModel.getAllHistoryObserves().observe(viewLifecycleOwner, {
             historyAdapter.setListData(ArrayList(it))
+            histories= ArrayList(it)
         })
         historyAdapter = IconHistoryAdapter(histories, this)
         binding.historyRecyclerView.apply {
@@ -79,16 +88,18 @@ class  HistoryFragment : Fragment(), IconHistoryAdapter.OnItemButtonClick {
             val dpd = DatePickerDialog(
                 requireActivity(), { _, year, monthOfYear, dayOfMonth ->
                     // Display Selected date in TextView
-                    if ((dayOfMonth < 10) && (monthOfYear < 10)) {
+                    if ((dayOfMonth < 10) && (monthOfYear < 9)) {
                         binding.tvDateStart.text = "0" + dayOfMonth + "/0" + (monthOfYear + 1) + "/" + year
-                    } else if (dayOfMonth < 10) {
+                    } else if ((dayOfMonth > 10) && (monthOfYear < 9)){
+                        binding.tvDateStart.text = "0" + dayOfMonth + "/0" + (monthOfYear + 1) + "/" + year
+                    }
+                    else if (dayOfMonth < 10) {
                         binding.tvDateStart.text = "0" + dayOfMonth + "/" + (monthOfYear + 1) + "/" + year
-                    } else if (monthOfYear < 10) {
+                    } else if (monthOfYear < 9) {
                         binding.tvDateStart.text = "" + dayOfMonth + "/0" + (monthOfYear + 1) + "/" + year
                     } else
                         binding.tvDateStart.text = "" + dayOfMonth + "/" + (monthOfYear + 1) + "/" + year
                     historyFilter()
-
                 },
                 year,
                 month,
@@ -99,11 +110,14 @@ class  HistoryFragment : Fragment(), IconHistoryAdapter.OnItemButtonClick {
         binding.tvDateEnd.setOnClickListener {
             val dpd = DatePickerDialog(
                 requireActivity(), { _, year, monthOfYear, dayOfMonth ->
-                    if ((dayOfMonth < 10) && (monthOfYear < 10)) {
+                    if ((dayOfMonth < 10) && (monthOfYear < 9)) {
                         binding.tvDateEnd.text = "0" + dayOfMonth + "/0" + (monthOfYear + 1) + "/" + year
-                    } else if (dayOfMonth < 10) {
+                    } else if ((dayOfMonth > 10) && (monthOfYear < 9)){
+                        binding.tvDateEnd.text = "0" + dayOfMonth + "/0" + (monthOfYear + 1) + "/" + year
+                    }
+                    else if (dayOfMonth < 10) {
                         binding.tvDateEnd.text = "0" + dayOfMonth + "/" + (monthOfYear + 1) + "/" + year
-                    } else if (monthOfYear < 10) {
+                    } else if (monthOfYear < 9) {
                         binding.tvDateEnd.text = "" + dayOfMonth + "/0" + (monthOfYear + 1) + "/" + year
                     } else
                         binding.tvDateEnd.text = "" + dayOfMonth + "/" + (monthOfYear + 1) + "/" + year
@@ -209,37 +223,104 @@ class  HistoryFragment : Fragment(), IconHistoryAdapter.OnItemButtonClick {
     private fun showAlert(){
         val builder = AlertDialog.Builder(requireContext(), R.style.AlertDialogTheme)
         val positiveButtonClick = { _: DialogInterface, _: Int ->
-            viewModel.deleteHistoryInfo()
-            getHistoryFirebase()
-            viewModel.insertAll(getHistoryFirebase())
+            checkOverall()
+        }
+        val negativeButtonClick= {_:DialogInterface, _: Int ->
+
         }
         with(builder) {
-            setMessage("Đồng bộ dữ liệu")
+            setTitle("Đồng bộ dữ liệu?")
+            setMessage("Lưu ý chỉ thực hiện đồng bộ khi có kết nối internet.")
             setPositiveButton(
-                "OK",
+                "Đồng bộ",
                 DialogInterface.OnClickListener(function = positiveButtonClick)
-            )
+            ).setNegativeButton("Không", DialogInterface.OnClickListener(negativeButtonClick) )
         }
         builder.show()
     }
 
-    private fun getHistoryFirebase():ArrayList<History>{
+    private fun checkOverall(){
+        if (isInternetAvailable()){
+            if (histories.isNotEmpty()){
+                for (history in histories){
+                    Log.d("_UDP", "$histories")
+                    if (history.Status == 0){
+                        upHistorytoFirebase(history)
+                    }
+                    viewModel.deleteHistoryInfo()
+                    getHistoryFirebase()
+                }
+            }else{
+                getHistoryFirebase()
+            }
+        }else{
+            showDialogShort("Có lỗi", "Kiểm tra lại kết nối internet của bạn")
+        }
+    }
+
+
+    private fun upHistorytoFirebase(history: History){
+                val historyFirebase= hashMapOf( "TimeStart" to history.TimeStart,
+            "CodeMachine" to history.CodeMachine,
+            "Concentration" to history.Concentration,
+            "Volume" to history.Volume,
+            "TimeEnd" to history.TimeEnd,
+            "Creator" to history.Creator,
+            "Room" to history.Room,
+            "TimeRun" to history.TimeRun,
+            "Error" to history.Error,
+            "SpeedSpray" to history.SpeedSpray,
+                    "TimeProgram" to history.TimeCreateProgram,
+            "Status" to 1)
+                val db = FirebaseFirestore.getInstance()
+        db.collection("histories").add(historyFirebase)
+            .addOnSuccessListener {
+
+            }
+            .addOnFailureListener { e ->
+                Toast.makeText(context, "Có lỗi xảy ra $e", Toast.LENGTH_SHORT).show()
+            }
+    }
+
+    //check internet
+    private fun isInternetAvailable(): Boolean {
+        return try {
+            val ipAddr: InetAddress = InetAddress.getByName("google.com")
+            //You can replace it with your name
+            !ipAddr.equals("")
+        } catch (e: Exception) {
+            false
+        }
+    }
+
+    fun checkConnectivity(context: Context): Boolean {
+
+        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        val activeNetwork: NetworkInfo? = connectivityManager.activeNetworkInfo
+
+        if(activeNetwork?.isConnected!=null){
+            return activeNetwork.isConnected
+        }
+        else{
+            return false
+        }
+    }
+
+    private fun getHistoryFirebase(){
         val db = FirebaseFirestore.getInstance()
         db.collection("histories").get()
             .addOnSuccessListener { result ->
                 histories= ArrayList(result.map {
                     it.toObject<History>()
                 })
-                historyAdapter.historys = histories
-
-                for (i in 0 until histories.size){
-                    histories[i].Status= 1
+                for (history in histories){
+                    history.timeEndLong = dateToLong(history.TimeEnd, "yyyy/MM/dd HH:mm:ss")
                 }
-                historyAdapter.historys = histories
-                // historyAdapter.notifyDataSetChanged()
+                viewModel.insertAll(histories)
+                Toast.makeText(context, "Đồng bộ thành công", Toast.LENGTH_SHORT).show()
             }
 
-        return histories
     }
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)

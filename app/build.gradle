@@ -7,7 +7,7 @@ apply plugin: 'com.google.firebase.crashlytics'
 apply plugin: 'com.google.gms.google-services'
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 30
     buildToolsVersion "30.0.3"
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -24,9 +24,9 @@ android {
     defaultConfig {
         applicationId "com.cpc1hn.uimkk"
         minSdkVersion 19
-        targetSdkVersion 29
-        versionCode 8
-        versionName "1.0.2"
+        targetSdkVersion 30
+        versionCode 9
+        versionName "1.0.3"
         multiDexEnabled true
         resConfigs "en", "vi"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -124,7 +124,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics-ktx'
 
 
-
+    //Zxing
+    implementation 'com.journeyapps:zxing-android-embedded:3.3.0'
 }
 
 

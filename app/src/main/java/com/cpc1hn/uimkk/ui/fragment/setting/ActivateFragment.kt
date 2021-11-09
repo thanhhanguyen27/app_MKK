@@ -57,13 +57,13 @@ class ActivateFragment : Fragment() {
         checkOn(0x02, 0x09, B3, B4, B5, 0x01)
         receiveData1()
         binding.apply {
-            btSwitchLED.setOnClickListener {
-                if (btSwitchLED.isChecked){
-                    checkOn(B1, B2, B3, B4, B5, B6)
-                }else{
-                    checkOff(B1, B2, B3, B4, B5, 0x00)
-                }
-            }
+//            btSwitchLED.setOnClickListener {
+//                if (btSwitchLED.isChecked){
+//                    checkOn(B1, B2, B3, B4, B5, B6)
+//                }else{
+//                    checkOff(B1, B2, B3, B4, B5, 0x00)
+//                }
+//            }
 
             btSwitchFan.setOnClickListener {
                 if (btSwitchFan.isChecked){
@@ -169,11 +169,11 @@ class ActivateFragment : Fragment() {
             //Receive LED, Scale, Fan, Buzzer
             if ((b[0] == 0x02.toByte()) && (b[1] == 0x09.toByte()) && (b[6] == checkSum(b).toByte())) {
                 Log.d("_UDP", "LED, Scale, Fan, Buzzer")
-                if (b[2] == 0x01.toByte()) {
-                    binding.btSwitchLED.isChecked = true
-                } else if (b[2] == (0x00).toByte()) {
-                    binding.btSwitchLED.isChecked = false
-                }
+//                if (b[2] == 0x01.toByte()) {
+//                    binding.btSwitchLED.isChecked = true
+//                } else if (b[2] == (0x00).toByte()) {
+//                    binding.btSwitchLED.isChecked = false
+//                }
                 if (b[3] == 0x01.toByte()) {
                     binding.btSwitchScale.isChecked = true
                 } else if (b[3] == 0x00.toByte()) {

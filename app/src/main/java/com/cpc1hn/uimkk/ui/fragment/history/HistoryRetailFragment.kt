@@ -43,7 +43,7 @@ class HistoryRetailFragment : Fragment() {
         // sendUDP(binding.tvCreater.text.toString())
         history= HistoryRetailFragmentArgs.fromBundle(requireArguments()).history
        // val time= longToDate(history.timeEndLong, "dd/MM/yyyy")
-        Log.d("_HIS", "${history.Creator} ${history.TimeRun}")
+        Log.d("_HIS", "${history.Creator} ${history.TimeEnd}")
         binding.history= history
         binding.tvTimeEnd.text= modifyDateLayout(history.TimeEnd)
         binding.tvTimeCreate.text= modifyDateLayout(history.TimeStart)

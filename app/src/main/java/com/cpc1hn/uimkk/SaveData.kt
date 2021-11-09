@@ -82,9 +82,8 @@ class SaveData(context:Context) {
         editor.apply()
     }
 
-    fun loadSpray():Int{
-        val spray= sharedPreferences.getInt(SPEED, 0)
-        return spray!!
+    fun loadSpray(): Int {
+        return sharedPreferences.getInt(SPEED, 0)
     }
     fun setTemp(temp:String){
         val editor= sharedPreferences.edit()

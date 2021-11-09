@@ -186,8 +186,8 @@
                                     android:src="@drawable/speedometer"/>
 
                                 <TextView
-                                    android:id="@+id/tvSpeedd"
-                                    android:layout_weight="2.2"
+                                    android:id="@+id/tvSpeed"
+                                    android:layout_weight="1.1"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
@@ -195,6 +195,16 @@
                                     android:text="Tốc độ phun"
                                     android:textColor="?attr/Text_head"
                                     android:textSize="16dp" />
+                                <TextView
+                                    android:id="@+id/tvSpeedNow"
+                                    android:layout_width="0dp"
+                                    android:layout_weight="0.8"
+                                    android:textSize="14sp"
+                                    android:gravity="center|end"
+                                    android:textColor="@color/load"
+                                    android:layout_gravity="center"
+                                    android:layout_height="wrap_content"
+                                    android:text="30ml/phut"/>
                             </LinearLayout>
 
                             <TextView
@@ -362,52 +372,52 @@
                         android:background="@color/grayline"
                         android:backgroundTint="@color/grayline" />
 
-                    <LinearLayout
-                        android:id="@+id/lnLanguage"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="?attr/backgroundLight"
-                        android:orientation="horizontal"
-                        android:paddingTop="8dp"
-                        android:paddingBottom="8dp"
-                        android:weightSum="3">
+<!--                    <LinearLayout-->
+<!--                        android:id="@+id/lnLanguage"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:background="?attr/backgroundLight"-->
+<!--                        android:orientation="horizontal"-->
+<!--                        android:paddingTop="8dp"-->
+<!--                        android:paddingBottom="8dp"-->
+<!--                        android:weightSum="3">-->
 
-                        <LinearLayout
-                            android:weightSum="2"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="2.95"
-                            android:orientation="horizontal">
+<!--                        <LinearLayout-->
+<!--                            android:weightSum="2"-->
+<!--                            android:layout_width="0dp"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_weight="2.95"-->
+<!--                            android:orientation="horizontal">-->
 
-                            <ImageView
-                                android:layout_width="24dp"
-                                android:layout_height="24dp"
-                                android:layout_marginLeft="16dp"
-                                android:layout_marginTop="4dp"
-                                android:layout_marginRight="10dp"
-                                android:layout_marginBottom="4dp"
-                                android:src="@drawable/translate" />
+<!--                            <ImageView-->
+<!--                                android:layout_width="24dp"-->
+<!--                                android:layout_height="24dp"-->
+<!--                                android:layout_marginLeft="16dp"-->
+<!--                                android:layout_marginTop="4dp"-->
+<!--                                android:layout_marginRight="10dp"-->
+<!--                                android:layout_marginBottom="4dp"-->
+<!--                                android:src="@drawable/translate" />-->
 
-                            <TextView
-                                android:layout_weight="2"
-                                android:id="@+id/tvLanguage"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:gravity="left|center"
-                                android:text="@string/ngon_ngu"
-                                android:textColor="?attr/Text_head"
-                                android:textSize="16dp" />
-                        </LinearLayout>
+<!--                            <TextView-->
+<!--                                android:layout_weight="2"-->
+<!--                                android:id="@+id/tvLanguage"-->
+<!--                                android:layout_width="wrap_content"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:layout_gravity="center"-->
+<!--                                android:gravity="left|center"-->
+<!--                                android:text="@string/ngon_ngu"-->
+<!--                                android:textColor="?attr/Text_head"-->
+<!--                                android:textSize="16dp" />-->
+<!--                        </LinearLayout>-->
 
-                        <TextView
-                            android:id="@+id/moreLanguge"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginRight="16dp"
-                            android:drawableRight="@drawable/ic_baseline_expand_more_24" />
-                    </LinearLayout>
+<!--                        <TextView-->
+<!--                            android:id="@+id/moreLanguge"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_gravity="center"-->
+<!--                            android:layout_marginRight="16dp"-->
+<!--                            android:drawableRight="@drawable/ic_baseline_expand_more_24" />-->
+<!--                    </LinearLayout>-->
 
                     <RadioGroup
                         android:id="@+id/radioGroup"

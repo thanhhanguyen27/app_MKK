@@ -3,28 +3,29 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/drawable/fab_background.xml" value="0.2557291666666667" />
         <entry key="app/src/main/res/layout/account_fragment.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/activate_fragment.xml" value="0.125" />
+        <entry key="app/src/main/res/layout/activate_fragment.xml" value="0.165" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="app/src/main/res/layout/alert_password.xml" value="0.1" />
         <entry key="app/src/main/res/layout/create_program.xml" value="0.1" />
         <entry key="app/src/main/res/layout/edit_profile_fragment.xml" value="0.25" />
         <entry key="app/src/main/res/layout/history_fragment.xml" value="0.23020833333333332" />
         <entry key="app/src/main/res/layout/history_retail_fragment.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/item_history.xml" value="0.23020833333333332" />
+        <entry key="app/src/main/res/layout/item_history.xml" value="0.25" />
         <entry key="app/src/main/res/layout/item_main.xml" value="0.1322463768115942" />
-        <entry key="app/src/main/res/layout/item_program.xml" value="0.1322463768115942" />
+        <entry key="app/src/main/res/layout/item_program.xml" value="0.335" />
         <entry key="app/src/main/res/layout/led_fragment.xml" value="0.1322463768115942" />
         <entry key="app/src/main/res/layout/list_item.xml" value="0.1322463768115942" />
         <entry key="app/src/main/res/layout/login_fragment.xml" value="0.1" />
         <entry key="app/src/main/res/layout/motor_a_c_fragment.xml" value="0.1" />
         <entry key="app/src/main/res/layout/program_depend_fragment.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/program_fragment.xml" value="0.335" />
-        <entry key="app/src/main/res/layout/program_retail_fragment.xml" value="0.165" />
+        <entry key="app/src/main/res/layout/program_fragment.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/program_retail_fragment.xml" value="0.335" />
         <entry key="app/src/main/res/layout/register_fragment.xml" value="0.165" />
         <entry key="app/src/main/res/layout/scale_fragment.xml" value="0.1322463768115942" />
-        <entry key="app/src/main/res/layout/setting_fragment.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/setting_fragment.xml" value="0.1838006230529595" />
         <entry key="app/src/main/res/layout/speed_fragment.xml" value="0.165" />
         <entry key="app/src/main/res/layout/test_fragment.xml" value="0.25" />
         <entry key="app/src/main/res/menu/history_menu.xml" value="0.11354166666666667" />

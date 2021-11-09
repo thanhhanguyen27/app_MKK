@@ -18,6 +18,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.cpc1hn.uimkk.R
 import com.cpc1hn.uimkk.SaveData
 import com.cpc1hn.uimkk.databinding.ProgramRetailFragmentBinding
+import com.cpc1hn.uimkk.dateToLong
 import com.cpc1hn.uimkk.model.History
 import com.cpc1hn.uimkk.model.Program
 import com.cpc1hn.uimkk.ui.viewmodel.program.ProgramRetailViewModel
@@ -277,8 +278,8 @@ class ProgramRetailFragment: Fragment(){
         val thetich= ProgramRetailFragmentArgs.fromBundle(requireArguments()).theTich
         val nongdo= ProgramRetailFragmentArgs.fromBundle(requireArguments()).nongdo
         val sdf = SimpleDateFormat("yyyy/MM/dd", Locale.getDefault())
-        timeEndLong =convertDateToLong(sdf.format(Date()))
-        val sdf1= SimpleDateFormat("HH:mm:ss", Locale.getDefault())
+        //timeEndLong =convertDateToLong(sdf.format(Date()))
+        val sdf1= SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.getDefault())
         hourEnd=sdf1.format(Date())
 
         history= History(
@@ -286,36 +287,19 @@ class ProgramRetailFragment: Fragment(){
             CodeMachine= savedata.getCodeMachine(),
             Concentration= nongdo,
             Volume= thetich,
-            TimeEnd= "${convertTimeLongToDate(timeEndLong)} ${hourEnd} ",
+            TimeEnd=  hourEnd,
+            timeEndLong= dateToLong(history.TimeEnd, "yyyy/MM/dd HH:mm:ss"),
             Creator=username,
            Room= program.NameProgram,
             TimeRun= timeSpray,
             Error= error,
+            TimeCreateProgram= program.TimeCreate,
             SpeedSpray= spraySpeed,
             Status = 0
         )
-        val historyFirebase= hashMapOf( "TimeStart" to timeCreate,
-            "CodeMachine" to savedata.getCodeMachine(),
-            "Concentration" to nongdo,
-            "Volume" to thetich,
-            "TimeEnd" to "${convertTimeLongToDate(timeEndLong)} $hourEnd ",
-            "Creator" to username,
-            "Room" to program.NameProgram,
-            "TimeRun" to timeSpray,
-            "Error" to error,
-            "SpeedSpray" to spraySpeed,
-            "Status" to 1)
+
         viewModel.insert(history)
         sendInfo()
-        val db = FirebaseFirestore.getInstance()
-        db.collection("histories").add(historyFirebase)
-            .addOnSuccessListener {
-                histories.add(history)
-                Log.d(TAG, "tải lên firebase thành công")
-            }
-            .addOnFailureListener { e ->
-                Log.w(TAG, "có lỗi xảy ra", e)
-            }
     }
 
     private fun convertSectoDay(time: Int):String {
@@ -380,17 +364,6 @@ class ProgramRetailFragment: Fragment(){
         }
         builder.show()
 
-    }
-
-    private fun convertDateToLong(date: String): Long {
-        try {
-            val f: DateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-            val d = f.parse(date)
-            mili = d!!.time
-        } catch (e: ParseException) {
-            e.printStackTrace()
-        }
-        return mili
     }
 
 

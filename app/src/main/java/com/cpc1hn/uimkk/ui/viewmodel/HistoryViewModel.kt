@@ -22,6 +22,7 @@ class HistoryViewModel(app: Application): AndroidViewModel(app)  {
     fun update(history: History){
         val historyDao = AppDatabase.getAppdatabase((getApplication()))?.historyDao()
         historyDao!!.update(history)
+        getAllHistory()
     }
 
     fun getHisstoryFilter(start:Long, end:Long):LiveData<List<History>>{

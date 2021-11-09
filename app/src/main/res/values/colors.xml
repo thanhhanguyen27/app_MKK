@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryDark">#3700B3</color>
-    <color name="colorAccent">#64b5f6</color>
+    <color name="colorAccent">#ffff</color>
     <color name="colorText">#5C5B5B</color>
     <color name="yellowlight">#ffff74</color>
     <color name="yellow">#ffd740</color>
@@ -30,6 +30,7 @@
     <color name="bgBottomNavigation">#fe485a</color>
     <color name="colorSurface">#fff</color>
     <color name="white">#ffffff</color>
+    <color name="unselected">#90ffffff</color>
     <color name="load">#00c853</color>
     <color name="light">#F8F8FB</color>
     <color name="red">#d50000</color>

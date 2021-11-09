@@ -45,18 +45,57 @@ class ScaleFragment : Fragment() {
         port=8080
         binding.apply {
             btZero.setOnClickListener {
-                checkOn(0x02, 0x08, 0x00, 0x00, 0x00, 0x01)
-                dialogScaleZero()
+                confirmScaleZero()
             }
 
             btMax.setOnClickListener {
-                checkOn(0x02, 0x08, 0x00, 0x00, 0x00, 0x02)
-                dialogScaleMax()
+                confirmScaleMax()
             }
         }
 
 
         return binding.root
+    }
+
+    private fun confirmScaleZero(){
+        val builder = AlertDialog.Builder(requireContext(), R.style.AlertDialogTheme)
+        val positiveButtonClick = { _: DialogInterface, _: Int ->
+            checkOn(0x02, 0x08, 0x00, 0x00, 0x00, 0x01)
+            dialogScaleZero()
+        }
+
+        val negativeButtonClick= {_:DialogInterface, _: Int ->
+
+        }
+        with(builder) {
+            setMessage("Bạn muốn căn chỉnh cân Zero?")
+            setPositiveButton(
+                "Có",
+                DialogInterface.OnClickListener(function = positiveButtonClick)
+            ).setNegativeButton("Không", DialogInterface.OnClickListener(negativeButtonClick) )
+        }
+        builder.show()
+    }
+
+    private fun confirmScaleMax(){
+        val builder = AlertDialog.Builder(requireContext(), R.style.AlertDialogTheme)
+        val positiveButtonClick = { _: DialogInterface, _: Int ->
+            checkOn(0x02, 0x08, 0x00, 0x00, 0x00, 0x02)
+            dialogScaleMax()
+        }
+        val negativeButtonClick= {_:DialogInterface, _: Int ->
+
+        }
+        with(builder) {
+            setMessage("Bạn muốn căn chỉnh cân Max?")
+            setPositiveButton(
+                "Có",
+                DialogInterface.OnClickListener(function = positiveButtonClick)
+            )
+            setNegativeButton("Không", DialogInterface.OnClickListener(negativeButtonClick) )
+
+        }
+        builder.show()
     }
     private fun dialogScaleMax(){
         val builder = AlertDialog.Builder(requireContext(), R.style.AlertDialogTheme)

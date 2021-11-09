@@ -4,7 +4,7 @@
     <item
         android:id="@+id/nav_home"
         android:icon="@drawable/homee"
-        android:title="Chương trình"
+        android:title="Trang chủ"
         app:showAsAction="ifRoom"
         android:contentDescription="Chương trình"
         />
@@ -15,6 +15,10 @@
         android:contentDescription="Kiểm tra"
         app:showAsAction="ifRoom"
         />
+    <item
+        app:showAsAction="never"
+        android:id="@+id/scanQR"
+        android:title=""/>
     <item
         android:id="@+id/nav_history"
         android:icon="@drawable/historyyyy"

@@ -16,7 +16,10 @@ class Program(
     @ColumnInfo(name = "volumne")
     var Volume: Int=0,
 
-    @PrimaryKey @ColumnInfo(name = "timeCreate")
+    @PrimaryKey @ColumnInfo(name = "Id")
+    var id:String="",
+
+    @ColumnInfo(name = "timeCreate")
     var TimeCreate: String= "",
 
     @ColumnInfo (name = "creator")

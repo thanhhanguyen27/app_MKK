@@ -74,6 +74,11 @@ class SettingFragment : Fragment() {
         viewModel = ViewModelProviders.of(this).get(SettingViewModel::class.java)
         Log.d(TAG, "Setting")
 
+        if (saveData.loadSpray() != 0){
+            binding.tvSpeedNow.text= "hiện tại ${saveData.loadSpray()}ml/p"
+        }else{
+            binding.tvSpeedNow.text= "30ml/phút"
+        }
 //
 //        viewModel.getAllSet()
 //        viewModel.getAllChecksObserves().observe(viewLifecycleOwner,{
@@ -90,7 +95,7 @@ class SettingFragment : Fragment() {
 //            }
 //        })
 
-        setLanguage()
+
 
         getData()
         //Lay du lieu len may
@@ -111,8 +116,9 @@ class SettingFragment : Fragment() {
                         btSaveSpeed.setOnClickListener {
                             if (edtSpeed.text.isNotEmpty()){
                                 if (( edtSpeed.text.toString().toInt() >=30) && ( edtSpeed.text.toString().toInt()<=37)) {
-                                    binding.edtSpeed.text = edtSpeed.text
+                                   // binding.edtSpeed.text = edtSpeed.text
                                     checkOn(0x02, 0x06, 0x00, 0x00, 0x00, edtSpeed.text.toString().toInt())
+                                    Log.d("_UDP", "speed: ${edtSpeed.text.toString().toInt()}")
                                     hideKeyboard()
                                     Toast.makeText(context,"Đã lưu tốc độ phun", Toast.LENGTH_SHORT).show()
                                 }
@@ -129,7 +135,7 @@ class SettingFragment : Fragment() {
                                 val positiveButtonClick = { _: DialogInterface, _: Int ->
                                 }
                                 with(builder) {
-                                    setMessage("Bajn chuwa nhaa")
+                                    setMessage("Bạn chưa nhập tốc độ phun")
                                     setPositiveButton(
                                         "OK",
                                         DialogInterface.OnClickListener(function = positiveButtonClick)
@@ -313,26 +319,26 @@ class SettingFragment : Fragment() {
             builder.show()
         }
 
-
-       private fun setLanguage() {
-            binding.lnLanguage.setOnClickListener(object : View.OnClickListener {
-                var visible: Boolean = false
-                override fun onClick(v: View?) {
-                    TransitionManager.beginDelayedTransition(binding.transition)
-                    visible = !visible
-                    if (visible) {
-                        binding.radioGroup.visibility = View.VISIBLE
-                        binding.moreLanguge.animate().rotation(180f).start()
-                        onRadioButtonClick()
-                    } else {
-                        binding.radioGroup.visibility = View.GONE
-                        binding.moreLanguge.animate().rotation(0f).start()
-                        onRadioButtonClick()
-                    }
-                }
-            })
-
-        }
+//
+//       private fun setLanguage() {
+//            binding.lnLanguage.setOnClickListener(object : View.OnClickListener {
+//                var visible: Boolean = false
+//                override fun onClick(v: View?) {
+//                    TransitionManager.beginDelayedTransition(binding.transition)
+//                    visible = !visible
+//                    if (visible) {
+//                        binding.radioGroup.visibility = View.VISIBLE
+//                        binding.moreLanguge.animate().rotation(180f).start()
+//                        onRadioButtonClick()
+//                    } else {
+//                        binding.radioGroup.visibility = View.GONE
+//                        binding.moreLanguge.animate().rotation(0f).start()
+//                        onRadioButtonClick()
+//                    }
+//                }
+//            })
+//
+//        }
 
       private  fun getData() {
             //get data LED, Scale, Buzzer, Fan

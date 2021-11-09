@@ -25,6 +25,31 @@ fun modifyDateLayout(inputDate: String): String {
 
 }
 
+@SuppressLint("SimpleDateFormat")
+fun String.convertStringToDate() : Date? {
+    val sdf = SimpleDateFormat("yyyy/MM/dd HH:mm:ss")
+    sdf.timeZone = TimeZone.getTimeZone("GMT+7")
+    return if(this.isEmpty()){
+        null
+    }else {
+        sdf.parse(this)
+    }
+}
+
+
+fun dateToLong(date: String?, fomat: String?): Long {
+    var milliseconds: Long = -1
+    val f = SimpleDateFormat(fomat)
+    f.timeZone = TimeZone.getDefault()
+    try {
+        val d = f.parse(date)
+        milliseconds = d.time
+    } catch (e: ParseException) {
+        e.printStackTrace()
+    }
+    return milliseconds
+}
+
 fun Fragment.showDialogShort(title: String, message: String?) {
     val builder = androidx.appcompat.app.AlertDialog.Builder(requireContext())
     builder.setTitle(title)

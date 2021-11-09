@@ -33,6 +33,16 @@ import java.net.InetAddress
 import java.net.InetSocketAddress
 import java.text.SimpleDateFormat
 import java.util.*
+import androidx.core.content.ContextCompat.getSystemService
+
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
+import androidx.core.content.ContextCompat
+import java.lang.Exception
+import androidx.core.content.ContextCompat.getSystemService
+
+
+
 
 
 class ProgramDependFragment : Fragment() {
@@ -91,14 +101,13 @@ class ProgramDependFragment : Fragment() {
         checkOn1(0x03, 0x04, 0x00, 0x00, 0x00, 0x00)
 
         //Nhan du lieu muc hoa chat
-        checkArray = receiveData()
+        receiveData()
 
         savedata = SaveData(requireContext())
-        if (savedata.loadSpray()!=0) {
+        if (savedata.loadSpray() !=0 ) {
             speedSpray = savedata.loadSpray()
-        }else{
-            speedSpray=30
         }
+        Log.d("_UDP", "$speedSpray")
 
         //  Toast.makeText(context, speedSpray, Toast.LENGTH_SHORT).show()
         binding.tvTheTich.setText(program.Volume.toString())
@@ -111,10 +120,30 @@ class ProgramDependFragment : Fragment() {
             //cai thoi gian uoc tinh
             setNongDo_TheTich()
             //setMucHoaChat()
-//            tvRun.setOnClickListener {
-//                showAlert()
-//
-//            }
+            tvRun.setOnClickListener {
+                    if (savedata.loadActiveScale()) {
+                        if (checkConnectivity(requireContext()) and isInternetAvailable()){
+                            showDialogShort("","Chưa kết nối với máy phun.")
+                        }else if (!checkConnectivity(requireContext()) and !isInternetAvailable()){
+                            showDialogShort("","Chưa kết nối với máy phun.")
+                        }else{
+                            if (binding.tvWarning.visibility == View.VISIBLE) {
+                                showDialogShort("", "Không đủ hoá chất")
+                            } else if (binding.tvWarning.visibility == View.GONE) {
+                                checkVolumeEmty()
+                            }
+                        }
+
+                    } else {
+                        if (checkConnectivity(requireContext()) and isInternetAvailable()){
+                            showDialogShort("","Chưa kết nối với máy phun.")
+                        }else if (!checkConnectivity(requireContext()) and !isInternetAvailable()){
+                            showDialogShort("","Chưa kết nối với máy phun.")
+                        }else{
+                            checkVolumeEmty()
+                        }
+                    }
+            }
         }
         val saveData=SaveData(requireContext())
         activity.run {
@@ -132,7 +161,6 @@ class ProgramDependFragment : Fragment() {
         val info: WifiInfo = mWifiManager.getConnectionInfo()
         savedata.setCodeMachine(info.ssid)
         Log.d("_SSID", " ${info.ssid} ${info.bssid}, ${info.ipAddress}")
-
     }
     private fun receiveData(): ByteArray {
         var buffer = ByteArray(6566)
@@ -147,6 +175,7 @@ class ProgramDependFragment : Fragment() {
                         val data = DatagramPacket(buffer, buffer.size)
                         socketReceive.receive(data)
                         display1(buffer)
+                        Log.d("_UDP", "ReceiveData $data ")
                         buffer = byteArrayOfInts(0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00)
                     }
                 } catch (e: java.lang.Exception) {
@@ -165,11 +194,9 @@ class ProgramDependFragment : Fragment() {
                     buffer
                 ).toByte())
             ) {
-                TransitionManager.beginDelayedTransition(binding.linear)
-                val visible = true
-                if (visible) {
-                    binding.tvPercent.text = "${buffer[4].toUInt()}%"
-                }
+
+                binding.tvPercent.text = "${buffer[4].toUInt()}%"
+                binding.tvPercent.visibility = View.VISIBLE
                 if (buffer[3].toInt()==0){
                     scaleActive =0
                 }else if (buffer[3].toInt()==1){
@@ -186,15 +213,8 @@ class ProgramDependFragment : Fragment() {
                         binding.tvWarning.visibility = View.GONE
                 }
 
-                binding.tvRun.setOnClickListener {
-                    showAlert()
-
-                }
-            }else{
-                binding.tvRun.setOnClickListener {
-                    showDialogShort("", "Chưa kết nối với máy phun")
-                }
             }
+
         }
     }
 
@@ -203,6 +223,18 @@ class ProgramDependFragment : Fragment() {
         timeSpeed = ((thetich * nongdo) * 60 / speedSpray) + 10
         val time: String = ConvertSectoDay(timeSpeed)
         binding.tvTimeEstimate.text = "Thời gian phun ước tính ${time} "
+    }
+
+    private fun checkVolumeEmty(){
+        if ((binding.tvTheTich.text.toString().isEmpty() ) or (binding.tvNongdo.text.toString().isEmpty()) )
+        {
+            showDialogShort(""," Cần điền đủ thông tin hể tích và nồng độ")
+        } else if ((binding.tvTheTich.text.toString().toInt() ==0) or (binding.tvNongdo.text.toString().toInt()==0)){
+            showDialogShort("", "Thể tích và nồng độ phải khác 0")
+        }
+        else{
+            showAlert()
+        }
     }
 
     private fun setNongDo_TheTich() {
@@ -356,11 +388,12 @@ class ProgramDependFragment : Fragment() {
         val b5 = (timeSpeed / 256)
         val b6 = (timeSpeed - b5 * 256)
         //truyen thoi gian phun
-        if ((checkArray[1] != 0x02.toByte())) {
-
-            checkOn(0x03, 0x02, 0x00, 0x00, b5, b6)
-            Log.d("_UDP", "bat dau dem so 20s")
-        }
+//        if ((checkArray[1] != 0x02.toByte())) {
+//
+//            checkOn(0x03, 0x02, 0x00, 0x00, b5, b6)
+//            Log.d("_UDP", "bat dau dem so 20s")
+//        }
+        checkOn(0x03, 0x02, 0x00, 0x00, b5, b6)
 
         requireView().findNavController().navigate(
             ProgramDependFragmentDirections.actionProgramDependFragmentToProgramRetailFragment2(
@@ -509,6 +542,30 @@ class ProgramDependFragment : Fragment() {
             }
         }
 
+    }
+
+    fun checkConnectivity(context: Context): Boolean {
+
+        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        val activeNetwork: NetworkInfo? = connectivityManager.activeNetworkInfo
+
+        if(activeNetwork?.isConnected!=null){
+            return activeNetwork.isConnected
+        }
+        else{
+            return false
+        }
+    }
+
+    private fun isInternetAvailable(): Boolean {
+        return try {
+            val ipAddr: InetAddress = InetAddress.getByName("google.com")
+            //You can replace it with your name
+            !ipAddr.equals("")
+        } catch (e: Exception) {
+            false
+        }
     }
 
 }
