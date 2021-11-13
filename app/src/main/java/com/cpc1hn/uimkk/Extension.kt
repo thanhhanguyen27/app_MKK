@@ -36,6 +36,28 @@ fun String.convertStringToDate() : Date? {
     }
 }
 
+@SuppressLint("SimpleDateFormat")
+fun Int.convertStringToDateHHMMSS() : Date? {
+    val sdf = SimpleDateFormat("HH:mm:ss")
+    sdf.timeZone = TimeZone.getTimeZone("GMT+7")
+    return if(this==0){
+        null
+    }else {
+        sdf.parse(this.toString())
+    }
+}
+
+@SuppressLint("SimpleDateFormat")
+fun String.convertStringToDateHHMMSS() : Date? {
+    val sdf = SimpleDateFormat("HH:mm:ss")
+    sdf.timeZone = TimeZone.getTimeZone("GMT+7")
+    return if(this.isEmpty()){
+        null
+    }else {
+        sdf.parse(this)
+    }
+}
+
 
 fun dateToLong(date: String?, fomat: String?): Long {
     var milliseconds: Long = -1

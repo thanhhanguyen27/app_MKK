@@ -112,7 +112,7 @@ class MotorACFragment : Fragment() {
 
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+       // super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(MotorACViewModel::class.java)
         // TODO: Use the ViewModel
     }

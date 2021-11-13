@@ -45,6 +45,12 @@ class LoginFragment : Fragment() {
         }
         login()
         saveData= SaveData(requireContext())
+        if (saveData.getMail().isNotEmpty()){
+            binding.edtEmail.setText(saveData.getMail())
+        }
+        if (saveData.getPass().isNotEmpty()){
+            binding.edtPass.setText(saveData.getPass())
+        }
 
         binding.btRegister.setOnClickListener {
             findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToRegisterFragment())

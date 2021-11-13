@@ -17,6 +17,9 @@ interface programDao {
     @Update
     fun update(program: Program)
 
+    @Update
+    fun updateAllProgram (programs: ArrayList<Program>)
+
     @Query("DELETE FROM Program")
     fun delete()
 

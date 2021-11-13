@@ -54,33 +54,26 @@ class EditProfileFragment : Fragment() {
 
             btSave.setOnClickListener {
                 val accountRoom= UserClass(1, edtName.text.toString(), edtSex.text.toString(), edtRoom.text.toString(), edtMail.text.toString(), edtPhone.text.toString() )
-               val account= hashMapOf("FullName" to edtName.text.toString(),
+                val account= hashMapOf("FullName" to edtName.text.toString(),
                    "Position" to edtRoom.text.toString(),
-                   "Email" to edtMail.text.toString(),
                    "PhoneNumber" to edtPhone.text.toString(),
                    "Sex" to edtSex.text.toString()
                   )
-                if (edtMail.text.toString().isNotEmpty()){
-                    db.collection("accounts").whereEqualTo("Email", binding.edtMail.text.toString()).get().addOnSuccessListener {
-                        for (document in it){
-                            db.collection("accounts").document(document.id).set(account).addOnSuccessListener {
-                                Toast.makeText(context,"Cập nhật thành công", Toast.LENGTH_LONG).show()
-                                viewModel.updatetUser(accountRoom)
-                                requireActivity().onBackPressed()
-                            }.addOnFailureListener {
-                                Toast.makeText(context, "Cập nhật không thành công", Toast.LENGTH_SHORT).show()
-                            }
+                db.collection("accounts").whereEqualTo("Email", binding.edtMail.text.toString()).get().addOnSuccessListener {
+                    for (document in it){
+                        db.collection("accounts").document(document.id).set(account).addOnSuccessListener {
+                            Toast.makeText(context,"Cập nhật thành công", Toast.LENGTH_LONG).show()
+                            viewModel.updatetUser(accountRoom)
+                            requireActivity().onBackPressed()
+                        }.addOnFailureListener {
+                            Toast.makeText(context, "Cập nhật không thành công", Toast.LENGTH_SHORT).show()
                         }
-                    }.addOnFailureListener {
-                        Toast.makeText(context, "Có lỗi xảy ra", Toast.LENGTH_LONG).show()
                     }
-
-                }else{
-                    MaterialAlertDialogBuilder(requireContext())
-                        .setMessage("Không được để trống Email")
-                        .setPositiveButton("Ok"){_, _ ->
-                        }.show()
+                }.addOnFailureListener {
+                    Toast.makeText(context, "Có lỗi xảy ra", Toast.LENGTH_LONG).show()
                 }
+
+
             }
         }
 

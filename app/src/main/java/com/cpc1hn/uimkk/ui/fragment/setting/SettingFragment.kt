@@ -75,9 +75,9 @@ class SettingFragment : Fragment() {
         Log.d(TAG, "Setting")
 
         if (saveData.loadSpray() != 0){
-            binding.tvSpeedNow.text= "hiện tại ${saveData.loadSpray()}ml/p"
+            binding.tvSpeedNow.text= "${saveData.loadSpray()}ml/phút"
         }else{
-            binding.tvSpeedNow.text= "30ml/phút"
+            binding.tvSpeedNow.text= "0ml/phút"
         }
 //
 //        viewModel.getAllSet()
@@ -158,7 +158,7 @@ class SettingFragment : Fragment() {
                     TransitionManager.beginDelayedTransition(transition)
                     if (lnSetTemp.visibility== View.GONE) {
                         lnSetTemp.visibility = View.VISIBLE
-                        tv3.visibility = View.GONE
+
                         moreSetTemp.animate().rotation(180f).start()
 
                         btSave.setOnClickListener {
@@ -223,7 +223,6 @@ class SettingFragment : Fragment() {
                         }
                     } else {
                         lnSetTemp.visibility = View.GONE
-                        tv3.visibility = View.VISIBLE
                         moreSetTemp.animate().rotation(0f).start()
                     }
                 }

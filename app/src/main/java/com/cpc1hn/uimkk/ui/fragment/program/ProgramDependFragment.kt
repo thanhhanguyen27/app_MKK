@@ -3,7 +3,6 @@ package com.cpc1hn.uimkk.ui.fragment.program
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.DialogInterface
-import android.content.pm.PackageManager
 import android.net.wifi.WifiInfo
 import android.net.wifi.WifiManager
 import android.os.Bundle
@@ -33,16 +32,11 @@ import java.net.InetAddress
 import java.net.InetSocketAddress
 import java.text.SimpleDateFormat
 import java.util.*
-import androidx.core.content.ContextCompat.getSystemService
 
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
-import androidx.core.content.ContextCompat
+import com.cpc1hn.uimkk.model.SetClass
 import java.lang.Exception
-import androidx.core.content.ContextCompat.getSystemService
-
-
-
 
 
 class ProgramDependFragment : Fragment() {
@@ -71,6 +65,7 @@ class ProgramDependFragment : Fragment() {
     private var numberOfRun: Int = 0
     private lateinit var checkArray: ByteArray
     private var scaleActive: Int=0
+    private var setClass = SetClass()
 
 
 
@@ -121,7 +116,7 @@ class ProgramDependFragment : Fragment() {
             setNongDo_TheTich()
             //setMucHoaChat()
             tvRun.setOnClickListener {
-                    if (savedata.loadActiveScale()) {
+                    if (setClass.scale) {
                         if (checkConnectivity(requireContext()) and isInternetAvailable()){
                             showDialogShort("","Chưa kết nối với máy phun.")
                         }else if (!checkConnectivity(requireContext()) and !isInternetAvailable()){
@@ -221,7 +216,7 @@ class ProgramDependFragment : Fragment() {
     @SuppressLint("SetTextI18n")
     private fun estimateTime() {
         timeSpeed = ((thetich * nongdo) * 60 / speedSpray) + 10
-        val time: String = ConvertSectoDay(timeSpeed)
+       val time: String = convertSecToTime(timeSpeed)
         binding.tvTimeEstimate.text = "Thời gian phun ước tính ${time} "
     }
 
@@ -273,7 +268,8 @@ class ProgramDependFragment : Fragment() {
                                     binding.tvWarning.visibility = View.GONE
                                 }
                             }
-                            val time: String = ConvertSectoDay(timeSpeed)
+                            val time: String = convertSecToTime(timeSpeed)
+//                            val time = timeSpeed.convertStringToDateHHMMSS()
                             tvTimeEstimate.text = "Thời gian phun ước tính ${time} "
                         }
                     }else{
@@ -317,7 +313,8 @@ class ProgramDependFragment : Fragment() {
                                     binding.tvWarning.visibility = View.GONE
                                 }
                             }
-                            val time: String = ConvertSectoDay(timeSpeed)
+                          val time: String = convertSecToTime(timeSpeed)
+                           // val time = timeSpeed.convertStringToDateHHMMSS()
                             tvTimeEstimate.text = "Thời gian phun ước tính ${time} "
                         }
                     }else{
@@ -411,33 +408,19 @@ class ProgramDependFragment : Fragment() {
     }
 
 
-   private fun ConvertSectoDay(time: Int):String {
-        var n = time
-        val hour = n / 3600
-        n %= 3600
-        val minutes = n / 60
-        n %= 60
-        val seconds = n
-        time1 ="${hour}:${minutes}:${seconds}"
-        if ((hour<10) && (hour!=0)&&(minutes<10) &&(seconds<10)){
-            time1= "0${hour}:0${minutes}:0${seconds}"
-        }else if ((hour<10) && (hour!=0)&&(minutes<10)&&(seconds>=10)){
-            time1= "0${hour}:0${minutes}:${seconds}"
-        }else if ((hour==0)&&(minutes<10) &&(seconds<10)){
-            time1= "0${minutes}:0${seconds}"
-        }else if ((hour==0)&&(minutes<10)&&(seconds>=10)){
-            time1= "0${minutes}:${seconds}"
+
+    private fun convertSecToTime(seconds: Int):String {
+        val h = seconds / 3600
+        val m = seconds % 3600 / 60
+        val s = seconds % 3600 % 60
+        return if (h <= 0){
+            String.format("%02d:%02d", m, s)
+        }else{
+            String.format("%02d:%02d:%02d", h, m, s)
         }
-        else if ((hour==0)&&(minutes>=10) &&(seconds>=10)){
-            time1= "${minutes}:${seconds}"
-        }
-        return time1
     }
 
     private fun byteArrayOfInts(vararg ints: Int) = ByteArray(ints.size) { pos -> ints[pos].toByte() }
-
-
-
 
     private fun checkSum(b: ByteArray):Int{
         val sum = b[0] +b[1]+ b[2]+ b[3] +b[4]+ b[5]
@@ -522,7 +505,7 @@ class ProgramDependFragment : Fragment() {
     }
 
     private fun updateProgram(){
-        val programUpdate = Program(program.NameProgram,binding.tvNongdo.text.toString().toInt(),binding.tvTheTich.text.toString().toInt(), program.TimeCreate,username, program.Email  )
+        val programUpdate = Program(program.id, program.NameProgram, binding.tvNongdo.text.toString().toInt(),binding.tvTheTich.text.toString().toInt(), program.TimeCreate,username, program.Email  )
         viewModel.updateProgram(programUpdate)
         hideKeyboard()
         Toast.makeText(context, "Đã lưu chương trình", Toast.LENGTH_SHORT).show()

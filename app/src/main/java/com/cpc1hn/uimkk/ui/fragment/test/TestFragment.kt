@@ -1,5 +1,6 @@
 package com.cpc1hn.uimkk.ui.fragment.test
 
+import android.animation.ObjectAnimator
 import android.os.Bundle
 import android.os.StrictMode
 import android.util.Log
@@ -39,6 +40,7 @@ class TestFragment : Fragment() {
     private var port: Int=0
     private lateinit var saveData: SaveData
     private var socketReceive= DatagramSocket(null)
+    private lateinit var animator: ObjectAnimator
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -61,14 +63,22 @@ class TestFragment : Fragment() {
 //            setLedBlue()
         }
 
+        binding.imOverall.setOnClickListener {
+            animator = ObjectAnimator.ofFloat( binding.imOverall , View.ROTATION, -360f, 0f )
+            animator.duration = 2000
+            animator.repeatCount= 4
+            animator.start()
+        }
 
         saveData= SaveData(requireContext())
         if (saveData.loadTemp().isNotEmpty()){
-            binding.temperature.text= saveData.loadTemp()
+           binding.temperature.text= saveData.loadTemp()
+           // binding.temperature.text= "0"
         }
         if (saveData.loadPer() != 0){
-            binding.progressBarHorizontal1.progress = saveData.loadPer()
+            binding.progressBarHorizontal1.progress = 0
             binding.tvTimePercent.text = "${saveData.loadPer()}%"
+            //binding.tvTimePercent.text="0%"
         }
 
         receiveData()
@@ -108,6 +118,8 @@ class TestFragment : Fragment() {
                 ).toByte())
             ) {
                 binding.tvNotify.text = "Đang kết nối"
+                binding.imCheck.visibility= View.VISIBLE
+                binding.imOverall.visibility= View.GONE
                 saveData.setSpray(buffer[3].toUInt().toInt())
                 saveData.setConnect(binding.tvNotify.text.toString())
                 Log.d("_SCALE", "${buffer[4].toUByte().toInt()}, temp:${buffer[5].toUInt()}")

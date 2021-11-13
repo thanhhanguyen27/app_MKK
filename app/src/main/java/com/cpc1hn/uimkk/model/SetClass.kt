@@ -16,3 +16,6 @@ class SetClass (
     @ColumnInfo(name = "temp") var  temp:String="",
     @ColumnInfo(name = "speedDomestor") var speedDomestor:String="",
     )
+{
+
+}

@@ -79,15 +79,15 @@ class RegisterFragment : Fragment() {
                             db.collection("accounts")
                                 .add(account)
                                 .addOnSuccessListener { _ ->
-
+                                    Toast.makeText(requireContext(), " Đăng ký thành công! ", Toast.LENGTH_LONG).show()
+                                    val saveData= SaveData(requireContext())
+                                    saveData.setMail(edtEmail.text.toString())
+                                    saveData.setPass(edtPass.text.toString())
+                                    requireActivity().onBackPressed()
                                 }
                                 .addOnFailureListener { e ->
                                     Toast.makeText(requireContext(), "Có lỗi xảy ", Toast.LENGTH_LONG).show()
                                 }
-                            Toast.makeText(requireContext(), " Đăng ký thành công! ", Toast.LENGTH_LONG).show()
-                            val saveData= SaveData(requireContext())
-                            saveData.setMail(edtEmail.text.toString())
-                            requireActivity().onBackPressed()
                         } else {
                             Toast.makeText(requireContext(), " Đăng ký thất bại! ${task.exception}", Toast.LENGTH_LONG).show()
                         }

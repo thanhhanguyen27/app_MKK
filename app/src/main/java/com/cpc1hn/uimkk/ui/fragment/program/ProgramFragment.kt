@@ -1,5 +1,6 @@
 package com.cpc1hn.uimkk.ui.fragment.program
 
+import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.ContentValues.TAG
@@ -61,6 +62,8 @@ class ProgramFragment : Fragment(), IconProgramAdapter.OnItemButtonClick  {
     private var socketReceive= DatagramSocket(null)
     private lateinit var a:ByteArray
     private val db = FirebaseFirestore.getInstance()
+    private lateinit var animator: ObjectAnimator
+    private lateinit var saveData: SaveData
 
 
 
@@ -80,6 +83,7 @@ class ProgramFragment : Fragment(), IconProgramAdapter.OnItemButtonClick  {
         ipAddress= "192.168.4.1"
         port= 8080
         checkOn(0x01, 0x0B, 0x00, 0x00, 0x00, 0x01)
+        saveData= SaveData(requireContext())
 
         binding.programRecyclerView.apply {
             adapter = programAdapter
@@ -91,6 +95,13 @@ class ProgramFragment : Fragment(), IconProgramAdapter.OnItemButtonClick  {
         }
         binding.imAccount.setOnClickListener {
             findNavController().navigate(ProgramFragmentDirections.actionNavHomeToAccountFragment(user))
+        }
+
+        binding.imOverall.setOnClickListener {
+            animator = ObjectAnimator.ofFloat( binding.imOverall , View.ROTATION, -360f, 0f )
+            animator.duration = 2000
+            animator.repeatCount= 4
+            animator.start()
         }
         search()
         receiveData()
@@ -176,6 +187,8 @@ class ProgramFragment : Fragment(), IconProgramAdapter.OnItemButtonClick  {
                             val user1 = it.toObject<UserFirebase>()
                             user= UserClass(1, user1!!.FullName, user1.Sex,user1.Position, user1.Email,user1.PhoneNumber )
                             viewModel.insertUser(user)
+                            saveData.setMail(user1.Email)
+                            saveData.setPass(user1.Password)
                         }
                     }
                 }
@@ -217,6 +230,8 @@ class ProgramFragment : Fragment(), IconProgramAdapter.OnItemButtonClick  {
                 ).toByte())
             ) {
                 binding.tvConnect.text = "Đang kết nối"
+                binding.imCheck.visibility= View.VISIBLE
+                binding.imOverall.visibility= View.GONE
             }
         }
     }
@@ -229,7 +244,10 @@ class ProgramFragment : Fragment(), IconProgramAdapter.OnItemButtonClick  {
                     listPrograms = ArrayList(result.map {
                         it.toObject<Program>()
                     })
+
+                    //viewModel.deleteAllProgram()
                     viewModel.insertListProgram(listPrograms)
+                    viewModel.updateAllProgram(listPrograms)
                 }
                 .addOnFailureListener { exception ->
                     viewModel.getAllProgram()
@@ -252,14 +270,15 @@ class ProgramFragment : Fragment(), IconProgramAdapter.OnItemButtonClick  {
         val edtNongdo:EditText = mDialogView.findViewById(R.id.edtNongdo)
         val edtThetich:EditText = mDialogView.findViewById(R.id.edtThetich)
         val sdf = SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.getDefault())
+        val uuid = UUID.randomUUID().toString()
         val currentDateandTime: String = sdf.format(Date())
             btOk.setOnClickListener {
                 val db = FirebaseFirestore.getInstance()
-                val room = hashMapOf("Concentration" to edtNongdo.text.toString().toInt(),
+                val room = hashMapOf("Concentration" to edtNongdo.text.toString().toInt(),"Id" to uuid,
                 "Creator" to user.FullName, "Email" to user.Email, "NameProgram" to edtRoom.text.toString()
                 , "TimeCreate" to currentDateandTime, "Volume" to edtThetich.text.toString().toInt())
 
-                val programNew = Program(edtRoom.text.toString(), edtNongdo.text.toString().toInt(),edtThetich.text.toString().toInt()
+                val programNew = Program(uuid, edtRoom.text.toString(), edtNongdo.text.toString().toInt(),edtThetich.text.toString().toInt()
                 , currentDateandTime, user.FullName, user.Email)
 
                 db.collection("programs").add(room)

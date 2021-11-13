@@ -104,7 +104,7 @@ class AccountFragment : Fragment() {
 
     private fun logOut() {
             auth.signOut()
-            sharedPrefsHelper.clearAndPutLogout()
+            //sharedPrefsHelper.clearAndPutLogout()
             val intent = Intent(requireContext(), LoginActivity::class.java)
             startActivity(intent)
             requireActivity().finish()

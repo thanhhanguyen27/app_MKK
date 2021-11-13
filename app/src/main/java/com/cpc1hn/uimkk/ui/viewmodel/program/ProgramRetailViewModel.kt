@@ -12,6 +12,12 @@ class ProgramRetailViewModel (app: Application): AndroidViewModel(app) {
         allHistory= MutableLiveData()
     }
 
+    fun getUsername():String {
+        val userDao = AppDatabase.getAppdatabase((getApplication()))?.userDao()
+        var username = userDao!!.getUsername()
+        return username
+    }
+
     fun getAllHistory(){
         val historyDao = AppDatabase.getAppdatabase((getApplication()))?.historyDao()
         var history = historyDao?.getAll()

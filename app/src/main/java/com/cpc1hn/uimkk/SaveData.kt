@@ -147,6 +147,16 @@ class SaveData(context:Context) {
         return sharedPreferences.getString("MAIL", "")!!
     }
 
+    fun setPass(pass:String){
+        val editor = sharedPreferences.edit()
+        editor.putString("PASS",pass)
+        editor.apply()
+    }
+
+    fun getPass():String{
+        return sharedPreferences.getString("PASS", "")!!
+    }
+
     fun setLocale(Lang:String){
         val locale = Locale(Lang)
         Locale.setDefault(locale)

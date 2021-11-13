@@ -3,7 +3,7 @@
     <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="colorPrimary">#0277bd</item>
         <item name="colorPrimaryDark">#004c8c</item>
-        <item name="colorAccent">#0177bd</item>
+        <item name="colorAccent">#21A2DE</item>
         <item name="android:actionMenuTextColor">#fff</item>
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
         <item name="backgroundColor">#F3F3F3</item>

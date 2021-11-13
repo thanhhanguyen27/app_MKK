@@ -7,6 +7,9 @@ import java.io.Serializable
 
 @Entity(tableName = "Program")
 class Program(
+    @PrimaryKey @ColumnInfo(name = "Id")
+    var id:String="",
+
     @ColumnInfo(name = "name")
     var NameProgram: String= "",
 
@@ -15,9 +18,6 @@ class Program(
 
     @ColumnInfo(name = "volumne")
     var Volume: Int=0,
-
-    @PrimaryKey @ColumnInfo(name = "Id")
-    var id:String="",
 
     @ColumnInfo(name = "timeCreate")
     var TimeCreate: String= "",

@@ -17,21 +17,23 @@
             app:layout_constraintTop_toTopOf="parent">
 
 
-        <fragment
-            android:id="@+id/navHostHome"
-            class="androidx.navigation.fragment.NavHostFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:defaultNavHost="true"
-            android:layout_alignParentBottom="true"
-            app:navGraph="@navigation/nav_main"
-            tools:ignore="MissingConstraints" />
+            <fragment
+                android:id="@+id/navHostHome"
+                class="androidx.navigation.fragment.NavHostFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentBottom="true"
+                app:defaultNavHost="true"
+                app:navGraph="@navigation/nav_main"
+                tools:ignore="MissingConstraints" />
 
         </RelativeLayout>
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:id="@+id/coordinatorLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:hideOnScroll="true"
+            app:layout_scrollFlags="scroll|enterAlways"
             app:layout_constraintBottom_toBottomOf="parent">
 
             <androidx.core.widget.NestedScrollView
@@ -49,8 +51,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/bottom_bar"
+                app:hideOnScroll="true"
+                app:layout_scrollFlags="scroll|enterAlways"
                 app:contentInsetLeft="0dp"
                 app:contentInsetStart="0dp"
+                app:fabCradleMargin= "4dp"
+                android:backgroundTint="@color/or"
+                android:background="@color/white"
                 app:contentInsetRight="0dp"
                 app:contentInsetEnd="0dp"
                 android:layout_gravity="bottom">
@@ -61,10 +68,15 @@
                     android:layout_alignParentBottom="true"
                     android:layout_gravity="bottom"
                     android:textSize="10sp"
+                    app:layout_behavior="@string/hide_bottom_view_on_scroll_behavior"
+                    app:itemIconTint="@drawable/tab_color"
+                    app:itemTextColor="@drawable/tab_color"
                     app:itemIconSize="22dp"
+                    android:shadowColor="@color/white"
                     android:outlineAmbientShadowColor="@android:color/transparent"
                     android:outlineSpotShadowColor="@android:color/transparent"
                     app:elevation="0.05dp"
+                    android:backgroundTint="@color/or"
                     app:menu="@menu/menu_home"
                     app:labelVisibilityMode="labeled"
                     android:background="@android:color/transparent">
@@ -75,9 +87,11 @@
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fab"
                 app:tint="@color/white"
-                app:borderWidth="0dp"
+                app:borderWidth="4dp"
+                android:elevation="0dp"
+                app:elevation="0dp"
+                app:backgroundTint="#D9D9D9"
                 android:backgroundTint="@color/or"
-                app:rippleColor="@color/white"
                 android:src="@drawable/qr"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -92,16 +106,16 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_gravity="bottom"
-            android:background="@android:color/transparent"
+            android:background="@color/white"
+            android:backgroundTint="@color/white"
             app:elevation="0dp"
+            android:alpha="0"
+            app:layout_behavior = "@string/hide_bottom_view_on_scroll_behavior"
             app:labelVisibilityMode="labeled"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
         </com.google.android.material.bottomnavigation.BottomNavigationView>
-
-
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

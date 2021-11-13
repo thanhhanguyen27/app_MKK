@@ -219,23 +219,22 @@
                         <LinearLayout
                             android:id="@+id/lnSetSpeed"
                             android:layout_width="match_parent"
+                            android:layout_gravity="center"
+                            android:gravity="center"
                             android:layout_height="wrap_content"
                             android:background="?attr/backgroundLight"
                             android:orientation="horizontal"
-                            android:visibility="gone"
+                            android:visibility="visible"
                             >
 
                             <LinearLayout
+                                android:gravity="center"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:layout_weight="1.4"
                                 android:weightSum="2">
 
-                                <TextView
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="0.3" />
 
                                 <EditText
                                     android:id="@+id/edtSpeed"
@@ -244,6 +243,7 @@
                                     android:layout_gravity="center"
                                     android:layout_weight="0.9"
                                     android:gravity="center"
+                                    android:inputType="number"
                                     android:hint="30-37 ml/phút"
                                     android:textColor="?attr/Text_head"
                                     android:textSize="16dp" />
@@ -251,7 +251,7 @@
                                 <Button
                                     android:id="@+id/btSaveSpeed"
                                     android:layout_width="0dp"
-                                    android:layout_height="35dp"
+                                    android:layout_height="40dp"
                                     android:layout_gravity="center"
                                     android:layout_marginLeft="20dp"
                                     android:layout_weight="0.4"
@@ -324,20 +324,17 @@
                             android:layout_height="wrap_content"
                             android:background="?attr/backgroundLight"
                             android:orientation="horizontal"
-                            android:visibility="gone"
+                            android:visibility="visible"
                             >
 
                             <LinearLayout
                                 android:layout_width="0dp"
+                                android:gravity="center"
+                                android:paddingBottom="10dp"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:layout_weight="1.4"
                                 android:weightSum="2">
-
-                                <TextView
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="0.3" />
 
                                 <EditText
                                     android:id="@+id/tvTemp"
@@ -347,13 +344,14 @@
                                     android:layout_weight="0.9"
                                     android:gravity="center"
                                     android:hint="0-100°C"
+                                    android:inputType="number"
                                     android:textColor="?attr/Text_head"
                                     android:textSize="16dp" />
 
                                 <Button
                                     android:id="@+id/btSave"
                                     android:layout_width="0dp"
-                                    android:layout_height="35dp"
+                                    android:layout_height="40dp"
                                     android:layout_gravity="center"
                                     android:layout_marginLeft="20dp"
                                     android:layout_weight="0.4"
@@ -366,11 +364,6 @@
 
                         </LinearLayout>
 
-                        <TextView
-                        android:id="@+id/tv3"
-                        style="@style/line"
-                        android:background="@color/grayline"
-                        android:backgroundTint="@color/grayline" />
 
 <!--                    <LinearLayout-->
 <!--                        android:id="@+id/lnLanguage"-->

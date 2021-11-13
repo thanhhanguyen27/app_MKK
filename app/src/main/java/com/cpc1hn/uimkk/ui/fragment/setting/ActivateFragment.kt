@@ -13,6 +13,7 @@ import androidx.databinding.DataBindingUtil
 import com.cpc1hn.uimkk.R
 import com.cpc1hn.uimkk.SaveData
 import com.cpc1hn.uimkk.databinding.ActivateFragmentBinding
+import com.cpc1hn.uimkk.model.SetClass
 import com.cpc1hn.uimkk.showDialogShort
 import com.cpc1hn.uimkk.ui.viewmodel.setting.ActivateViewModel
 import java.io.IOException
@@ -40,6 +41,7 @@ class ActivateFragment : Fragment() {
     private var B6= 0x01
     private var socketReceive= DatagramSocket(null)
     private lateinit var saveData: SaveData
+    private var setClass = SetClass()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -83,9 +85,12 @@ class ActivateFragment : Fragment() {
             btSwitchScale.setOnClickListener {
                 if (btSwitchScale.isChecked){
                     checkOn(B1, 0x02, B3, B4, B5, B6)
+                    val setClass = SetClass()
+                    setClass.scale=true
                     saveData.setActiveScale(true)
                 }else {
                     checkOff(B1, 0x02, B3, B4, B5, 0x00)
+                    setClass.scale = false
                     saveData.setActiveScale(false)
                 }
             }

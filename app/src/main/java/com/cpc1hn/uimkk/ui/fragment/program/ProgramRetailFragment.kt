@@ -17,6 +17,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.cpc1hn.uimkk.R
 import com.cpc1hn.uimkk.SaveData
+import com.cpc1hn.uimkk.convertStringToDateHHMMSS
 import com.cpc1hn.uimkk.databinding.ProgramRetailFragmentBinding
 import com.cpc1hn.uimkk.dateToLong
 import com.cpc1hn.uimkk.model.History
@@ -53,7 +54,7 @@ class ProgramRetailFragment: Fragment(){
     private var timeSpray: Int=0
     private var time1:String=""
     private var username: String=""
-    private lateinit var history: History
+    private  var history: History = History()
     private var histories:ArrayList<History> = arrayListOf()
     private var TAG="_HISTORY"
     private var socketReceive= DatagramSocket()
@@ -88,7 +89,7 @@ class ProgramRetailFragment: Fragment(){
         username=  ProgramRetailFragmentArgs.fromBundle(requireArguments()).username
         hourStart=ProgramRetailFragmentArgs.fromBundle(requireArguments()).hourStart
         spraySpeed=  ProgramRetailFragmentArgs.fromBundle(requireArguments()).speedSpray
-        binding.tvTime.text = timeRun
+        binding.tvTime.text =  convertSectoDay(timeSum)
         binding.lnBack.setOnClickListener {
             requireActivity().onBackPressed()
         }
@@ -185,17 +186,18 @@ class ProgramRetailFragment: Fragment(){
                         ((c.toDouble() / timeSum.toDouble()) * 100).toInt()
                 }
                 binding.progressBarTime.max = 100
-                Log.d(TAG, "${binding.progressBarTime.progress}  $timeSum  $timeRun")
+                Log.d("_TIME", "${binding.progressBarTime.progress}  $timeSum  $timeRun")
                 binding.tvTime.text = convertSectoDay(timeRun.toInt())
+               // binding.tvTime.text= timeRun.convertStringToDateHHMMSS().toString()
                 if (timeRun == 0.toString()) {
                     checkOn(0x03, 0x03, 0x00, 0x00, 0x00, 0x01)
                     Log.d("_UDP", "send 030300000000")
-                    //timeSpray = convertSectoDay(timeSum)
+                  //  timeSpray = convertSectoDay(timeSum)
                     timeSpray= timeSum
-                    // binding.progressBarTime.setProgress(0)
+//                    binding.progressBarTime.setProgress(0)
                     error = 0
                     saveHistory()
-                    // binding.tvTime.setText(convertSectoDay(0))
+                    //binding.tvTime.setText(convertSectoDay(0))
                     notifyEnd()
                 }
                 if (timeRun != 0.toString()) {
@@ -288,8 +290,8 @@ class ProgramRetailFragment: Fragment(){
             Concentration= nongdo,
             Volume= thetich,
             TimeEnd=  hourEnd,
-            timeEndLong= dateToLong(history.TimeEnd, "yyyy/MM/dd HH:mm:ss"),
-            Creator=username,
+            timeEndLong= dateToLong(hourEnd, "yyyy/MM/dd HH:mm:ss"),
+            Creator = viewModel.getUsername(),
            Room= program.NameProgram,
             TimeRun= timeSpray,
             Error= error,

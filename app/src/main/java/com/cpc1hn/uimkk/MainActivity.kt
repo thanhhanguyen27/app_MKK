@@ -22,6 +22,7 @@ import com.cpc1hn.uimkk.helper.hideKeyboard
 import com.cpc1hn.uimkk.helper.showToast
 import com.cpc1hn.uimkk.model.Program
 import com.cpc1hn.uimkk.ui.fragment.program.ProgramFragmentDirections
+import com.cpc1hn.uimkk.ui.fragment.test.MotorACFragment
 import com.cpc1hn.uimkk.ui.viewmodel.ProgramViewModel
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.zxing.integration.android.IntentIntegrator
@@ -62,7 +63,7 @@ class MainActivity : AppCompatActivity(), DrawerLocker {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
     }
 
     private fun setupBottomNavMenu(navController: NavController) {
@@ -139,16 +140,19 @@ class MainActivity : AppCompatActivity(), DrawerLocker {
             Log.d("_QRCODE", "ko null")
             if (result.contents != null){
                 try {
-                    val  programTime = result.contents.toString()
-                    Log.d("_QRCODE", programTime )
+                    val idProgram = result.contents.toString()
+                    Log.d("_QRCODE", " result: $idProgram ")
+//                    val myFragment = MotorACFragment()
+//                    supportFragmentManager.beginTransaction().replace(R.id.container,myFragment).commit()
+
                     for (program in listPrograms){
-                        if (program.TimeCreate.convertStringToDate()?.compareTo(programTime.convertStringToDate()) ==0){
+                        if (program.id == idProgram){
                             when(navController.currentDestination?.id){
                                 R.id.nav_home -> {
-                                    showToast("Navigate to fragment")
-                                    //navController.navigate(ProgramFragmentDirections.actionNavHomeToProgramDependFragment(program, viewModel.getUsername()))
-                                    Log.d("_QRCODE"," time program: ${program.NameProgram}, ${viewModel.getUsername()}")
-                                    navController.navigate(R.id.programDependFragment, bundleOf("program" to program, "username" to viewModel.getUsername()))
+                                   // showToast("Navigate to fragment")
+                                    navController.navigate(ProgramFragmentDirections.actionNavHomeToProgramDependFragment(program, viewModel.getUsername()))
+                                    Log.d("_QRCODE","id: ${program.id}, ${program.NameProgram}, ${viewModel.getUsername()}")
+                                  // navController.navigate(R.id.programDependFragment, bundleOf("program" to program, "username" to viewModel.getUsername()))
                                 }
 
                                 R.id.nav_test -> {
@@ -164,13 +168,13 @@ class MainActivity : AppCompatActivity(), DrawerLocker {
                                 }
                             }
                         }else{
-                            Log.d("_QRCODE"," not equal time: ${program.TimeCreate}")
                             Toast.makeText(this, "Chương trình này không tồn tại", Toast.LENGTH_SHORT).show()
                         }
                     }
 
                 }catch (e: Exception){
-                    Toast.makeText(this, "Chương trình này không tồn tại", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Có lỗi xảy ra: $e", Toast.LENGTH_SHORT).show()
+                    Log.d("_QRCODE","Có lỗi xảy ra:  $e")
                 }
             }
         } else {
