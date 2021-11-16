@@ -505,7 +505,7 @@ class ProgramDependFragment : Fragment() {
     }
 
     private fun updateProgram(){
-        val programUpdate = Program(program.id, program.NameProgram, binding.tvNongdo.text.toString().toInt(),binding.tvTheTich.text.toString().toInt(), program.TimeCreate,username, program.Email  )
+        val programUpdate = Program(program.Id, program.NameProgram, binding.tvNongdo.text.toString().toInt(),binding.tvTheTich.text.toString().toInt(), program.TimeCreate,username, program.Email  )
         viewModel.updateProgram(programUpdate)
         hideKeyboard()
         Toast.makeText(context, "Đã lưu chương trình", Toast.LENGTH_SHORT).show()

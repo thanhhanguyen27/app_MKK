@@ -38,11 +38,11 @@ class LoginFragment : Fragment() {
        binding= DataBindingUtil.inflate(inflater,R.layout.login_fragment, container, false)
         auth = FirebaseAuth.getInstance()
 
-        val currentuser = auth.currentUser
-        if(currentuser != null) {
-            startActivity(Intent( requireContext(), MainActivity::class.java))
-            requireActivity().finish()
-        }
+//        val currentuser = auth.currentUser
+//        if(currentuser != null) {
+//            startActivity(Intent( requireContext(), MainActivity::class.java))
+//            requireActivity().finish()
+//        }
         login()
         saveData= SaveData(requireContext())
         if (saveData.getMail().isNotEmpty()){

@@ -232,6 +232,7 @@ class ProgramFragment : Fragment(), IconProgramAdapter.OnItemButtonClick  {
                 binding.tvConnect.text = "Đang kết nối"
                 binding.imCheck.visibility= View.VISIBLE
                 binding.imOverall.visibility= View.GONE
+                saveData.setSpray(buffer[2].toUInt().toInt())
             }
         }
     }
@@ -250,7 +251,6 @@ class ProgramFragment : Fragment(), IconProgramAdapter.OnItemButtonClick  {
                     viewModel.updateAllProgram(listPrograms)
                 }
                 .addOnFailureListener { exception ->
-                    viewModel.getAllProgram()
                 }
         viewModel.getAllProgram()
     }

@@ -21,8 +21,11 @@ import com.cpc1hn.uimkk.databinding.ActivityMainBinding
 import com.cpc1hn.uimkk.helper.hideKeyboard
 import com.cpc1hn.uimkk.helper.showToast
 import com.cpc1hn.uimkk.model.Program
+import com.cpc1hn.uimkk.ui.fragment.history.HistoryFragmentDirections
 import com.cpc1hn.uimkk.ui.fragment.program.ProgramFragmentDirections
+import com.cpc1hn.uimkk.ui.fragment.setting.SettingFragmentDirections
 import com.cpc1hn.uimkk.ui.fragment.test.MotorACFragment
+import com.cpc1hn.uimkk.ui.fragment.test.TestFragmentDirections
 import com.cpc1hn.uimkk.ui.viewmodel.ProgramViewModel
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.zxing.integration.android.IntentIntegrator
@@ -142,36 +145,31 @@ class MainActivity : AppCompatActivity(), DrawerLocker {
                 try {
                     val idProgram = result.contents.toString()
                     Log.d("_QRCODE", " result: $idProgram ")
-//                    val myFragment = MotorACFragment()
-//                    supportFragmentManager.beginTransaction().replace(R.id.container,myFragment).commit()
-
-                    for (program in listPrograms){
-                        if (program.id == idProgram){
-                            when(navController.currentDestination?.id){
-                                R.id.nav_home -> {
-                                   // showToast("Navigate to fragment")
-                                    navController.navigate(ProgramFragmentDirections.actionNavHomeToProgramDependFragment(program, viewModel.getUsername()))
-                                    Log.d("_QRCODE","id: ${program.id}, ${program.NameProgram}, ${viewModel.getUsername()}")
-                                  // navController.navigate(R.id.programDependFragment, bundleOf("program" to program, "username" to viewModel.getUsername()))
-                                }
-
-                                R.id.nav_test -> {
-                                    navController.navigate(ProgramFragmentDirections.actionNavHomeToProgramDependFragment(program, viewModel.getUsername()))
-                                }
-
-                                R.id.nav_history -> {
-                                    navController.navigate(ProgramFragmentDirections.actionNavHomeToProgramDependFragment(program, viewModel.getUsername()))
-                                }
-
-                                R.id.nav_test -> {
-                                    navController.navigate(ProgramFragmentDirections.actionNavHomeToProgramDependFragment(program, viewModel.getUsername()))
-                                }
+                    super.onResume()
+                    val program = listPrograms.filter { it.Id== idProgram }
+                    if (program.isEmpty()){
+                        Toast.makeText(this, "Chương trình không tồn tại!", Toast.LENGTH_SHORT).show()
+                    }else{
+                        when(navController.currentDestination?.id) {
+                            R.id.nav_home -> {
+                                navController.navigate(ProgramFragmentDirections.actionNavHomeToProgramDependFragment(program.first(), viewModel.getUsername()))
                             }
-                        }else{
-                            Toast.makeText(this, "Chương trình này không tồn tại", Toast.LENGTH_SHORT).show()
+
+                            R.id.nav_test -> {
+                                navController.navigate(TestFragmentDirections.actionNavTestToProgramDependFragment(program.first(), viewModel.getUsername()))
+
+                            }
+
+                            R.id.nav_history -> {
+                                navController.navigate(HistoryFragmentDirections.actionNavHistoryToProgramDependFragment(program.first(), viewModel.getUsername()))
+
+                            }
+
+                            R.id.nav_setting -> {
+                                navController.navigate(SettingFragmentDirections.actionNavSettingToProgramDependFragment(program.first(), viewModel.getUsername()))
+                            }
                         }
                     }
-
                 }catch (e: Exception){
                     Toast.makeText(this, "Có lỗi xảy ra: $e", Toast.LENGTH_SHORT).show()
                     Log.d("_QRCODE","Có lỗi xảy ra:  $e")

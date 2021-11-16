@@ -8,7 +8,7 @@ import java.io.Serializable
 @Entity(tableName = "Program")
 class Program(
     @PrimaryKey @ColumnInfo(name = "Id")
-    var id:String="",
+    var Id:String="",
 
     @ColumnInfo(name = "name")
     var NameProgram: String= "",

@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_nav_history_to_historyRetailFragment"
             app:destination="@id/historyRetailFragment" />
+        <action
+            android:id="@+id/action_nav_history_to_programDependFragment"
+            app:destination="@id/programDependFragment" />
     </fragment>
     <fragment
         android:id="@+id/nav_home"
@@ -40,6 +43,9 @@
         <action
             android:id="@+id/action_nav_setting_to_scaleFragment"
             app:destination="@id/scaleFragment" />
+        <action
+            android:id="@+id/action_nav_setting_to_programDependFragment"
+            app:destination="@id/programDependFragment" />
     </fragment>
     <fragment
         android:id="@+id/nav_test"
@@ -52,6 +58,9 @@
         <action
             android:id="@+id/action_nav_test_to_motorACFragment"
             app:destination="@id/motorACFragment" />
+        <action
+            android:id="@+id/action_nav_test_to_programDependFragment"
+            app:destination="@id/programDependFragment" />
     </fragment>
     <fragment
         android:id="@+id/programDependFragment"

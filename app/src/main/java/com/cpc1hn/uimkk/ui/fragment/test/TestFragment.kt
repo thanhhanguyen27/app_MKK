@@ -120,7 +120,7 @@ class TestFragment : Fragment() {
                 binding.tvNotify.text = "Đang kết nối"
                 binding.imCheck.visibility= View.VISIBLE
                 binding.imOverall.visibility= View.GONE
-                saveData.setSpray(buffer[3].toUInt().toInt())
+                saveData.setSpray(buffer[2].toUInt().toInt())
                 saveData.setConnect(binding.tvNotify.text.toString())
                 Log.d("_SCALE", "${buffer[4].toUByte().toInt()}, temp:${buffer[5].toUInt()}")
                 binding.temperature.text = buffer[5].toUInt().toString()
