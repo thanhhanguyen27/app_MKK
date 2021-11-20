@@ -241,18 +241,8 @@ class  HistoryFragment : Fragment(), IconHistoryAdapter.OnItemButtonClick {
 
     private fun checkOverall(){
         if (isInternetAvailable()){
-            if (histories.isNotEmpty()){
-                for (history in histories){
-                    Log.d("_UDP", "$histories")
-                    if (history.Status == 0){
-                        upHistorytoFirebase(history)
-                    }
-                    viewModel.deleteHistoryInfo()
-                    getHistoryFirebase()
-                }
-            }else{
-                getHistoryFirebase()
-            }
+            viewModel.deleteHistoryInfo()
+            getHistoryFirebase()
         }else{
             showDialogShort("Có lỗi", "Kiểm tra lại kết nối internet của bạn")
         }
@@ -308,6 +298,7 @@ class  HistoryFragment : Fragment(), IconHistoryAdapter.OnItemButtonClick {
     }
 
     private fun getHistoryFirebase(){
+
         val db = FirebaseFirestore.getInstance()
         db.collection("histories").get()
             .addOnSuccessListener { result ->
@@ -317,15 +308,15 @@ class  HistoryFragment : Fragment(), IconHistoryAdapter.OnItemButtonClick {
                 for (history in histories){
                     history.timeEndLong = dateToLong(history.TimeEnd, "yyyy/MM/dd HH:mm:ss")
                 }
+
                 viewModel.insertAll(histories)
                 Toast.makeText(context, "Đồng bộ thành công", Toast.LENGTH_SHORT).show()
             }
-
     }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(HistoryViewModel::class.java)
-        // TODO: Use the ViewModel
     }
 
 
@@ -336,5 +327,4 @@ class  HistoryFragment : Fragment(), IconHistoryAdapter.OnItemButtonClick {
             )
         )
     }
-
 }

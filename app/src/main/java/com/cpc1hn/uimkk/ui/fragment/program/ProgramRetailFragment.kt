@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -299,9 +300,31 @@ class ProgramRetailFragment: Fragment(){
             SpeedSpray= spraySpeed,
             Status = 0
         )
-
+        upHistorytoFirebase(history)
         viewModel.insert(history)
         sendInfo()
+    }
+    private fun upHistorytoFirebase(history: History){
+        val historyFirebase= hashMapOf( "TimeStart" to history.TimeStart,
+            "CodeMachine" to history.CodeMachine,
+            "Concentration" to history.Concentration,
+            "Volume" to history.Volume,
+            "TimeEnd" to history.TimeEnd,
+            "Creator" to history.Creator,
+            "Room" to history.Room,
+            "TimeRun" to history.TimeRun,
+            "Error" to history.Error,
+            "SpeedSpray" to history.SpeedSpray,
+            "TimeProgram" to history.TimeCreateProgram,
+            "Status" to 1)
+        val db = FirebaseFirestore.getInstance()
+        db.collection("histories").add(historyFirebase)
+            .addOnSuccessListener {
+
+            }
+            .addOnFailureListener { e ->
+                Toast.makeText(context, "Có lỗi xảy ra $e", Toast.LENGTH_SHORT).show()
+            }
     }
 
     private fun convertSectoDay(time: Int):String {
