@@ -224,7 +224,7 @@
                             android:layout_height="wrap_content"
                             android:background="?attr/backgroundLight"
                             android:orientation="horizontal"
-                            android:visibility="visible"
+                            android:visibility="gone"
                             >
 
                             <LinearLayout
@@ -324,7 +324,7 @@
                             android:layout_height="wrap_content"
                             android:background="?attr/backgroundLight"
                             android:orientation="horizontal"
-                            android:visibility="visible"
+                            android:visibility="gone"
                             >
 
                             <LinearLayout

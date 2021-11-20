@@ -22,7 +22,7 @@
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:hardwareAccelerated="false"
+        android:hardwareAccelerated="true"
         android:configChanges="orientation|screenSize"
         android:theme="@style/AppTheme">
         <meta-data android:name="com.google.android.gms.version"
@@ -31,14 +31,13 @@
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
 
         <activity android:name="com.cpc1hn.uimkk.MainActivity"
-            android:windowSoftInputMode="adjustPan|adjustResize">
+            android:windowSoftInputMode="adjustPan">
 
         </activity>
         <activity
