@@ -204,7 +204,7 @@
                                     android:textColor="@color/load"
                                     android:layout_gravity="center"
                                     android:layout_height="wrap_content"
-                                    android:text="30ml/phut"/>
+                                    android:text="ml/phut"/>
                             </LinearLayout>
 
                             <TextView
@@ -299,7 +299,7 @@
 
                             <TextView
                                 android:id="@+id/tvSetTemp"
-                                android:layout_weight="2"
+                                android:layout_weight="1.1"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
@@ -307,6 +307,16 @@
                                 android:text="@string/caidatnhiet"
                                 android:textColor="?attr/Text_head"
                                 android:textSize="16dp" />
+                            <TextView
+                                android:id="@+id/tvTempNow"
+                                android:layout_width="0dp"
+                                android:layout_weight="0.8"
+                                android:textSize="14sp"
+                                android:gravity="center|end"
+                                android:textColor="@color/load"
+                                android:layout_gravity="center"
+                                android:layout_height="wrap_content"
+                                android:text="°C"/>
                         </LinearLayout>
 
                         <TextView

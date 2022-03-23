@@ -10,14 +10,12 @@ class ProgramRetailViewModel (app: Application): AndroidViewModel(app) {
     lateinit var allHistory : MutableLiveData<List<History>>
     init {
         allHistory= MutableLiveData()
+        getAllHistory()
     }
 
-    fun getUsername():String {
-        val userDao = AppDatabase.getAppdatabase((getApplication()))?.userDao()
-        var username = userDao!!.getUsername()
-        return username
+    fun getAllHistoryObserves(): MutableLiveData<List<History>> {
+        return allHistory
     }
-
     fun getAllHistory(){
         val historyDao = AppDatabase.getAppdatabase((getApplication()))?.historyDao()
         var history = historyDao?.getAll()
@@ -26,7 +24,11 @@ class ProgramRetailViewModel (app: Application): AndroidViewModel(app) {
     fun insert(history: History){
         val historyDao= AppDatabase.getAppdatabase((getApplication()))?.historyDao()
         historyDao!!.insert(history)
-        getAllHistory()
+    }
+
+    fun update(history: History){
+        val historyDao= AppDatabase.getAppdatabase((getApplication()))?.historyDao()
+        historyDao!!.update(history)
     }
     fun getSpeed():String{
         val setDao = AppDatabase.getAppdatabase((getApplication()))?.setDao()

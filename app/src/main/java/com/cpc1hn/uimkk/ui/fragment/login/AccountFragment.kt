@@ -22,6 +22,7 @@ import com.cpc1hn.uimkk.LoginActivity
 import com.cpc1hn.uimkk.R
 import com.cpc1hn.uimkk.SaveData
 import com.cpc1hn.uimkk.databinding.AccountFragmentBinding
+import com.cpc1hn.uimkk.model.History
 import com.cpc1hn.uimkk.model.UserClass
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
@@ -67,6 +68,7 @@ class AccountFragment : Fragment() {
         binding.btLogout.setOnClickListener {
                 showlogOut()
         }
+        binding.history = History()
         return binding.root
     }
 

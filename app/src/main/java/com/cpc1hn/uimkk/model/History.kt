@@ -11,34 +11,58 @@ class History(
     @PrimaryKey
     @ColumnInfo(name = "TimeStart")
     var TimeStart: String = "",
+
     @ColumnInfo(name = "CodeMachine")
     var CodeMachine:String="",
+
     @ColumnInfo(name = "Concentration")
     var Concentration: Int= 0,
+
     @ColumnInfo(name = "Volume")
     var Volume: Int = 0,
+
     @ColumnInfo(name = "hourStart")
     var hourStart:String="",
+
     @ColumnInfo(name = "TimeEnd")
     var TimeEnd: String="",
+
     @ColumnInfo(name = "timeEndLong")
     var timeEndLong: Long=0,
+
     @ColumnInfo(name = "hourEnd")
     var hourEnd:String="",
+
     @ColumnInfo(name = "Creator")
     var Creator: String = "",
+
     @ColumnInfo(name = "Room")
     var Room:String ="",
+
     @ColumnInfo(name = "TimeRun")
     var TimeRun: Int= 0,
+
     @ColumnInfo(name = "Error")
     var Error: Int = 0,
+
     @ColumnInfo(name = "SpeedSpray")
     var SpeedSpray: Int = 0,
+
     @ColumnInfo(name = "Status")
     var Status: Int=0,
+
     @ColumnInfo(name="TimeProgram")
-    var TimeCreateProgram: String=""
+    var TimeCreateProgram: String="",
+
+    @ColumnInfo(name = "save")
+    var save: Boolean = false,
+
+    @ColumnInfo(name = "timeSpeed")
+    var timeSpeed : String = "",
+
+    @ColumnInfo(name = "timeProgramOff")
+    var timeProgramOff : Int = 0
+
 ): Serializable {
     fun isNoCode(): Boolean {
         return Status==0

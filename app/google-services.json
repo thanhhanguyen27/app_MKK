@@ -1,24 +1,25 @@
 {
   "project_info": {
     "project_number": "1064393816695",
+    "firebase_url": "https://mkk-b76da-default-rtdb.firebaseio.com",
     "project_id": "mkk-b76da",
     "storage_bucket": "mkk-b76da.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1064393816695:android:d5fbcd74d195c2548ea472",
+        "mobilesdk_app_id": "1:1064393816695:android:5685d62daa8962198ea472",
         "android_client_info": {
           "package_name": "com.cpc1hn.uimkk"
         }
       },
       "oauth_client": [
         {
-          "client_id": "1064393816695-6e679c60hrekr991mmk8jr6pbcslu0pa.apps.googleusercontent.com",
+          "client_id": "1064393816695-ghtmeekg3i2nfvf3ij4l3f7a0lggdli9.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.cpc1hn.uimkk",
-            "certificate_hash": "871783bfe5a40445b54b914e0589ff77c45d82e7"
+            "certificate_hash": "5e2f48d5723f04903564ee0d21cdb8df927b073b"
           }
         },
         {
@@ -37,6 +38,13 @@
             {
               "client_id": "1064393816695-2ni87gj9c8ls90um6dbmvmlsjp7df5p5.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "1064393816695-66rpsrl78govhm3vfn28vnimn7bncrg8.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "Anhthanh.MKK-IOS"
+              }
             }
           ]
         }

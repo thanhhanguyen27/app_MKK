@@ -241,8 +241,18 @@ class  HistoryFragment : Fragment(), IconHistoryAdapter.OnItemButtonClick {
 
     private fun checkOverall(){
         if (isInternetAvailable()){
-            viewModel.deleteHistoryInfo()
-            getHistoryFirebase()
+            if (histories.isNotEmpty()){
+                for (history in histories){
+                    Log.d("_UDP", "$histories")
+                    if (history.Status == 0){
+                        upHistorytoFirebase(history)
+                    }
+                    viewModel.deleteHistoryInfo()
+                    getHistoryFirebase()
+                }
+            }else{
+                getHistoryFirebase()
+            }
         }else{
             showDialogShort("Có lỗi", "Kiểm tra lại kết nối internet của bạn")
         }
@@ -250,7 +260,7 @@ class  HistoryFragment : Fragment(), IconHistoryAdapter.OnItemButtonClick {
 
 
     private fun upHistorytoFirebase(history: History){
-                val historyFirebase= hashMapOf( "TimeStart" to history.TimeStart,
+        val historyFirebase= hashMapOf( "TimeStart" to history.TimeStart,
             "CodeMachine" to history.CodeMachine,
             "Concentration" to history.Concentration,
             "Volume" to history.Volume,
@@ -260,9 +270,9 @@ class  HistoryFragment : Fragment(), IconHistoryAdapter.OnItemButtonClick {
             "TimeRun" to history.TimeRun,
             "Error" to history.Error,
             "SpeedSpray" to history.SpeedSpray,
-                    "TimeProgram" to history.TimeCreateProgram,
+            "TimeProgram" to history.TimeCreateProgram,
             "Status" to 1)
-                val db = FirebaseFirestore.getInstance()
+        val db = FirebaseFirestore.getInstance()
         db.collection("histories").add(historyFirebase)
             .addOnSuccessListener {
 
@@ -298,7 +308,6 @@ class  HistoryFragment : Fragment(), IconHistoryAdapter.OnItemButtonClick {
     }
 
     private fun getHistoryFirebase(){
-
         val db = FirebaseFirestore.getInstance()
         db.collection("histories").get()
             .addOnSuccessListener { result ->
@@ -308,15 +317,15 @@ class  HistoryFragment : Fragment(), IconHistoryAdapter.OnItemButtonClick {
                 for (history in histories){
                     history.timeEndLong = dateToLong(history.TimeEnd, "yyyy/MM/dd HH:mm:ss")
                 }
-
                 viewModel.insertAll(histories)
                 Toast.makeText(context, "Đồng bộ thành công", Toast.LENGTH_SHORT).show()
             }
-    }
 
+    }
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(HistoryViewModel::class.java)
+        // TODO: Use the ViewModel
     }
 
 
@@ -327,4 +336,7 @@ class  HistoryFragment : Fragment(), IconHistoryAdapter.OnItemButtonClick {
             )
         )
     }
+
+
+
 }

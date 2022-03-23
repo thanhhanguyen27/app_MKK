@@ -3,33 +3,36 @@ package com.cpc1hn.uimkk.ui.viewmodel.program
 import android.app.Application
 import androidx.lifecycle.*
 import com.cpc1hn.uimkk.dao.AppDatabase
+import com.cpc1hn.uimkk.model.History
 import com.cpc1hn.uimkk.model.Program
 import com.cpc1hn.uimkk.model.SetClass
 
 class ProgramDependViewModel (app: Application): AndroidViewModel(app)  {
-    lateinit var allSetting: MutableLiveData<SetClass>
-
+    lateinit var allHistory : MutableLiveData<List<History>>
     init {
-        allSetting = MutableLiveData()
-    }
-    fun getAllSet(){
-        val setDao = AppDatabase.getAppdatabase((getApplication()))?.setDao()
-        var setting = setDao?.getId()
-        allSetting.postValue(setting)
+        allHistory= MutableLiveData()
     }
 
+    fun getAllHistory(){
+        val historyDao = AppDatabase.getAppdatabase((getApplication()))?.historyDao()
+        var history = historyDao?.getAll()
+        allHistory.postValue(history)
+    }
+    fun getAllHistoryObserves(): MutableLiveData<List<History>>{
+        return allHistory
+    }
     fun updateProgram(program: Program){
         val programDao = AppDatabase.getAppdatabase((getApplication()))?.programDao()
         programDao?.update(program)
     }
-    fun getSpeed():String{
-        val setDao = AppDatabase.getAppdatabase((getApplication()))?.setDao()
-        var setting = setDao?.getSpeed()!!
-        return setting
+    fun update(history: History){
+        val historyDao = AppDatabase.getAppdatabase((getApplication()))?.historyDao()
+        historyDao!!.update(history)
+        getAllHistory()
     }
-
-    fun getAllChecksObserves(): MutableLiveData<SetClass> {
-        return allSetting
+    fun insert(history: History){
+        val historyDao = AppDatabase.getAppdatabase((getApplication()))?.historyDao()
+        historyDao!!.insert(history)
     }
 
 }

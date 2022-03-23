@@ -76,8 +76,10 @@ class SettingFragment : Fragment() {
 
         if (saveData.loadSpray() != 0){
             binding.tvSpeedNow.text= "${saveData.loadSpray()}ml/phút"
-        }else{
-            binding.tvSpeedNow.text= "0ml/phút"
+        }
+
+        if (saveData.loadTempSetting().isNotEmpty()){
+            binding.tvTempNow.text = "${saveData.loadTempSetting()}°C"
         }
 //
 //        viewModel.getAllSet()
@@ -119,13 +121,14 @@ class SettingFragment : Fragment() {
                                    // binding.edtSpeed.text = edtSpeed.text
                                     checkOn(0x02, 0x06, 0x00, 0x00, 0x00, edtSpeed.text.toString().toInt())
                                     Log.d("_UDP", "speed: ${edtSpeed.text.toString().toInt()}")
-                                    hideKeyboard()
+                                    saveData.setSpray(binding.edtSpeed.text.toString().toInt())
+                                    binding.tvSpeedNow.text= "${binding.edtSpeed.text}ml/phút"
                                     Toast.makeText(context,"Đã lưu tốc độ phun", Toast.LENGTH_SHORT).show()
                                 }
                                 if ( (edtSpeed.text.toString().toInt()<30) or (edtSpeed.text.toString().toInt()>37)){
-                                    hideKeyboard()
                                     warningSpeed()
                                 }
+                                hideKeyboard()
                             }else{
                                 hideKeyboard()
                                 val builder = AlertDialog.Builder(
@@ -167,7 +170,6 @@ class SettingFragment : Fragment() {
                                         .toInt() > 100) or (binding.tvTemp.text.toString()
                                         .toInt() < 0)
                                 ) {
-                                    hideKeyboard()
                                     val builder = AlertDialog.Builder(
                                         requireContext(),
                                         R.style.AlertDialogTheme
@@ -200,8 +202,10 @@ class SettingFragment : Fragment() {
                                         0x00,
                                         binding.tvTemp.text.toString().toInt()
                                     )
+                                    binding.tvTempNow.text = "${binding.tvTemp.text}°C"
                                     saveData.setTempSetting(binding.tvTemp.text.toString())
                                 }
+                                hideKeyboard()
                             } else {
                                 hideKeyboard()
                                 val builder = AlertDialog.Builder(

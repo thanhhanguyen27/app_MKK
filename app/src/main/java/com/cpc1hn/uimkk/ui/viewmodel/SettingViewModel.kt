@@ -35,10 +35,10 @@ class SettingViewModel(app: Application): AndroidViewModel(app)  {
         return setting
     }
 
-
     fun update(setting: SetClass){
         val setDao = AppDatabase.getAppdatabase((getApplication()))?.setDao()
         setDao!!.insert(setting)
+
     }
 
 

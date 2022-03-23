@@ -91,7 +91,7 @@ class ProgramFragment : Fragment(), IconProgramAdapter.OnItemButtonClick  {
         }
         //username= viewModel.getUser().name
         binding.btAdd.setOnClickListener {
-           addProgram()
+            addProgram()
         }
         binding.imAccount.setOnClickListener {
             findNavController().navigate(ProgramFragmentDirections.actionNavHomeToAccountFragment(user))
@@ -109,13 +109,13 @@ class ProgramFragment : Fragment(), IconProgramAdapter.OnItemButtonClick  {
         saveData.setCheckPermissionLocation(requestLocationPermission())
         viewModel.getAllProgramObserves().observe(viewLifecycleOwner,{
             if (it.isNotEmpty()){
-                programAdapter.setListData(ArrayList(it))
-                listPrograms= ArrayList(it)
+                programAdapter.programs = ArrayList(it)
+                programAdapter.notifyDataSetChanged()
             }
         })
 
         return binding.root
-        }
+    }
     private fun search(){
         binding.imSearch.setOnClickListener {
             TransitionManager.beginDelayedTransition(binding.lnMain)
@@ -181,7 +181,7 @@ class ProgramFragment : Fragment(), IconProgramAdapter.OnItemButtonClick  {
         db.collection("accounts").whereEqualTo("Email",email).get()
             .addOnSuccessListener { documents ->
                 for (document in documents) {
-                  val id:String= document.id
+                    val id:String= document.id
                     db.collection("accounts").document(id).get().addOnSuccessListener {
                         if (it.data!=null){
                             val user1 = it.toObject<UserFirebase>()
@@ -225,6 +225,7 @@ class ProgramFragment : Fragment(), IconProgramAdapter.OnItemButtonClick  {
 
     private fun display(buffer: ByteArray){
         activity?.runOnUiThread {
+            Log.d("_RECEIVE", "receive data: ${buffer.toUByteArray()}")
             if ((buffer[0] == 0x03.toByte()) && (buffer[1] == 0x04.toByte()) && (buffer[6] == checkSum(
                     buffer
                 ).toByte())
@@ -239,19 +240,19 @@ class ProgramFragment : Fragment(), IconProgramAdapter.OnItemButtonClick  {
 
     private fun getProgram(){
         val db = FirebaseFirestore.getInstance()
-            db.collection("programs").get()
-                .addOnSuccessListener { result ->
+        db.collection("programs").get()
+            .addOnSuccessListener { result ->
 
-                    listPrograms = ArrayList(result.map {
-                        it.toObject<Program>()
-                    })
+                listPrograms = ArrayList(result.map {
+                    it.toObject<Program>()
+                })
 
-                    //viewModel.deleteAllProgram()
-                    viewModel.insertListProgram(listPrograms)
-                    viewModel.updateAllProgram(listPrograms)
-                }
-                .addOnFailureListener { exception ->
-                }
+                //viewModel.deleteAllProgram()
+                viewModel.insertListProgram(listPrograms)
+
+            }
+            .addOnFailureListener { exception ->
+            }
         viewModel.getAllProgram()
     }
 
@@ -272,35 +273,35 @@ class ProgramFragment : Fragment(), IconProgramAdapter.OnItemButtonClick  {
         val sdf = SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.getDefault())
         val uuid = UUID.randomUUID().toString()
         val currentDateandTime: String = sdf.format(Date())
-            btOk.setOnClickListener {
-                val db = FirebaseFirestore.getInstance()
-                val room = hashMapOf("Concentration" to edtNongdo.text.toString().toInt(),"Id" to uuid,
+        btOk.setOnClickListener {
+            val db = FirebaseFirestore.getInstance()
+            val room = hashMapOf("Concentration" to edtNongdo.text.toString().toInt(),"Id" to uuid,
                 "Creator" to user.FullName, "Email" to user.Email, "NameProgram" to edtRoom.text.toString()
                 , "TimeCreate" to currentDateandTime, "Volume" to edtThetich.text.toString().toInt())
 
-                val programNew = Program(uuid, edtRoom.text.toString(), edtNongdo.text.toString().toInt(),edtThetich.text.toString().toInt()
+            val programNew = Program(uuid, edtRoom.text.toString(), edtNongdo.text.toString().toInt(),edtThetich.text.toString().toInt()
                 , currentDateandTime, user.FullName, user.Email)
 
-                db.collection("programs").add(room)
-                    .addOnSuccessListener {
-                        Log.d("_PROGRAM", "Firebase")
-                    }
-                    .addOnFailureListener { e ->
-                        Log.w("ADD", "có lỗi xảy ra", e)
+            db.collection("programs").add(room)
+                .addOnSuccessListener {
+                    Log.d("_PROGRAM", "Firebase")
+                }
+                .addOnFailureListener { e ->
+                    Log.w("ADD", "có lỗi xảy ra", e)
 
-                    }
-                //add program to offline
-                viewModel.insertProgram(programNew)
-                Log.d("_PROGRAM", "offline")
-                hideKeyboard()
-                Toast.makeText(context, "Đã lưu chương trình", Toast.LENGTH_SHORT).show()
-                mAlertDialog.dismiss()
-                //add program to firebase
+                }
+            //add program to offline
+            viewModel.insertProgram(programNew)
+            Log.d("_PROGRAM", "offline")
+            hideKeyboard()
+            Toast.makeText(context, "Đã lưu chương trình", Toast.LENGTH_SHORT).show()
+            mAlertDialog.dismiss()
+            //add program to firebase
 
-            }
-            btCancel.setOnClickListener {
-                mAlertDialog.dismiss()
-            }
+        }
+        btCancel.setOnClickListener {
+            mAlertDialog.dismiss()
+        }
     }
 
 
@@ -347,17 +348,17 @@ class ProgramFragment : Fragment(), IconProgramAdapter.OnItemButtonClick  {
 
 
     override fun onItemClick(program: Program) {
-     requireView().findNavController().navigate(
-         ProgramFragmentDirections.actionNavHomeToProgramDependFragment(
-             program, username = viewModel.getUsername()
-         )
-     )
+        requireView().findNavController().navigate(
+            ProgramFragmentDirections.actionNavHomeToProgramDependFragment(
+                program, username = viewModel.getUsername()
+            )
+        )
     }
 
     override fun delete(program: Program) {
         val builder = androidx.appcompat.app.AlertDialog.Builder(requireContext(), R.style.AlertDialogTheme)
         val positiveButtonClick = { _: DialogInterface, _: Int ->
-           deleteProgram(program)
+            deleteProgram(program)
         }
         val negativeButtonClick= { _: DialogInterface, _: Int ->
 
@@ -373,22 +374,22 @@ class ProgramFragment : Fragment(), IconProgramAdapter.OnItemButtonClick  {
         builder.show()
 
     }
-   private fun deleteProgram(program: Program){
-       viewModel.delete(program)
-       Toast.makeText(context, "Đã xóa chương trình", Toast.LENGTH_LONG).show()
+    private fun deleteProgram(program: Program){
+        viewModel.delete(program)
+        Toast.makeText(context, "Đã xóa chương trình", Toast.LENGTH_LONG).show()
         db.collection("programs").whereEqualTo("TimeCreate", program.TimeCreate).get().addOnSuccessListener { documents->
             for (document in documents) {
-            db.collection("programs").document(document.id).delete()
-                .addOnSuccessListener {
-                    for (document in documents) {
-                        db.collection("programs").document(document.id).delete()
-                            .addOnSuccessListener {
-                                 }
-                            .addOnFailureListener { e ->
-                                 }
+                db.collection("programs").document(document.id).delete()
+                    .addOnSuccessListener {
+                        for (document in documents) {
+                            db.collection("programs").document(document.id).delete()
+                                .addOnSuccessListener {
+                                }
+                                .addOnFailureListener { e ->
+                                }
+                        }
                     }
-                }
-                .addOnFailureListener { e ->
+                    .addOnFailureListener { e ->
                     }
             }
         }
@@ -439,6 +440,12 @@ class ProgramFragment : Fragment(), IconProgramAdapter.OnItemButtonClick  {
             Log.e("_UDP", "IOException: " + e.message)
         }
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        //connect
+        checkOn(0x01, 0x0B, 0x00, 0x00, 0x00, 0x01)
     }
 
 }

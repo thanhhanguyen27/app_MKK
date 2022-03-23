@@ -10,14 +10,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.databinding.DataBindingUtil
 import com.cpc1hn.uimkk.R
-import com.cpc1hn.uimkk.convertSectoDay
+import com.cpc1hn.uimkk.convertSecToTime
 import com.cpc1hn.uimkk.databinding.HistoryRetailFragmentBinding
 import com.cpc1hn.uimkk.model.History
 import com.cpc1hn.uimkk.modifyDateLayout
 import com.cpc1hn.uimkk.ui.viewmodel.history.HistoryRetailViewModel
 import com.google.firebase.firestore.FirebaseFirestore
-import java.text.SimpleDateFormat
-import java.util.*
 
 class HistoryRetailFragment : Fragment() {
 
@@ -43,12 +41,12 @@ class HistoryRetailFragment : Fragment() {
         // sendUDP(binding.tvCreater.text.toString())
         history= HistoryRetailFragmentArgs.fromBundle(requireArguments()).history
        // val time= longToDate(history.timeEndLong, "dd/MM/yyyy")
-        Log.d("_HIS", "${history.Creator} ${history.TimeEnd}")
+        Log.d("_HIS", "${history.Creator},${history.TimeStart}, ${history.TimeEnd}, ${history.hourEnd}")
         binding.history= history
-        binding.tvTimeEnd.text= modifyDateLayout(history.TimeEnd)
+        binding.tvTimeEnd.text = modifyDateLayout(history.TimeEnd)
         binding.tvTimeCreate.text= modifyDateLayout(history.TimeStart)
         binding.tvError.text= history.checkError()
-        binding.tvTimeRun.text= convertSectoDay(history.TimeRun)
+        binding.tvTimeRun.text= convertSecToTime(history.TimeRun)
 
         return binding.root
     }

@@ -8,7 +8,7 @@ import com.cpc1hn.uimkk.model.Program
 import com.cpc1hn.uimkk.model.UserClass
 
 class ProgramViewModel (app: Application): AndroidViewModel(app) {
-     private var allUser: MutableLiveData<UserClass>
+    private var allUser: MutableLiveData<UserClass>
     lateinit var allProgram: MutableLiveData<List<Program>>
 
     init {
@@ -24,7 +24,7 @@ class ProgramViewModel (app: Application): AndroidViewModel(app) {
     fun insertListProgram(programs: ArrayList<Program>){
         val programDao = AppDatabase.getAppdatabase((getApplication()))?.programDao()
         programDao?.insertAll(programs)
-        //getAllProgram()
+        getAllProgram()
     }
 
     fun getAllProgramObserves(): MutableLiveData<List<Program>>{
@@ -47,12 +47,6 @@ class ProgramViewModel (app: Application): AndroidViewModel(app) {
         val userDao = AppDatabase.getAppdatabase((getApplication()))?.userDao()
         var username = userDao!!.getUsername()
         return username
-    }
-
-    fun updateAllProgram(programs: ArrayList<Program>){
-        val programDao = AppDatabase.getAppdatabase((getApplication()))?.programDao()
-        programDao?.updateAllProgram(programs)
-        getAllProgram()
     }
     fun getUser():UserClass{
         val userDao= AppDatabase.getAppdatabase(getApplication())!!.userDao()

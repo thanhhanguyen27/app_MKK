@@ -25,8 +25,8 @@ android {
         applicationId "com.cpc1hn.uimkk"
         minSdkVersion 19
         targetSdkVersion 30
-        versionCode 9
-        versionName "1.0.3"
+        versionCode 10
+        versionName "1.0.4"
         multiDexEnabled true
         resConfigs "en", "vi"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -95,12 +95,13 @@ dependencies {
 
 
     // Import the BoM for the Firebase platform
-    implementation platform('com.google.firebase:firebase-bom:27.1.0')
+    implementation platform('com.google.firebase:firebase-bom:29.2.0')
     implementation 'com.google.firebase:firebase-firestore-ktx'
     implementation 'com.android.support:multidex:1.0.3'
     implementation 'com.google.firebase:firebase-auth:19.4.0'
     implementation 'com.google.firebase:firebase-database:19.4.0'
     implementation 'com.google.firebase:firebase-database:11.0.4'
+    implementation 'com.google.firebase:firebase-analytics'
 
     //location
     implementation "com.google.android.gms:play-services-location:17.0.0"

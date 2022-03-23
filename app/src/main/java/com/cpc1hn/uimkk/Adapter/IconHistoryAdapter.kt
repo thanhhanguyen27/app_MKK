@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.cpc1hn.uimkk.R
-import com.cpc1hn.uimkk.convertSectoDay
+import com.cpc1hn.uimkk.convertSecToTime
 import com.cpc1hn.uimkk.databinding.ItemHistoryBinding
 import com.cpc1hn.uimkk.model.History
 import com.cpc1hn.uimkk.modifyDateLayout
@@ -18,14 +18,13 @@ class IconHistoryAdapter (var historys: List<History>, private val onItemButtonC
     ): RecyclerView.ViewHolder(binding.root){
         fun bindView(history: History) {
             binding.history= history
-            "Thời gian phun: ${convertSectoDay(history.TimeRun)}".also { binding.tvTimeRun.text = it }
+            "Thời gian phun: ${convertSecToTime(history.TimeRun)}".also { binding.tvTimeRun.text = it }
             binding.tvTime.text= "Ngày phun: ${modifyDateLayout(history.TimeStart)}"
             binding.tvError.text= history.checkError()
             binding.root.setOnClickListener{
                 onItemButtonClick.onItemClick(history)
             }
         }
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

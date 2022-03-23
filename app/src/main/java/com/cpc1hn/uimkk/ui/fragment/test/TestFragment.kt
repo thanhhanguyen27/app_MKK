@@ -1,8 +1,8 @@
 package com.cpc1hn.uimkk.ui.fragment.test
 
+import android.animation.Animator
 import android.animation.ObjectAnimator
-import android.os.Bundle
-import android.os.StrictMode
+import android.os.*
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -11,15 +11,22 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
 import com.cpc1hn.uimkk.R
 import com.cpc1hn.uimkk.SaveData
 import com.cpc1hn.uimkk.databinding.TestFragmentBinding
+import com.cpc1hn.uimkk.dateToLong
+import com.cpc1hn.uimkk.helper.showToast
+import com.cpc1hn.uimkk.model.History
+import com.cpc1hn.uimkk.model.Program
 import com.cpc1hn.uimkk.ui.viewmodel.TestViewModel
 import java.io.IOException
 import java.net.DatagramPacket
 import java.net.DatagramSocket
 import java.net.InetAddress
 import java.net.InetSocketAddress
+import java.text.SimpleDateFormat
+import java.util.*
 
 class TestFragment : Fragment() {
 
@@ -41,17 +48,60 @@ class TestFragment : Fragment() {
     private lateinit var saveData: SaveData
     private var socketReceive= DatagramSocket(null)
     private lateinit var animator: ObjectAnimator
+    private lateinit var animator2: ObjectAnimator
+    private lateinit var savedata : SaveData
+    private var programOffline = listOf<History>()
+    private var programContinue : History? = null
+    val handler = Handler(Looper.getMainLooper())
+
+    private val animatorListener = object : Animator.AnimatorListener {
+        override fun onAnimationStart(p0: Animator?) {
+        }
+
+        override fun onAnimationEnd(p0: Animator?) {
+            handleAnimatorFinished()
+        }
+
+        override fun onAnimationCancel(p0: Animator?) {
+        }
+
+        override fun onAnimationRepeat(p0: Animator?) {
+        }
+
+    }
+
+    private fun handleAnimatorFinished(){
+        binding.lnLoad.visibility = View.GONE
+        binding.tvNotifyConnect.visibility = View.VISIBLE
+        binding.btRetry.visibility = View.VISIBLE
+        binding.btRetry.setOnClickListener {
+            binding.lnLoad.visibility = View.VISIBLE
+            binding.btRetry.visibility = View.GONE
+            binding.tvNotifyConnect.visibility = View.GONE
+            animator2.duration = 2000
+            animator2.repeatCount= 3
+            animator2.addListener(animatorListener)
+            animator2.start()
+            checkOn(0x01, 0x0B, 0x00, 0x00, 0x00, 0x01)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         (activity as AppCompatActivity).supportActionBar?.show()
+        setupViewmodel()
         binding= DataBindingUtil.inflate(inflater, R.layout.test_fragment, container, false)
         ipAddress= "192.168.4.1"
         port= 8080
         //connect
-        checkOn(0x01, 0x0B, 0x00, 0x00, 0x00, 0x01)
+        //checkOn(0x01, 0x0B, 0x00, 0x00, 0x00, 0x01)
+        savedata= SaveData(requireContext())
+        getProgramSpraying()
+        handler.postDelayed({
+            checkOn(0x01, 0x0B, 0x00, 0x00, 0x00, 0x01)
+        }, 5000)
         if ((ipAddress.isNotEmpty()) && (port != 0) ){
             setBomNhuDong()
             setMotorBlow()
@@ -62,7 +112,13 @@ class TestFragment : Fragment() {
 //            setLedGreen()
 //            setLedBlue()
         }
+        animator2 = ObjectAnimator.ofFloat( binding.imOverallFirst , View.ROTATION, -360f, 0f )
+        animator2.addListener(animatorListener)
+        animator2.duration = 2000
+        animator2.repeatCount= 3
+        animator2.start()
 
+        check5s()
         binding.imOverall.setOnClickListener {
             animator = ObjectAnimator.ofFloat( binding.imOverall , View.ROTATION, -360f, 0f )
             animator.duration = 2000
@@ -71,19 +127,37 @@ class TestFragment : Fragment() {
         }
 
         saveData= SaveData(requireContext())
-        if (saveData.loadTemp().isNotEmpty()){
-           binding.temperature.text= saveData.loadTemp()
-           // binding.temperature.text= "0"
-        }
-        if (saveData.loadPer() != 0){
-            binding.progressBarHorizontal1.progress = 0
-            binding.tvTimePercent.text = "${saveData.loadPer()}%"
-            //binding.tvTimePercent.text="0%"
-        }
-
         receiveData()
 
         return binding.root
+    }
+
+    private fun  getProgramSpraying() {
+        viewModel.getAllHistoryObserves().observe(viewLifecycleOwner,{ listProgram ->
+            programOffline = listProgram.filter { it.save }
+            if (programOffline.isNotEmpty()){
+                Log.d("_RECEIVE", "program not empty")
+                programContinue = programOffline[0]
+                receiveData()
+            }else{
+                Log.d("_RECEIVE", "program empty")
+                programContinue = null
+                //connect
+                checkOn(0x01, 0x0B, 0x00, 0x00, 0x00, 0x01)
+                receiveData()
+            }
+        })
+    }
+
+    private fun check5s(){
+        val runnableCode = object : Runnable {
+            override fun run() {
+                checkOn(0x01, 0x0B, 0x00, 0x00, 0x00, 0x01)
+                handler.postDelayed(this, 5000)
+                Log.d("_TIMER", "5s")
+            }
+        }
+        handler.post(runnableCode)
     }
 
     private fun receiveData() {
@@ -96,7 +170,6 @@ class TestFragment : Fragment() {
                     socketReceive.reuseAddress = true
                     socketReceive.broadcast = true
                     socketReceive.bind(InetSocketAddress(8081))
-                    //socketReceive.setSoTimeout(10000)
                     val data = DatagramPacket(buffer, buffer.size)
                     socketReceive.receive(data)
                     display(buffer)
@@ -111,29 +184,109 @@ class TestFragment : Fragment() {
         }.start()
     }
 
-    private fun display(buffer: ByteArray){
+    private fun display(buffer: ByteArray) {
+        Log.d("_RECEIVE", "receive data: ${buffer[0]}, ${buffer[1]}, ${buffer[2]}, ${buffer[3]}, ${buffer[4]}, ${buffer[5]}")
         activity?.runOnUiThread {
             if ((buffer[0] == 0x03.toByte()) && (buffer[1] == 0x04.toByte()) && (buffer[6] == checkSum(
                     buffer
                 ).toByte())
             ) {
-                binding.tvNotify.text = "Đang kết nối"
-                binding.imCheck.visibility= View.VISIBLE
-                binding.imOverall.visibility= View.GONE
-                saveData.setSpray(buffer[2].toUInt().toInt())
-                saveData.setConnect(binding.tvNotify.text.toString())
                 Log.d("_SCALE", "${buffer[4].toUByte().toInt()}, temp:${buffer[5].toUInt()}")
-                binding.temperature.text = buffer[5].toUInt().toString()
-                binding.progressBarHorizontal1.progress = (buffer[4].toInt())
-                binding.tvTimePercent.text = "${buffer[4].toUInt()}%"
-                saveData.setTemp(binding.temperature.text.toString())
-                saveData.setPer(binding.progressBarHorizontal1.progress)
-
+                getConnect(buffer)
             }
+            if ((buffer[0] == 0x03.toByte()) && (buffer[1] == 0x02.toByte()) && (buffer[6] == checkSum(
+            buffer
+            ).toByte())
+            ) {
+                getContinue()
+            }
+            if ((buffer[0] == 0x03.toByte()) && (buffer[1] == 0x05.toByte()) && (buffer[6] == checkSum(
+                    buffer
+                ).toByte())
+            ) {
+                getFinish()
+            }
+        }
+    }
+    private fun getConnect(buffer: ByteArray){
+        receiveData()
+        binding.tvNotify.text = "Đang kết nối"
+        binding.layoutLoad.visibility = View.GONE
 
+        binding.imCheck.visibility= View.VISIBLE
+        binding.imOverall.visibility= View.GONE
+        saveData.setSpray(buffer[2].toUInt().toInt())
+        saveData.setConnect(binding.tvNotify.text.toString())
+        Log.d("_SCALE", "${buffer[4].toUByte().toInt()}, temp:${buffer[5].toUInt()}")
+        binding.temperature.text = buffer[5].toUInt().toString()
+        binding.progressBarHorizontal1.progress = (buffer[4].toInt())
+        binding.tvTimePercent.text = "${buffer[4].toUInt()}%"
+        saveData.setTemp(binding.temperature.text.toString())
+        saveData.setPer(binding.progressBarHorizontal1.progress)
+    }
+    private fun getContinue(){
+        binding.tvNotify.text = "Đang kết nối"
+        Log.d("_RECEIVE", "continue")
+        binding.layoutLoad.visibility = View.GONE
+        if (programContinue != null){
+            val program = Program(
+                programContinue!!.TimeCreateProgram,
+                programContinue!!.Room,
+                programContinue!!.Concentration,
+                programContinue!!.Volume,
+                programContinue!!.TimeCreateProgram,
+                programContinue!!.Creator)
+            findNavController().navigate(
+                TestFragmentDirections.
+                actionNavTestToProgramRetailFragment(
+                    program = program,
+                    timeSpeed = programContinue!!.timeSpeed,
+                    nongdo = programContinue!!.Concentration,
+                    theTich = programContinue!!.Volume,
+                    username = programContinue!!.Creator,
+                    timecreate = programContinue!!.TimeCreateProgram,
+                    speedSpray = programContinue!!.SpeedSpray,
+                    hourStart = programContinue!!.hourStart,
+                    timeSum = programContinue!!.timeProgramOff
+                ))
+            binding.layoutLoad.visibility = View.GONE
         }
     }
 
+    private fun getFinish(){
+        if (programContinue != null){
+            val timeEnd = convertLongToTime(convertDateToLong(programContinue!!.TimeStart) + programContinue!!.timeSpeed.toLong())
+            val history= History(
+                TimeStart= programContinue!!.TimeStart,
+                CodeMachine= savedata.getCodeMachine(),
+                Concentration= programContinue!!.Concentration,
+                Volume= programContinue!!.Volume,
+                TimeEnd=  timeEnd,
+                timeEndLong= dateToLong(timeEnd, "yyyy/MM/dd HH:mm:ss"),
+                Creator= programContinue!!.Creator,
+                Room= programContinue!!.Room,
+                TimeRun= programContinue!!.TimeRun,
+                Error= 1,
+                TimeCreateProgram= programContinue!!.TimeCreateProgram,
+                SpeedSpray= programContinue!!.SpeedSpray,
+                Status = 0,
+                save = false
+            )
+            viewModel.insert(history)
+            binding.layoutLoad.visibility = View.GONE
+            showToast("Đã lưu thông tin lần phun trước")
+        }
+    }
+    fun convertLongToTime(time: Long): String {
+        val date = Date(time)
+        val format = SimpleDateFormat("yyyy/MM/dd HH:mm:ss")
+        return format.format(date)
+    }
+
+    fun convertDateToLong(date: String): Long {
+        val df = SimpleDateFormat("yyyy/MM/dd HH:mm:ss")
+        return df.parse(date).time
+    }
 //    fun setLedRed(){
 //        binding.btLedRed.setOnCheckedChangeListener { buttonView, isChecked ->
 //            if (isChecked){
@@ -190,7 +343,7 @@ class TestFragment : Fragment() {
         binding.btPump.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 checkOn(B1, 0x02, B3, B4, B5, B6)
-                   binding.lnPump.setBackgroundResource(R.drawable.checked_true)
+                binding.lnPump.setBackgroundResource(R.drawable.checked_true)
             }else {
                 checkOff(B1, 0x02, B3, B4, B5, 0x00)
                 binding.lnPump.setBackgroundResource(R.drawable.checked_false)
@@ -207,7 +360,7 @@ class TestFragment : Fragment() {
 //                binding.tvThoi.setTextColor(R.attr.Text_light)
             }else {
                 checkOff(B1, B2, B3, B4, B5, 0x00)
-               binding.lnThoi.setBackgroundResource(R.drawable.checked_false)
+                binding.lnThoi.setBackgroundResource(R.drawable.checked_false)
 //                binding.tvThoi.setTextColor(R.attr.Text_head)
             }
         }
@@ -236,11 +389,11 @@ class TestFragment : Fragment() {
         binding.btNotifyOnOff.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked){
                 checkOn(B1, 0x08, B3, B4, B5, B6)
-               binding.lnNotification.setBackgroundResource(R.drawable.checked_true)
+                binding.lnNotification.setBackgroundResource(R.drawable.checked_true)
 //                binding.tvNotify.setTextColor(R.attr.Text_light)
             }else{
                 checkOff(B1, 0x08, B3, B4, B5, 0x00)
-               binding.lnNotification.setBackgroundResource(R.drawable.checked_false)
+                binding.lnNotification.setBackgroundResource(R.drawable.checked_false)
 //                binding.tvNotification.setTextColor(R.attr.Text_head)
             }
         }
@@ -305,16 +458,26 @@ class TestFragment : Fragment() {
     }
 
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    private fun setupViewmodel(){
         viewModel = ViewModelProviders.of(this).get(TestViewModel::class.java)
-        // TODO: Use the ViewModel
+    }
+
+//    override fun onStop() {
+//        super.onStop()
+//        checkOn(0x01, 0x0C, 0x00, 0x00, 0x00, 0x01)
+//    }
+
+    override fun onResume() {
+        super.onResume()
+        //connect
+        checkOn(0x01, 0x0B, 0x00, 0x00, 0x00, 0x01)
     }
 
     override fun onStop() {
         super.onStop()
-        checkOn(0x01, 0x0C, 0x00, 0x00, 0x00, 0x01)
+        handler.removeCallbacksAndMessages(null)
     }
+
 
 }
 

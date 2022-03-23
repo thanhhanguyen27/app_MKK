@@ -20,9 +20,10 @@ fun Fragment.hideKeyboard() {
 @SuppressLint("SimpleDateFormat")
 @Throws(ParseException::class)
 fun modifyDateLayout(inputDate: String): String {
-    val date = SimpleDateFormat("yyyy/MM/dd HH:mm:ss").parse(inputDate)
-    return SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(date!!)
-
+    if (inputDate.isNotEmpty()){
+        val date = SimpleDateFormat("yyyy/MM/dd HH:mm:ss").parse(inputDate)
+        return SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(date!!)
+    }else return ""
 }
 
 @SuppressLint("SimpleDateFormat")
@@ -84,36 +85,18 @@ fun Fragment.showDialogShort(title: String, message: String?) {
         .show()
 }
 
-//@Throws(ParseException::class)
-//private fun modifyDateLayout(inputDate: String): String? {
-//    val date: Date = SimpleDateFormat("yyyy-MM-dd HH:mm:ss z").parse(inputDate)
-//    return SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(date)
-//}
 
-fun convertSectoDay(time: Int):String {
-    var n = time
-    var time1=""
-    val hour = n / 3600
-    n %= 3600
-    val minutes = n / 60
-    n %= 60
-    val seconds = n
-    time1 ="${hour}:${minutes}:${seconds}"
-    if ((hour<10) && (hour!=0)&&(minutes<10) &&(seconds<10)){
-        time1= "0${hour}:0${minutes}:0${seconds}"
-    }else if ((hour<10) && (hour!=0)&&(minutes<10)&&(seconds>=10)){
-        time1= "0${hour}:0${minutes}:${seconds}"
-    }else if ((hour==0)&&(minutes<10) &&(seconds<10)){
-        time1= "0${minutes}:0${seconds}"
-    }else if ((hour==0)&&(minutes<10)&&(seconds>=10)){
-        time1= "0${minutes}:${seconds}"
+fun convertSecToTime(seconds: Int):String {
+    val h = seconds / 3600
+    val m = seconds % 3600 / 60
+    val s = seconds % 3600 % 60
+    return if (h <= 0){
+        String.format("%02d:%02d", m, s)
+    }else{
+        String.format("%02d:%02d:%02d", h, m, s)
     }
-    else if ((hour==0)&&(minutes>=10) &&(seconds>=10)){
-        time1= "${minutes}:${seconds}"
-    }
-
-    return time1
 }
+
 fun Context.hideKeyboard(view: View) {
     val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
     inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)

@@ -35,6 +35,9 @@ import java.util.*
 
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
+import android.os.Handler
+import android.os.Looper
+import com.cpc1hn.uimkk.model.History
 import com.cpc1hn.uimkk.model.SetClass
 import java.lang.Exception
 
@@ -66,7 +69,7 @@ class ProgramDependFragment : Fragment() {
     private lateinit var checkArray: ByteArray
     private var scaleActive: Int=0
     private var setClass = SetClass()
-
+    val handler = Handler(Looper.getMainLooper())
 
 
     override fun onCreateView(
@@ -91,7 +94,10 @@ class ProgramDependFragment : Fragment() {
         port = 8080
         savedata = SaveData(requireContext())
         savedata.setRoom(program.NameProgram)
-
+        if (savedata.loadSpray() != 0){
+            speedSpray = savedata.loadSpray()
+        }
+        check5s()
         //lay du lieu hoa chat
         checkOn1(0x03, 0x04, 0x00, 0x00, 0x00, 0x00)
 
@@ -99,12 +105,7 @@ class ProgramDependFragment : Fragment() {
         receiveData()
 
         savedata = SaveData(requireContext())
-        if (savedata.loadSpray() !=0 ) {
-            speedSpray = savedata.loadSpray()
-        }
-        Log.d("_UDP", "$speedSpray")
 
-        //  Toast.makeText(context, speedSpray, Toast.LENGTH_SHORT).show()
         binding.tvTheTich.setText(program.Volume.toString())
         binding.tvNongdo.setText(program.Concentration.toString())
         thetich = binding.tvTheTich.text.toString().toInt()
@@ -149,7 +150,16 @@ class ProgramDependFragment : Fragment() {
         return binding.root
     }
 
-
+    private fun check5s(){
+        val runnableCode = object : Runnable {
+            override fun run() {
+                checkOn(0x01, 0x0B, 0x00, 0x00, 0x00, 0x01)
+                handler.postDelayed(this, 5000)
+                Log.d("_TIMER", "5s")
+            }
+        }
+        handler.post(runnableCode)
+    }
     private fun getWifiSSID() {
         val mWifiManager: WifiManager =
             ((activity as AppCompatActivity).applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager)
@@ -189,7 +199,7 @@ class ProgramDependFragment : Fragment() {
                     buffer
                 ).toByte())
             ) {
-
+                Log.d("_CHECK", "hoa chat data")
                 binding.tvPercent.text = "${buffer[4].toUInt()}%"
                 binding.tvPercent.visibility = View.VISIBLE
                 if (buffer[3].toInt()==0){
@@ -350,7 +360,24 @@ class ProgramDependFragment : Fragment() {
     private fun start() {
         if (scaleActive==1) {
             if (( binding.tvWarning.visibility != View.VISIBLE) ){
-                 next()
+                time1 = convertSecToTime(timeSpeed)
+                next()
+                val history = History (
+                    TimeStart= timeCreate,
+                    Concentration= nongdo,
+                    Volume= thetich,
+                    Creator=username,
+                    Room= program.NameProgram,
+                    TimeCreateProgram= program.TimeCreate,
+                    SpeedSpray= speedSpray,
+                    Status = 0,
+                    timeSpeed = time1,
+                    hourStart = hourStart,
+                    save = true,
+                    timeProgramOff = timeSpeed
+                )
+                Log.d("_CHECKPROGRAM", "$timeCreate")
+                viewModel.insert(history)
              }
             else {
                 hideKeyboard()
@@ -372,6 +399,21 @@ class ProgramDependFragment : Fragment() {
             }
         }else{
             next()
+            val history = History (
+                TimeStart= timeCreate,
+                Concentration= nongdo,
+                Volume= thetich,
+                Creator=username,
+                Room= program.NameProgram,
+                TimeCreateProgram= program.TimeCreate,
+                SpeedSpray= speedSpray,
+                Status = 0,
+                timeSpeed = time1,
+                hourStart = hourStart,
+                save = true,
+                timeProgramOff = timeSpeed
+            )
+            viewModel.insert(history)
         }
 
     }
@@ -384,12 +426,7 @@ class ProgramDependFragment : Fragment() {
         numberOfRun += 1
         val b5 = (timeSpeed / 256)
         val b6 = (timeSpeed - b5 * 256)
-        //truyen thoi gian phun
-//        if ((checkArray[1] != 0x02.toByte())) {
-//
-//            checkOn(0x03, 0x02, 0x00, 0x00, b5, b6)
-//            Log.d("_UDP", "bat dau dem so 20s")
-//        }
+
         checkOn(0x03, 0x02, 0x00, 0x00, b5, b6)
 
         requireView().findNavController().navigate(
@@ -432,7 +469,6 @@ class ProgramDependFragment : Fragment() {
         val B7 = checkSum(a)
         a=byteArrayOfInts(B1, B2, B3, B4, B5, B6, B7)
         sendUDP(a)
-        Log.d("_UDP", "bat dau dem so 20s")
     }
     private fun checkOn1(B1: Int, B2: Int, B3: Int, B4: Int, B5: Int, B6: Int){
         var a = byteArrayOfInts(B1, B2, B3, B4, B5, B6)
@@ -550,5 +586,15 @@ class ProgramDependFragment : Fragment() {
             false
         }
     }
+
+    override fun onStop() {
+        super.onStop()
+        handler.removeCallbacksAndMessages(null)
+    }
+
+//    override fun onResume() {
+//        super.onResume()
+//        check5s()
+//    }
 
 }

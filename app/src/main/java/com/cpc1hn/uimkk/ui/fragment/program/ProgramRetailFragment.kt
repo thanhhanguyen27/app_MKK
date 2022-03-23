@@ -4,6 +4,8 @@ package com.cpc1hn.uimkk.ui.fragment.program
 import android.annotation.SuppressLint
 import android.content.DialogInterface
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.os.StrictMode
 import android.transition.TransitionManager
 import android.util.Log
@@ -16,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
 import com.cpc1hn.uimkk.R
 import com.cpc1hn.uimkk.SaveData
 import com.cpc1hn.uimkk.convertStringToDateHHMMSS
@@ -36,6 +39,7 @@ import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 
+
 class ProgramRetailFragment: Fragment(){
 
     companion object {
@@ -47,13 +51,10 @@ class ProgramRetailFragment: Fragment(){
     private lateinit var ipAddress:String
     private var port: Int=0
     private var timeCreate: String=""
-    private var timeEndLong:Long=0
-    private var mili:Long=0
     private lateinit var program: Program
     private var timeRun:String=""
     private var timeSum:Int=0
     private var timeSpray: Int=0
-    private var time1:String=""
     private var username: String=""
     private  var history: History = History()
     private var histories:ArrayList<History> = arrayListOf()
@@ -64,7 +65,9 @@ class ProgramRetailFragment: Fragment(){
     private var hourEnd:String=""
     private var hourStart:String=""
     private var error:Int=0
-
+    val handler = Handler(Looper.getMainLooper())
+    private var programContinue : History? = null
+    private var timeKeyHistory = ""
 
 
     override fun onCreateView(
@@ -72,6 +75,7 @@ class ProgramRetailFragment: Fragment(){
         savedInstanceState: Bundle?
     ): View {
         setHasOptionsMenu(true)
+        setupViewmodel()
         (activity as AppCompatActivity).supportActionBar?.show()
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding= DataBindingUtil.inflate(
@@ -84,31 +88,57 @@ class ProgramRetailFragment: Fragment(){
         port=8080
         ipAddress="192.168.4.1"
         timeCreate= ProgramRetailFragmentArgs.fromBundle(requireArguments()).timecreate
+        Log.d("_CHECK", "$timeCreate")
         program= ProgramRetailFragmentArgs.fromBundle(requireArguments()).program
         timeRun= ProgramRetailFragmentArgs.fromBundle(requireArguments()).timeSpeed
         timeSum= ProgramRetailFragmentArgs.fromBundle(requireArguments()).timeSum
         username=  ProgramRetailFragmentArgs.fromBundle(requireArguments()).username
-        hourStart=ProgramRetailFragmentArgs.fromBundle(requireArguments()).hourStart
+        hourStart= ProgramRetailFragmentArgs.fromBundle(requireArguments()).hourStart
         spraySpeed=  ProgramRetailFragmentArgs.fromBundle(requireArguments()).speedSpray
-        binding.tvTime.text =  convertSectoDay(timeSum)
+
+        checkProgramSpraying()
+
+        //lay du lieu hoa chat
+        checkOn1(0x03, 0x04, 0x00, 0x00, 0x00, 0x00)
+
+        binding.tvTime.text = timeRun
         binding.lnBack.setOnClickListener {
             requireActivity().onBackPressed()
         }
+        check1s()
         savedata= SaveData(requireContext())
         savedata.setRoomSpraying(program.NameProgram)
-        if (savedata.loadSpray()!=0){
-            spraySpeed= savedata.loadSpray()
-        }
+
         //Receive Data
         if (socketReceive.isClosed){
             socketReceive.bind(InetSocketAddress(8081))
-            Log.d("_UDP", "receive open")
         }
 
         receiveData1()
         return  binding.root
     }
 
+    private fun checkProgramSpraying(){
+        viewModel.getAllHistoryObserves().observe(viewLifecycleOwner,{ listProgram ->
+            val listProgram = listProgram.filter { it.save }
+            if (listProgram.isNotEmpty()){
+                Log.d("_CHECKPROGRAM", "program not empty")
+                programContinue = listProgram[0]
+            }else{
+                Log.d("_CHECKPROGRAM", "program empty")
+            }
+        })
+    }
+
+    private fun check1s(){
+        val runnableCode = object : Runnable {
+            override fun run() {
+                checkOn(0x01, 0x0B, 0x00, 0x00, 0x00, 0x01)
+                handler.postDelayed(this, 1000)
+            }
+        }
+        handler.post(runnableCode)
+    }
     private fun receiveData1(){
         var buffer = ByteArray(6566)
         object : Thread() {
@@ -142,9 +172,11 @@ class ProgramRetailFragment: Fragment(){
                     b
                 ).toByte())
             ) {
-                Log.d("_UDP1", "hoa chat data= ${b}")
+                Log.d("_CHECK", "hoa chat data")
                 binding.progressBarHorizontal1.progress = (b[4].toInt())
                 binding.tvTimePercent.text = "${b[4].toUInt()}%"
+                savedata.setTemp(b[5].toUInt().toString())
+
             }
 
             //Canh bao chuan bi phun hoa chat(20s) đếm ngược
@@ -154,51 +186,55 @@ class ProgramRetailFragment: Fragment(){
                 savedata.setRoomSpraying(program.NameProgram)
                 binding.btBack.visibility=View.GONE
                 binding.textViewPrimary.text = b[5].toString()
-                Log.d("_UDP1", "dem20s data= ${b}")
                 if (b[5].toInt() != 1) {
                     binding.btStop.setOnClickListener {
                         confirmEnd()
-
                     }
                 }
-
             }
             //bat dau dem nguoc <2^16s
             if ((b[0] == 0x03.toByte()) && (b[1] == 0x02.toByte()) && (b[6] == checkSum(
                     b
                 ).toByte())
             ) {
+
                 binding.btBack.visibility=View.GONE
                 TransitionManager.beginDelayedTransition(binding.mainLayout)
                 binding.tv1.visibility = View.GONE
                 binding.ln3.visibility = View.GONE
                 binding.lnWarning.visibility = View.VISIBLE
-                Log.d("_UDP1", "bat dau data= ${b}")
                 //truyen thoi gian dem nguoc
                 val b5 = b[4] * 256
                 val b6 = UnsignedBytes.toInt(b[5])
                 val c = b5 + b6
                 timeRun = c.toString()
-                if (c == timeSum) {
-                    binding.progressBarTime.progress = 100
-                }
-                if (c != timeSum) {
-                    binding.progressBarTime.progress =
-                        ((c.toDouble() / timeSum.toDouble()) * 100).toInt()
-                }
+
                 binding.progressBarTime.max = 100
-                Log.d("_TIME", "${binding.progressBarTime.progress}  $timeSum  $timeRun")
-                binding.tvTime.text = convertSectoDay(timeRun.toInt())
-               // binding.tvTime.text= timeRun.convertStringToDateHHMMSS().toString()
+                binding.tvTime.text = convertSecToTime(timeRun.toInt())
+
+
+                if (programContinue != null){
+                    //checkOn1(0x03, 0x04, 0x00, 0x00, 0x00, 0x00)
+                    binding.progressBarTime.progress =
+                        ((c.toDouble() / programContinue!!.timeProgramOff.toDouble()) * 100).toInt()
+                    Log.d("_CHECKPROGRAM", "program not null")
+                }else{
+//                    Log.d("_CHECKPROGRAM", "program null")
+//                    if (c == timeSum) {
+//                        binding.progressBarTime.progress = 100
+//                    }
+//                    if (c != timeSum) {
+//                        binding.progressBarTime.progress =
+//                            ((c.toDouble() / timeSum.toDouble()) * 100).toInt()
+//                    }
+                }
+
                 if (timeRun == 0.toString()) {
                     checkOn(0x03, 0x03, 0x00, 0x00, 0x00, 0x01)
                     Log.d("_UDP", "send 030300000000")
-                  //  timeSpray = convertSectoDay(timeSum)
                     timeSpray= timeSum
-//                    binding.progressBarTime.setProgress(0)
                     error = 0
                     saveHistory()
-                    //binding.tvTime.setText(convertSectoDay(0))
                     notifyEnd()
                 }
                 if (timeRun != 0.toString()) {
@@ -208,15 +244,13 @@ class ProgramRetailFragment: Fragment(){
                         val builder =
                             AlertDialog.Builder(requireContext(), R.style.AlertDialogTheme)
                         val positiveButtonClick = { _: DialogInterface, _: Int ->
-                           // timeSpray = convertSectoDay(timeSum - timeRun.toInt())
                             timeSpray= timeSum- timeRun.toInt()
                             socketReceive.close()
-                            //  binding.progressBarTime.setProgress(0)
-                            //binding.tvTime.setText(convertSectoDay(0))
                             checkOn(0x03, 0x03, 0x00, 0x00, 0x00, 0x01)
                             error = 1
                             saveHistory()
-                            notifyEnd()
+                            navigateToProgramFragment()
+                            //notifyEnd()
                         }
                         val negativeButtonClick = { _: DialogInterface, _: Int ->
                         }
@@ -236,134 +270,85 @@ class ProgramRetailFragment: Fragment(){
                 }
             }
 
-  
+
         }
 
     }
-     private fun confirmEnd(){
-         val builder =
-             AlertDialog.Builder(requireContext(), R.style.AlertDialogTheme)
-         val positiveButtonClick = { _: DialogInterface, _: Int ->
-             checkOn(0x03, 0x03, 0x00, 0x00, 0x00, 0x01)
-             requireActivity().onBackPressed()
-         }
-         val negativeButtonClick = { _: DialogInterface, _: Int ->
-         }
-         with(builder) {
-             setMessage("Dừng phun?")
-             setPositiveButton(
-                 "Ok",
-                 DialogInterface.OnClickListener(function = positiveButtonClick)
-             )
-             setNegativeButton(
-                 "Hủy",
-                 DialogInterface.OnClickListener(function = negativeButtonClick)
-             )
-         }
-         builder.show()
-     }
+    private fun confirmEnd(){
+        val builder =
+            AlertDialog.Builder(requireContext(), R.style.AlertDialogTheme)
+        val positiveButtonClick = { _: DialogInterface, _: Int ->
+            checkOn(0x03, 0x03, 0x00, 0x00, 0x00, 0x01)
+            requireActivity().onBackPressed()
+        }
+        val negativeButtonClick = { _: DialogInterface, _: Int ->
+        }
+        with(builder) {
+            setMessage("Dừng phun?")
+            setPositiveButton(
+                "Ok",
+                DialogInterface.OnClickListener(function = positiveButtonClick)
+            )
+            setNegativeButton(
+                "Hủy",
+                DialogInterface.OnClickListener(function = negativeButtonClick)
+            )
+        }
+        builder.show()
+    }
     private fun checkTemp(){
         //kiem tra qua nhiet, ket thuc phun hoa chat
         if ((savedata.loadTempSetting().isNotEmpty()) && (savedata.loadTemp().isNotEmpty())) {
             if (savedata.loadTemp().toInt() > savedata.loadTempSetting().toInt()) {
                 checkOn(0x03, 0x03, 0x00, 0x00, 0x00, 0x01)
-               // socketReceive.close()
-                //timeSpray = convertSectoDay(timeSum - timeRun.toInt())
                 error=2
-                // saveHistory()
-                //notifyEnd()
-
+                saveHistory()
+                navigateToProgramFragment()
             }
         }
     }
     private fun saveHistory(){
-        savedata.setRoomSpraying("")
-        val thetich= ProgramRetailFragmentArgs.fromBundle(requireArguments()).theTich
-        val nongdo= ProgramRetailFragmentArgs.fromBundle(requireArguments()).nongdo
-        val sdf = SimpleDateFormat("yyyy/MM/dd", Locale.getDefault())
-        //timeEndLong =convertDateToLong(sdf.format(Date()))
         val sdf1= SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.getDefault())
         hourEnd=sdf1.format(Date())
-
+        val thetich= ProgramRetailFragmentArgs.fromBundle(requireArguments()).theTich
+        val nongdo= ProgramRetailFragmentArgs.fromBundle(requireArguments()).nongdo
+//        if (programContinue != null){
+//            history.TimeStart = programContinue!!.TimeStart
+//            Log.d("_CHECKPROGRAM", "program not null 2")
+//        }else{
+//            history.TimeStart = hourEnd
+//            Log.d("_CHECKPROGRAM", "program null")
+//        }
         history= History(
-            TimeStart= timeCreate,
             CodeMachine= savedata.getCodeMachine(),
+            TimeStart = programContinue!!.TimeStart,
             Concentration= nongdo,
             Volume= thetich,
-            TimeEnd=  hourEnd,
-            timeEndLong= dateToLong(hourEnd, "yyyy/MM/dd HH:mm:ss"),
-            Creator = viewModel.getUsername(),
-           Room= program.NameProgram,
+            TimeEnd= hourEnd,
+            timeEndLong= dateToLong(history.TimeEnd, "yyyy/MM/dd HH:mm:ss"),
+            Creator=username,
+            Room= program.NameProgram,
             TimeRun= timeSpray,
             Error= error,
             TimeCreateProgram= program.TimeCreate,
             SpeedSpray= spraySpeed,
-            Status = 0
+            Status = 0,
+            save = false
         )
-        upHistorytoFirebase(history)
-        viewModel.insert(history)
+        Log.d("_CHECKPROGRAM", "end ${hourEnd} , ${history.TimeStart}, ${programContinue!!.TimeStart}")
+        viewModel.update(history)
         sendInfo()
     }
-    private fun upHistorytoFirebase(history: History){
-        val historyFirebase= hashMapOf( "TimeStart" to history.TimeStart,
-            "CodeMachine" to history.CodeMachine,
-            "Concentration" to history.Concentration,
-            "Volume" to history.Volume,
-            "TimeEnd" to history.TimeEnd,
-            "Creator" to history.Creator,
-            "Room" to history.Room,
-            "TimeRun" to history.TimeRun,
-            "Error" to history.Error,
-            "SpeedSpray" to history.SpeedSpray,
-            "TimeProgram" to history.TimeCreateProgram,
-            "Status" to 1)
-        val db = FirebaseFirestore.getInstance()
-        db.collection("histories").add(historyFirebase)
-            .addOnSuccessListener {
 
-            }
-            .addOnFailureListener { e ->
-                Toast.makeText(context, "Có lỗi xảy ra $e", Toast.LENGTH_SHORT).show()
-            }
-    }
-
-    private fun convertSectoDay(time: Int):String {
-        var n = time
-        val hour = n / 3600
-        n %= 3600
-        val minutes = n / 60
-        n %= 60
-        val seconds = n
-        time1 ="${hour}:${minutes}:${seconds}"
-        if ((hour<10) && (hour!=0)&&(minutes<10) &&(seconds<10)){
-            time1= "0${hour}:0${minutes}:0${seconds}"
-        }else if ((hour<10) && (hour!=0)&&(minutes<10)&&(seconds>=10)){
-            time1= "0${hour}:0${minutes}:${seconds}"
-        }else if ((hour==0)&&(minutes<10) &&(seconds<10)){
-            time1= "0${minutes}:0${seconds}"
-        }else if ((hour==0)&&(minutes<10)&&(seconds>=10)){
-            time1= "0${minutes}:${seconds}"
+    private fun convertSecToTime(seconds: Int):String {
+        val h = seconds / 3600
+        val m = seconds % 3600 / 60
+        val s = seconds % 3600 % 60
+        return if (h <= 0){
+            String.format("%02d:%02d", m, s)
+        }else{
+            String.format("%02d:%02d:%02d", h, m, s)
         }
-        else if ((hour==0)&&(minutes>=10) &&(seconds>=10)){
-            time1= "${minutes}:${seconds}"
-        }
-
-        return time1
-    }
-
-    private fun showNotify(){
-        val builder = AlertDialog.Builder(requireContext(), R.style.AlertDialogTheme)
-        val positiveButtonClick = { _: DialogInterface, _: Int -> }
-        with(builder) {
-            setMessage("Đang trong quá trình phun.")
-            setPositiveButton(
-                "Hủy",
-                DialogInterface.OnClickListener(function = positiveButtonClick)
-            )
-        }
-
-        builder.show()
-
     }
 
 
@@ -378,7 +363,8 @@ class ProgramRetailFragment: Fragment(){
     private fun notifyEnd(){
         val builder = AlertDialog.Builder(requireContext(), R.style.AlertDialogTheme)
         val positiveButtonClick = { _: DialogInterface, _: Int ->
-            requireActivity().onBackPressed()
+//            requireActivity().onBackPressed()
+           navigateToProgramFragment()
         }
         with(builder) {
             setMessage("Hoàn tất")
@@ -391,6 +377,9 @@ class ProgramRetailFragment: Fragment(){
 
     }
 
+    private fun navigateToProgramFragment(){
+        findNavController().navigate(ProgramRetailFragmentDirections.actionProgramRetailFragmentToNavHome())
+    }
 
     private fun checkSum(b: ByteArray): Int {
         return b[0] + b[1] + b[2] + b[3] + b[4] + b[5]
@@ -426,20 +415,29 @@ class ProgramRetailFragment: Fragment(){
         }
     }
 
-    private fun convertTimeLongToDate(time:Long):String{
-       return SimpleDateFormat("yyyy/MM/dd").format(Date(time))
-    }
-
-
-
     private fun byteArrayOfInts(vararg ints: Int) = ByteArray(ints.size) { pos -> ints[pos].toByte() }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    private fun setupViewmodel(){
         viewModel = ViewModelProviders.of(this).get(ProgramRetailViewModel::class.java)
-        // TODO: Use the ViewModel
     }
 
+    private fun checkOn1(B1: Int, B2: Int, B3: Int, B4: Int, B5: Int, B6: Int){
+        var a = byteArrayOfInts(B1, B2, B3, B4, B5, B6)
+        val B7 = checkSum(a)
+        a=byteArrayOfInts(B1, B2, B3, B4, B5, B6, B7)
+        sendUDP(a)
+        Log.d("_CHECKPROGRAM", "lay hoa chat")
+    }
 
+    override fun onResume() {
+        super.onResume()
+        //connect
+        check1s()
+//        //lay du lieu hoa chat
+//        checkOn1(0x03, 0x04, 0x00, 0x00, 0x00, 0x00)
+
+        receiveData1()
+    }
 
 }
+
