@@ -24,6 +24,7 @@ import com.cpc1hn.uimkk.SaveData
 import com.cpc1hn.uimkk.convertStringToDateHHMMSS
 import com.cpc1hn.uimkk.databinding.ProgramRetailFragmentBinding
 import com.cpc1hn.uimkk.dateToLong
+import com.cpc1hn.uimkk.helper.showToast
 import com.cpc1hn.uimkk.model.History
 import com.cpc1hn.uimkk.model.Program
 import com.cpc1hn.uimkk.ui.viewmodel.program.ProgramRetailViewModel
@@ -68,6 +69,7 @@ class ProgramRetailFragment: Fragment(){
     val handler = Handler(Looper.getMainLooper())
     private var programContinue : History? = null
     private var timeKeyHistory = ""
+    private var timeRunTemp : Int = 0
 
 
     override fun onCreateView(
@@ -179,6 +181,21 @@ class ProgramRetailFragment: Fragment(){
 
             }
 
+            //tin hieu dung phun tu mach
+            if ((b[0] == 0x03.toByte()) && (b[1] == 0x05.toByte()) && (b[6] == checkSum(
+                    b
+                ).toByte())
+            ){
+                if (b[5].toInt() == 2){
+                    //truyen thoi gian dem nguoc
+                    error = 2
+                    timeSpray= timeSum - timeRunTemp
+                    saveHistory()
+                    showToast("Dừng phun do quá nhiệt")
+                    navigateToProgramFragment()
+                }
+            }
+
             //Canh bao chuan bi phun hoa chat(20s) đếm ngược
 
             if ((b[0] == 0x03.toByte()) && (b[1] == 0x01.toByte()) && (b[6] == checkSum(b).toByte())) {
@@ -208,6 +225,7 @@ class ProgramRetailFragment: Fragment(){
                 val b6 = UnsignedBytes.toInt(b[5])
                 val c = b5 + b6
                 timeRun = c.toString()
+                timeRunTemp = c
 
                 binding.progressBarTime.max = 100
                 binding.tvTime.text = convertSecToTime(timeRun.toInt())
@@ -218,28 +236,19 @@ class ProgramRetailFragment: Fragment(){
                     binding.progressBarTime.progress =
                         ((c.toDouble() / programContinue!!.timeProgramOff.toDouble()) * 100).toInt()
                     Log.d("_CHECKPROGRAM", "program not null")
-                }else{
-//                    Log.d("_CHECKPROGRAM", "program null")
-//                    if (c == timeSum) {
-//                        binding.progressBarTime.progress = 100
-//                    }
-//                    if (c != timeSum) {
-//                        binding.progressBarTime.progress =
-//                            ((c.toDouble() / timeSum.toDouble()) * 100).toInt()
-//                    }
                 }
 
                 if (timeRun == 0.toString()) {
                     checkOn(0x03, 0x03, 0x00, 0x00, 0x00, 0x01)
                     Log.d("_UDP", "send 030300000000")
-                    timeSpray= timeSum
+                    timeSpray = timeSum
                     error = 0
                     saveHistory()
                     notifyEnd()
                 }
                 if (timeRun != 0.toString()) {
                     //kiem tra qua nhiet, ket thuc phun hoa chat
-                    checkTemp()
+                   // checkTemp()
                     binding.btStop.setOnClickListener {
                         val builder =
                             AlertDialog.Builder(requireContext(), R.style.AlertDialogTheme)

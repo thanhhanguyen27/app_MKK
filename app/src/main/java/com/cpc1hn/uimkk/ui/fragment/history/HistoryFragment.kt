@@ -59,7 +59,11 @@ class  HistoryFragment : Fragment(), IconHistoryAdapter.OnItemButtonClick {
         val toolbar= binding.toolbar
         (activity as AppCompatActivity).setSupportActionBar(toolbar)
         (activity as AppCompatActivity).supportActionBar?.show()
-
+        historyAdapter = IconHistoryAdapter(histories, this)
+        binding.historyRecyclerView.apply {
+            adapter = historyAdapter
+            layoutManager = LinearLayoutManager(context)
+        }
         viewModel = ViewModelProviders.of(this).get(HistoryViewModel::class.java)
         viewModel.getAllHistory()
 
@@ -67,11 +71,6 @@ class  HistoryFragment : Fragment(), IconHistoryAdapter.OnItemButtonClick {
             historyAdapter.setListData(ArrayList(it))
             histories= ArrayList(it)
         })
-        historyAdapter = IconHistoryAdapter(histories, this)
-        binding.historyRecyclerView.apply {
-            adapter = historyAdapter
-            layoutManager = LinearLayoutManager(context)
-        }
 
 
         val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
@@ -240,6 +239,7 @@ class  HistoryFragment : Fragment(), IconHistoryAdapter.OnItemButtonClick {
     }
 
     private fun checkOverall(){
+        binding.loadinglayout.visibility = View.VISIBLE
         if (isInternetAvailable()){
             if (histories.isNotEmpty()){
                 for (history in histories){
@@ -271,7 +271,8 @@ class  HistoryFragment : Fragment(), IconHistoryAdapter.OnItemButtonClick {
             "Error" to history.Error,
             "SpeedSpray" to history.SpeedSpray,
             "TimeProgram" to history.TimeCreateProgram,
-            "Status" to 1)
+            "Status" to 1,
+            "ID" to history.id)
         val db = FirebaseFirestore.getInstance()
         db.collection("histories").add(historyFirebase)
             .addOnSuccessListener {
@@ -318,7 +319,16 @@ class  HistoryFragment : Fragment(), IconHistoryAdapter.OnItemButtonClick {
                     history.timeEndLong = dateToLong(history.TimeEnd, "yyyy/MM/dd HH:mm:ss")
                 }
                 viewModel.insertAll(histories)
+                binding.loadinglayout.visibility = View.GONE
+                viewModel.getAllHistoryObserves().observe(viewLifecycleOwner, {
+                    historyAdapter.setListData(ArrayList(histories))
+                    historyAdapter.notifyDataSetChanged()
+                })
+
                 Toast.makeText(context, "Đồng bộ thành công", Toast.LENGTH_SHORT).show()
+            }
+            .addOnFailureListener {
+                binding.loadinglayout.visibility = View.GONE
             }
 
     }

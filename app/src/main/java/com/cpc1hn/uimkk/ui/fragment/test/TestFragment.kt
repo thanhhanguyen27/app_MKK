@@ -12,10 +12,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
-import com.cpc1hn.uimkk.R
-import com.cpc1hn.uimkk.SaveData
+import com.cpc1hn.uimkk.*
 import com.cpc1hn.uimkk.databinding.TestFragmentBinding
-import com.cpc1hn.uimkk.dateToLong
 import com.cpc1hn.uimkk.helper.showToast
 import com.cpc1hn.uimkk.model.History
 import com.cpc1hn.uimkk.model.Program
@@ -83,6 +81,7 @@ class TestFragment : Fragment() {
             animator2.addListener(animatorListener)
             animator2.start()
             checkOn(0x01, 0x0B, 0x00, 0x00, 0x00, 0x01)
+            Log.d("_PRESS", "Thử lại 0x01, 0x0B, 0x00, 0x00, 0x00, 0x01")
         }
     }
 
@@ -204,7 +203,7 @@ class TestFragment : Fragment() {
                     buffer
                 ).toByte())
             ) {
-                getFinish()
+                getFinish(buffer[5].toInt())
             }
         }
     }
@@ -253,9 +252,18 @@ class TestFragment : Fragment() {
         }
     }
 
-    private fun getFinish(){
+    private fun getFinish(error: Int){
+        Log.d("_FINISH", "finish")
         if (programContinue != null){
-            val timeEnd = convertLongToTime(convertDateToLong(programContinue!!.TimeStart) + programContinue!!.timeSpeed.toLong())
+//            Log.d("_ENDD", "${convertDateToLong(programContinue!!.TimeStart) + programContinue!!.timeSpeed.toLong()} ")
+            val arrayTime = getTime(programContinue!!.timeProgramOff.toInt())
+            var c  = Calendar.getInstance()
+            c.setTime(programContinue!!.TimeStart.convertStringToDate()!!)
+            c.add(Calendar.HOUR, arrayTime[0])
+            c.add(Calendar.MINUTE, arrayTime[1])
+            c.add(Calendar.SECOND, arrayTime[2])
+           // val timeEnd = convertLongToTime(convertDateToLong(programContinue!!.TimeStart) + programContinue!!.timeSpeed.toLong())
+            val timeEnd = c.time.convertDateToStringHHMMDDMMYYYYGT7()
             val history= History(
                 TimeStart= programContinue!!.TimeStart,
                 CodeMachine= savedata.getCodeMachine(),
@@ -265,8 +273,8 @@ class TestFragment : Fragment() {
                 timeEndLong= dateToLong(timeEnd, "yyyy/MM/dd HH:mm:ss"),
                 Creator= programContinue!!.Creator,
                 Room= programContinue!!.Room,
-                TimeRun= programContinue!!.TimeRun,
-                Error= 1,
+                TimeRun= programContinue!!.timeProgramOff,
+                Error= error,
                 TimeCreateProgram= programContinue!!.TimeCreateProgram,
                 SpeedSpray= programContinue!!.SpeedSpray,
                 Status = 0,
@@ -280,6 +288,12 @@ class TestFragment : Fragment() {
     fun convertLongToTime(time: Long): String {
         val date = Date(time)
         val format = SimpleDateFormat("yyyy/MM/dd HH:mm:ss")
+        return format.format(date)
+    }
+
+    fun convertStringToTime(time: String): String {
+        val date = Date(time)
+        val format = SimpleDateFormat("HH:mm:ss")
         return format.format(date)
     }
 
@@ -471,6 +485,7 @@ class TestFragment : Fragment() {
         super.onResume()
         //connect
         checkOn(0x01, 0x0B, 0x00, 0x00, 0x00, 0x01)
+        animator2.addListener(animatorListener)
     }
 
     override fun onStop() {

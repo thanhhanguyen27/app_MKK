@@ -43,7 +43,7 @@ class History(
     var TimeRun: Int= 0,
 
     @ColumnInfo(name = "Error")
-    var Error: Int = 0,
+    var Error: Int = 3,
 
     @ColumnInfo(name = "SpeedSpray")
     var SpeedSpray: Int = 0,
@@ -61,7 +61,10 @@ class History(
     var timeSpeed : String = "",
 
     @ColumnInfo(name = "timeProgramOff")
-    var timeProgramOff : Int = 0
+    var timeProgramOff : Int = 0,
+
+    @ColumnInfo(name = "ID")
+    var id: String = ""
 
 ): Serializable {
     fun isNoCode(): Boolean {
@@ -86,7 +89,9 @@ class History(
         return when(Error){
             0-> "Không có lỗi"
             1 -> "Dừng đột ngột"
-            else -> "Dừng do quá nhiệt"
+            2 -> "Dừng do quá nhiệt"
+            3 -> "Không có tín hiệu kết thúc"
+            else -> "Không có tín hiệu kết thúc"
         }
     }
 }

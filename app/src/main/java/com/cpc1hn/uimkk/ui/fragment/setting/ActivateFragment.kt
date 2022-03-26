@@ -1,5 +1,8 @@
 package com.cpc1hn.uimkk.ui.fragment.setting
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.os.StrictMode
@@ -17,6 +20,7 @@ import com.cpc1hn.uimkk.model.SetClass
 import com.cpc1hn.uimkk.showDialogShort
 import com.cpc1hn.uimkk.ui.viewmodel.setting.ActivateViewModel
 import java.io.IOException
+import java.lang.Exception
 import java.net.DatagramPacket
 import java.net.DatagramSocket
 import java.net.InetAddress
@@ -68,35 +72,77 @@ class ActivateFragment : Fragment() {
 //            }
 
             btSwitchFan.setOnClickListener {
-                if (btSwitchFan.isChecked){
-                    checkOn(B1, 0x04, B3, B4, B5, B6)
-                }else {
-                    checkOff(B1, 0x04, B3, B4, B5, 0x00)
+                if (checkConnectivity(requireContext()) and isInternetAvailable()){
+                    showDialogShort("","Chưa kết nối với máy phun.")
+                }else if (!checkConnectivity(requireContext()) and !isInternetAvailable()){
+                    showDialogShort("","Chưa kết nối với máy phun.")
+                }else{
+                    if (btSwitchFan.isChecked){
+                        checkOn(B1, 0x04, B3, B4, B5, B6)
+                    }else {
+                        checkOff(B1, 0x04, B3, B4, B5, 0x00)
+                    }
                 }
             }
 
             btSwitchBuzzer.setOnClickListener {
-                if (btSwitchBuzzer.isChecked){
-                    checkOn(B1, 0x03, B3, B4, B5, B6)
-                }else {
-                    checkOff(B1, 0x03, B3, B4, B5, 0x00)
+                if (checkConnectivity(requireContext()) and isInternetAvailable()){
+                    showDialogShort("","Chưa kết nối với máy phun.")
+                }else if (!checkConnectivity(requireContext()) and !isInternetAvailable()){
+                    showDialogShort("","Chưa kết nối với máy phun.")
+                }else{
+                    if (btSwitchBuzzer.isChecked){
+                        checkOn(B1, 0x03, B3, B4, B5, B6)
+                    }else {
+                        checkOff(B1, 0x03, B3, B4, B5, 0x00)
+                    }
                 }
             }
             btSwitchScale.setOnClickListener {
-                if (btSwitchScale.isChecked){
-                    checkOn(B1, 0x02, B3, B4, B5, B6)
-                    val setClass = SetClass()
-                    setClass.scale=true
-                    saveData.setActiveScale(true)
-                }else {
-                    checkOff(B1, 0x02, B3, B4, B5, 0x00)
-                    setClass.scale = false
-                    saveData.setActiveScale(false)
+                if (checkConnectivity(requireContext()) and isInternetAvailable()){
+                    showDialogShort("","Chưa kết nối với máy phun.")
+                }else if (!checkConnectivity(requireContext()) and !isInternetAvailable()){
+                    showDialogShort("","Chưa kết nối với máy phun.")
+                }else{
+                    if (btSwitchScale.isChecked){
+                        checkOn(B1, 0x02, B3, B4, B5, B6)
+                        val setClass = SetClass()
+                        setClass.scale=true
+                        saveData.setActiveScale(true)
+                    }else {
+                        checkOff(B1, 0x02, B3, B4, B5, 0x00)
+                        setClass.scale = false
+                        saveData.setActiveScale(false)
+                    }
                 }
             }
 
         }
         return binding.root
+    }
+
+    fun checkConnectivity(context: Context): Boolean {
+
+        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        val activeNetwork: NetworkInfo? = connectivityManager.activeNetworkInfo
+
+        if(activeNetwork?.isConnected!=null){
+            return activeNetwork.isConnected
+        }
+        else{
+            return false
+        }
+    }
+
+    private fun isInternetAvailable(): Boolean {
+        return try {
+            val ipAddr: InetAddress = InetAddress.getByName("google.com")
+            //You can replace it with your name
+            !ipAddr.equals("")
+        } catch (e: Exception) {
+            false
+        }
     }
 
     private fun byteArrayOfInts(vararg ints: Int) = ByteArray(ints.size) { pos -> ints[pos].toByte() }

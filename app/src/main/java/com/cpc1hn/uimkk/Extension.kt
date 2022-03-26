@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 fun Fragment.hideKeyboard() {
@@ -24,6 +25,13 @@ fun modifyDateLayout(inputDate: String): String {
         val date = SimpleDateFormat("yyyy/MM/dd HH:mm:ss").parse(inputDate)
         return SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(date!!)
     }else return ""
+}
+
+@SuppressLint("SimpleDateFormat")
+fun Date.convertDateToStringHHMMDDMMYYYYGT7(): String {
+    val dateFormat = SimpleDateFormat("yyyy/MM/dd HH:mm:ss")
+    dateFormat.timeZone = TimeZone.getTimeZone("GMT+7")
+    return dateFormat.format(time)
 }
 
 @SuppressLint("SimpleDateFormat")
@@ -96,6 +104,19 @@ fun convertSecToTime(seconds: Int):String {
         String.format("%02d:%02d:%02d", h, m, s)
     }
 }
+
+
+fun getTime(seconds: Int):ArrayList<Int> {
+    val h = seconds / 3600
+    val m = seconds % 3600 / 60
+    val s = seconds % 3600 % 60
+    val timeArray = ArrayList<Int>()
+    timeArray.add(h)
+    timeArray.add(m)
+    timeArray.add(s)
+    return timeArray
+}
+
 
 fun Context.hideKeyboard(view: View) {
     val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager

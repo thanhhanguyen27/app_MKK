@@ -1,6 +1,9 @@
 package com.cpc1hn.uimkk.ui.fragment.setting
 
+import android.content.Context
 import android.content.DialogInterface
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.os.StrictMode
@@ -14,8 +17,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.cpc1hn.uimkk.R
 import com.cpc1hn.uimkk.databinding.ScaleFragmentBinding
+import com.cpc1hn.uimkk.showDialogShort
 import com.cpc1hn.uimkk.ui.viewmodel.setting.ScaleViewModel
 import java.io.IOException
+import java.lang.Exception
 import java.net.DatagramPacket
 import java.net.DatagramSocket
 import java.net.InetAddress
@@ -45,16 +50,51 @@ class ScaleFragment : Fragment() {
         port=8080
         binding.apply {
             btZero.setOnClickListener {
-                confirmScaleZero()
+                if (checkConnectivity(requireContext()) and isInternetAvailable()){
+                    showDialogShort("","Chưa kết nối với máy phun.")
+                }else if (!checkConnectivity(requireContext()) and !isInternetAvailable()){
+                    showDialogShort("","Chưa kết nối với máy phun.")
+                }else{
+                    confirmScaleZero()
+                }
             }
 
             btMax.setOnClickListener {
-                confirmScaleMax()
+                if (checkConnectivity(requireContext()) and isInternetAvailable()){
+                    showDialogShort("","Chưa kết nối với máy phun.")
+                }else if (!checkConnectivity(requireContext()) and !isInternetAvailable()){
+                    showDialogShort("","Chưa kết nối với máy phun.")
+                }else{
+                    confirmScaleMax()
+                }
             }
         }
 
 
         return binding.root
+    }
+    fun checkConnectivity(context: Context): Boolean {
+
+        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        val activeNetwork: NetworkInfo? = connectivityManager.activeNetworkInfo
+
+        if(activeNetwork?.isConnected!=null){
+            return activeNetwork.isConnected
+        }
+        else{
+            return false
+        }
+    }
+
+    private fun isInternetAvailable(): Boolean {
+        return try {
+            val ipAddr: InetAddress = InetAddress.getByName("google.com")
+            //You can replace it with your name
+            !ipAddr.equals("")
+        } catch (e: Exception) {
+            false
+        }
     }
 
     private fun confirmScaleZero(){

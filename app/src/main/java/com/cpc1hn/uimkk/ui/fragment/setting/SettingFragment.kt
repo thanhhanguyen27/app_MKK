@@ -4,6 +4,8 @@ package com.cpc1hn.uimkk.ui.fragment.setting
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import android.os.Bundle
 import android.os.StrictMode
 import android.text.Html
@@ -25,6 +27,7 @@ import com.cpc1hn.uimkk.R
 import com.cpc1hn.uimkk.databinding.SettingFragmentBinding
 import com.cpc1hn.uimkk.ui.viewmodel.SettingViewModel
 import java.io.IOException
+import java.lang.Exception
 import java.net.DatagramPacket
 import java.net.DatagramSocket
 import java.net.InetAddress
@@ -116,35 +119,41 @@ class SettingFragment : Fragment() {
                         tvLineSpeed.visibility= View.GONE
                         tvMoreSpeed.animate().rotation(180f).start()
                         btSaveSpeed.setOnClickListener {
-                            if (edtSpeed.text.isNotEmpty()){
-                                if (( edtSpeed.text.toString().toInt() >=30) && ( edtSpeed.text.toString().toInt()<=37)) {
-                                   // binding.edtSpeed.text = edtSpeed.text
-                                    checkOn(0x02, 0x06, 0x00, 0x00, 0x00, edtSpeed.text.toString().toInt())
-                                    Log.d("_UDP", "speed: ${edtSpeed.text.toString().toInt()}")
-                                    saveData.setSpray(binding.edtSpeed.text.toString().toInt())
-                                    binding.tvSpeedNow.text= "${binding.edtSpeed.text}ml/phút"
-                                    Toast.makeText(context,"Đã lưu tốc độ phun", Toast.LENGTH_SHORT).show()
-                                }
-                                if ( (edtSpeed.text.toString().toInt()<30) or (edtSpeed.text.toString().toInt()>37)){
-                                    warningSpeed()
-                                }
-                                hideKeyboard()
+                            if (checkConnectivity(requireContext()) and isInternetAvailable()){
+                                showDialogShort("","Chưa kết nối với máy phun.")
+                            }else if (!checkConnectivity(requireContext()) and !isInternetAvailable()){
+                                showDialogShort("","Chưa kết nối với máy phun.")
                             }else{
-                                hideKeyboard()
-                                val builder = AlertDialog.Builder(
-                                    requireContext(),
-                                    R.style.AlertDialogTheme
-                                )
-                                val positiveButtonClick = { _: DialogInterface, _: Int ->
-                                }
-                                with(builder) {
-                                    setMessage("Bạn chưa nhập tốc độ phun")
-                                    setPositiveButton(
-                                        "OK",
-                                        DialogInterface.OnClickListener(function = positiveButtonClick)
+                                if (edtSpeed.text.isNotEmpty()){
+                                    if (( edtSpeed.text.toString().toInt() >=30) && ( edtSpeed.text.toString().toInt()<=37)) {
+                                        // binding.edtSpeed.text = edtSpeed.text
+                                        checkOn(0x02, 0x06, 0x00, 0x00, 0x00, edtSpeed.text.toString().toInt())
+                                        Log.d("_UDP", "speed: ${edtSpeed.text.toString().toInt()}")
+                                        saveData.setSpray(binding.edtSpeed.text.toString().toInt())
+                                        binding.tvSpeedNow.text= "${binding.edtSpeed.text}ml/phút"
+                                        Toast.makeText(context,"Đã lưu tốc độ phun", Toast.LENGTH_SHORT).show()
+                                    }
+                                    if ( (edtSpeed.text.toString().toInt()<30) or (edtSpeed.text.toString().toInt()>37)){
+                                        warningSpeed()
+                                    }
+                                    hideKeyboard()
+                                }else{
+                                    hideKeyboard()
+                                    val builder = AlertDialog.Builder(
+                                        requireContext(),
+                                        R.style.AlertDialogTheme
                                     )
+                                    val positiveButtonClick = { _: DialogInterface, _: Int ->
+                                    }
+                                    with(builder) {
+                                        setMessage("Bạn chưa nhập tốc độ phun")
+                                        setNeutralButton(
+                                            "OK",
+                                            DialogInterface.OnClickListener(function = positiveButtonClick)
+                                        )
+                                    }
+                                    builder.show()
                                 }
-                                builder.show()
                             }
                         }
                     }else{
@@ -161,68 +170,73 @@ class SettingFragment : Fragment() {
                     TransitionManager.beginDelayedTransition(transition)
                     if (lnSetTemp.visibility== View.GONE) {
                         lnSetTemp.visibility = View.VISIBLE
-
                         moreSetTemp.animate().rotation(180f).start()
 
                         btSave.setOnClickListener {
-                            if (binding.tvTemp.text.isNotEmpty()) {
-                                if ((binding.tvTemp.text.toString()
-                                        .toInt() > 100) or (binding.tvTemp.text.toString()
-                                        .toInt() < 0)
-                                ) {
+                            if (checkConnectivity(requireContext()) and isInternetAvailable()){
+                                showDialogShort("","Chưa kết nối với máy phun.")
+                            }else if (!checkConnectivity(requireContext()) and !isInternetAvailable()){
+                                showDialogShort("","Chưa kết nối với máy phun.")
+                            }else{
+                                if (binding.tvTemp.text.isNotEmpty()) {
+                                    if ((binding.tvTemp.text.toString()
+                                            .toInt() > 100) or (binding.tvTemp.text.toString()
+                                            .toInt() < 0)
+                                    ) {
+                                        val builder = AlertDialog.Builder(
+                                            requireContext(),
+                                            R.style.AlertDialogTheme
+                                        )
+                                        val positiveButtonClick =
+                                            { _: DialogInterface, _: Int ->
+
+                                            }
+                                        with(builder) {
+                                            setMessage("Nhiệt độ giới hạn từ 0-100°C. \nMời nhập lại")
+                                            setPositiveButton(
+                                                "OK",
+                                                DialogInterface.OnClickListener(function = positiveButtonClick)
+                                            )
+                                        }
+                                        builder.show()
+                                    } else {
+                                        Toast.makeText(
+                                            context,
+                                            "Đã cài mức nhiệt tới hạn",
+                                            Toast.LENGTH_SHORT
+                                        )
+                                            .show()
+                                        //  viewModel.update(setClass)
+                                        checkOn(
+                                            0x02,
+                                            0x05,
+                                            0x00,
+                                            0x00,
+                                            0x00,
+                                            binding.tvTemp.text.toString().toInt()
+                                        )
+                                        binding.tvTempNow.text = "${binding.tvTemp.text}°C"
+                                        saveData.setTempSetting(binding.tvTemp.text.toString())
+                                    }
+                                    hideKeyboard()
+                                } else {
+                                    hideKeyboard()
                                     val builder = AlertDialog.Builder(
                                         requireContext(),
+
                                         R.style.AlertDialogTheme
                                     )
-                                    val positiveButtonClick =
-                                        { _: DialogInterface, _: Int ->
-
-                                        }
+                                    val positiveButtonClick = { _: DialogInterface, _: Int ->
+                                    }
                                     with(builder) {
-                                        setMessage("Nhiệt độ giới hạn từ 0-100°C. \nMời nhập lại")
-                                        setPositiveButton(
+                                        setMessage("Vui lòng cài đặt mức nhiệt!")
+                                        setNeutralButton(
                                             "OK",
                                             DialogInterface.OnClickListener(function = positiveButtonClick)
                                         )
                                     }
                                     builder.show()
-                                } else {
-                                    Toast.makeText(
-                                        context,
-                                        "Đã cài mức nhiệt tới hạn",
-                                        Toast.LENGTH_SHORT
-                                    )
-                                        .show()
-                                    //  viewModel.update(setClass)
-                                    checkOn(
-                                        0x02,
-                                        0x05,
-                                        0x00,
-                                        0x00,
-                                        0x00,
-                                        binding.tvTemp.text.toString().toInt()
-                                    )
-                                    binding.tvTempNow.text = "${binding.tvTemp.text}°C"
-                                    saveData.setTempSetting(binding.tvTemp.text.toString())
                                 }
-                                hideKeyboard()
-                            } else {
-                                hideKeyboard()
-                                val builder = AlertDialog.Builder(
-                                    requireContext(),
-
-                                    R.style.AlertDialogTheme
-                                )
-                                val positiveButtonClick = { _: DialogInterface, _: Int ->
-                                }
-                                with(builder) {
-                                    setMessage("Vui lòng cài đặt mức nhiệt!")
-                                    setPositiveButton(
-                                        "OK",
-                                        DialogInterface.OnClickListener(function = positiveButtonClick)
-                                    )
-                                }
-                                builder.show()
                             }
                         }
                     } else {
@@ -236,6 +250,29 @@ class SettingFragment : Fragment() {
         }
     }
 
+    fun checkConnectivity(context: Context): Boolean {
+
+        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        val activeNetwork: NetworkInfo? = connectivityManager.activeNetworkInfo
+
+        if(activeNetwork?.isConnected!=null){
+            return activeNetwork.isConnected
+        }
+        else{
+            return false
+        }
+    }
+
+    private fun isInternetAvailable(): Boolean {
+        return try {
+            val ipAddr: InetAddress = InetAddress.getByName("google.com")
+            //You can replace it with your name
+            !ipAddr.equals("")
+        } catch (e: Exception) {
+            false
+        }
+    }
     private fun warningSpeed(){
         val builder = AlertDialog.Builder(
             requireContext(),

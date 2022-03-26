@@ -16,8 +16,11 @@ import com.cpc1hn.uimkk.MainActivity
 import com.cpc1hn.uimkk.R
 import com.cpc1hn.uimkk.SaveData
 import com.cpc1hn.uimkk.databinding.LoginFragmentBinding
+import com.cpc1hn.uimkk.helper.showToast
 import com.cpc1hn.uimkk.ui.viewmodel.login.LoginViewModel
 import com.google.firebase.auth.FirebaseAuth
+import java.lang.Exception
+import java.net.InetAddress
 
 class LoginFragment : Fragment() {
 
@@ -38,11 +41,11 @@ class LoginFragment : Fragment() {
        binding= DataBindingUtil.inflate(inflater,R.layout.login_fragment, container, false)
         auth = FirebaseAuth.getInstance()
 
-//        val currentuser = auth.currentUser
-//        if(currentuser != null) {
-//            startActivity(Intent( requireContext(), MainActivity::class.java))
-//            requireActivity().finish()
-//        }
+        val currentuser = auth.currentUser
+        if(currentuser != null) {
+            startActivity(Intent( requireContext(), MainActivity::class.java))
+            requireActivity().finish()
+        }
         login()
         saveData= SaveData(requireContext())
         if (saveData.getMail().isNotEmpty()){
@@ -58,39 +61,50 @@ class LoginFragment : Fragment() {
 
         return binding.root
     }
+    private fun isInternetAvailable(): Boolean {
+        return try {
+            val ipAddr: InetAddress = InetAddress.getByName("google.com")
+            //You can replace it with your name
+            !ipAddr.equals("")
+        } catch (e: Exception) {
+            false
+        }
+    }
 
     fun login(){
         binding.apply {
             btLogin.setOnClickListener {
-                if (TextUtils.isEmpty(edtEmail.text.toString())) {
-                    edtEmail.error = "Bạn cần nhập email! "
-                    return@setOnClickListener
-                } else if (TextUtils.isEmpty(edtPass.text.toString())) {
-                    edtPass.error = "Bạn cần điền mật khẩu! "
-                    return@setOnClickListener
+                    if (TextUtils.isEmpty(edtEmail.text.toString())) {
+                        edtEmail.error = "Bạn cần nhập email! "
+                        return@setOnClickListener
+                    } else if (TextUtils.isEmpty(edtPass.text.toString())) {
+                        edtPass.error = "Bạn cần điền mật khẩu! "
+                        return@setOnClickListener
+                    }
+
+                    auth.signInWithEmailAndPassword(edtEmail.text.toString(), edtPass.text.toString())
+                        .addOnCompleteListener {task->
+                            if (task.isSuccessful) {
+                                startActivity(Intent(requireContext(), MainActivity::class.java))
+                                Toast.makeText(
+                                    context,
+                                    "Đăng nhập thành công ",
+                                    Toast.LENGTH_LONG
+                                ).show()
+                                saveData.setMail(edtEmail.text.toString())
+
+                            } else {
+                                Toast.makeText(
+                                    context,
+                                    "Đăng nhập chưa thành công. Vui lòng xem lại thông tin đăng nhập ",
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            }
+
+                        }
                 }
 
-                auth.signInWithEmailAndPassword(edtEmail.text.toString(), edtPass.text.toString())
-                    .addOnCompleteListener {task->
-                        if (task.isSuccessful) {
-                            startActivity(Intent(requireContext(), MainActivity::class.java))
-                            Toast.makeText(
-                                context,
-                                "Đăng nhập thành công ",
-                                Toast.LENGTH_LONG
-                            ).show()
-                            saveData.setMail(edtEmail.text.toString())
 
-                        } else {
-                            Toast.makeText(
-                                context,
-                                "Đăng nhập chưa thành công. Vui lòng xem lại thông tin đăng nhập ",
-                                Toast.LENGTH_LONG
-                            ).show()
-                        }
-
-                    }
-            }
         }
     }
 

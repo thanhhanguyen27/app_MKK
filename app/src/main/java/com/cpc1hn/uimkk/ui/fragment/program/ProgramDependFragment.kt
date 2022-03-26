@@ -100,6 +100,8 @@ class ProgramDependFragment : Fragment() {
         check5s()
         //lay du lieu hoa chat
         checkOn1(0x03, 0x04, 0x00, 0x00, 0x00, 0x00)
+        //lay du lieu can
+        checkOn(0x01, 0x0D, 0x00, 0x00, 0x00, 0x01)
 
         //Nhan du lieu muc hoa chat
         receiveData()
@@ -194,6 +196,22 @@ class ProgramDependFragment : Fragment() {
     @SuppressLint("SetTextI18n")
     fun display1(buffer: ByteArray) {
         activity?.runOnUiThread {
+            Log.d("_SCALE", "dò dữ liệu: ${buffer[0].toInt()}, ${buffer[1].toInt()}${buffer[5].toInt()}")
+            //cap nhat status can hoa chat
+            if ((buffer[0] == 0x01.toByte()) && (buffer[1] == 0x0D.toByte()) && (buffer[6] == checkSum(
+                    buffer
+                ).toByte())
+            ) {
+                if (buffer[5].toInt() == 1){
+                    scaleActive = 1
+                    Log.d("_SCALE", "can hoa chat ${buffer[5].toInt()}")
+                    binding.tvScaleStatus.visibility = View.VISIBLE
+                    binding.tvScaleStatus.text = "(Cân hóa chất đang bật)"
+                }else{
+                    binding.tvScaleStatus.visibility = View.VISIBLE
+                    binding.tvScaleStatus.text = "(Cân hóa chất đang tắt)"
+                }
+            }
             //cap nhat phan tram hoa chat
             if ((buffer[0] == 0x03.toByte()) && (buffer[1] == 0x04.toByte()) && (buffer[6] == checkSum(
                     buffer
@@ -227,6 +245,7 @@ class ProgramDependFragment : Fragment() {
     private fun estimateTime() {
         timeSpeed = ((thetich * nongdo) * 60 / speedSpray) + 10
        val time: String = convertSecToTime(timeSpeed)
+        time1 = time
         binding.tvTimeEstimate.text = "Thời gian phun ước tính ${time} "
     }
 
@@ -358,6 +377,7 @@ class ProgramDependFragment : Fragment() {
     }
 
     private fun start() {
+        Log.d("_CHECKPROGRAM", "${time1}")
         if (scaleActive==1) {
             if (( binding.tvWarning.visibility != View.VISIBLE) ){
                 time1 = convertSecToTime(timeSpeed)
@@ -374,9 +394,9 @@ class ProgramDependFragment : Fragment() {
                     timeSpeed = time1,
                     hourStart = hourStart,
                     save = true,
-                    timeProgramOff = timeSpeed
+                    timeProgramOff = timeSpeed,
+                    id = UUID.randomUUID().toString()
                 )
-                Log.d("_CHECKPROGRAM", "$timeCreate")
                 viewModel.insert(history)
              }
             else {
@@ -411,7 +431,8 @@ class ProgramDependFragment : Fragment() {
                 timeSpeed = time1,
                 hourStart = hourStart,
                 save = true,
-                timeProgramOff = timeSpeed
+                timeProgramOff = timeSpeed,
+                id = UUID.randomUUID().toString()
             )
             viewModel.insert(history)
         }
@@ -467,6 +488,7 @@ class ProgramDependFragment : Fragment() {
     private fun checkOn(B1: Int, B2: Int, B3: Int, B4: Int, B5: Int, B6: Int){
         var a = byteArrayOfInts(B1, B2, B3, B4, B5, B6)
         val B7 = checkSum(a)
+        Log.d("_SCALE", " ${B1}, ${B2}, ${B5}")
         a=byteArrayOfInts(B1, B2, B3, B4, B5, B6, B7)
         sendUDP(a)
     }
